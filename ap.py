@@ -8,4 +8,8 @@ class ap:
         self.id = id
         self.type = type_ap
     
-    def check_state()
+    def check_state(self, d_num):
+        if d_num == 0:
+            state = IDLE
+
+    def st
