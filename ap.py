@@ -1,6 +1,6 @@
 from enum import(IntEnum, unique)
 from parameter import*
-from utils import(distance)
+from utils import distance
 
 #all mathematical model constant  
 GTX = 4 #sender antenna gain

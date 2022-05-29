@@ -8,7 +8,7 @@ class State(IntEnum):
     handover = 4
 
 class DEVICE:
-    def _init_(self, x, y, vx, vy, id, type_device):
+    def __init__(self, x, y, vx, vy, id, type_device):
         self.x = x
         self.y = y
         self.vx = vx
@@ -18,11 +18,11 @@ class DEVICE:
         self.id = id
         self.type = type_device
         self.state = State.init
+        self.ap = 0
 
     def move(x, vx, y, vy):
         x = x + vx
         y = y + vy
     
-
     def state_change():
         pass
