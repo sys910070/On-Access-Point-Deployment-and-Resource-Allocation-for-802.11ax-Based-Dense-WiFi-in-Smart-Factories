@@ -3,7 +3,7 @@ import random
 import math
 from ap import AP 
 from device import DEVICE
-from initialization import init
+from information_center import*
 import optimization
 from utils import* 
 from parameter import*
@@ -26,33 +26,20 @@ device_list = [DEVICE(random.uniform(0, 180), random.uniform(0, 200), random.ran
 
 # initialization
 init(ap_list, device_list) 
+power_allocation(ap_list)
+channel_allocation(id_to_ap)
 
 for aps in ap_list:    
     for ap in aps:
-        print(ap.id, ap.user)
+        print(ap.id, [user.id for user in ap.user], ap.power, ap.neighbor)
 
 for devices in device_list:
     print(devices.id, devices.ap)
 
 graph_device(ap_list, device_list)
 
-for ap_ in ap_list:
-    ap_.power_change(30)   
-    ap_.add_neighbor_ap(ap_list)
-    
-for i in range(ap_num):
-    ap_list[i].channel = random.randint(1, 3)
-
-for _ap in ap_list:
-    _ap.neighbors_cci_calculation()
-    
-# for i in range(ap_num):
-#     print(i, end = ' ')
-#     print('x ', ap_list[i].x, end = ' ')
-#     print('y ', ap_list[i].y)   
-#     print('channel ', ap_list[i].channel)
-#     print('neighbor ', ap_list[i].neighbor)
-#     print('cci ', ap_list[i].cci)
+# for _ap in ap_list:
+#     _ap.neighbors_cci_calculation()
 
 while t!=operation_time:
     t = t+1

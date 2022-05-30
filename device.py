@@ -20,9 +20,9 @@ class DEVICE:
         self.state = State.init
         self.ap = 0
 
-    def move(x, vx, y, vy):
-        x = x + vx
-        y = y + vy
+    def move(self):
+        self.x = self.x + self.vx
+        self.y = self.y + self.vy
     
     def state_change():
         pass
