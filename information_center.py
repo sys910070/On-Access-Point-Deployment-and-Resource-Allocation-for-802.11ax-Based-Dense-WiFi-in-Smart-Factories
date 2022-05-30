@@ -33,26 +33,23 @@ def power_allocation(ap_list):
         for ap in aps:
             ap.add_neighbor_ap(ap_list)
 
-# # allocate 20MHz frequency channel
-# def channel_allocation(id_to_ap):
-#     # firstly sort the quene indecending order for the most users ap in the first position
-#     q = sorted(id_to_ap.values(), key = lambda ap: len(ap.user), reverse = True)
-#     set_20 = set(frequency_channel_20)
-#     for ap in q:
-#         if len(ap.user) == 0:
-#             break
-#         else:
-#             set_neighbor = {id_to_ap[neighbor_id].channel for neighbor_id in ap.neighbor}
-#             new_set = set_20-set_neighbor
-#             if len(new_set) != 0:
-#                 ap.channel = random.choice(new_set)
-#             else:
-#                 ap.channel = min_user_channel(ap)
+# allocate 20MHz frequency channel
+def channel_allocation(id_to_ap):
+    # firstly sort the quene indecending order for the most users ap in the first position
+    q = sorted(id_to_ap.values(), key = lambda ap: len(ap.user), reverse = True)
+    set_20 = set(frequency_channel_20)
+    set_neighbor = set()
+    for ap in q:
+        if len(ap.user) == 0:
+            continue
+        else:
+            set_neighbor = {id_to_ap[neighbor_id].channel for neighbor_id in ap.neighbor}
+            set_diff = set_20.difference(set_neighbor)
+            if len(set_diff) != 0:
+                ap.channel = random.choice(list(set_diff))
+            else:
+                ap.channel = random.choice(list(set_20))
 
-
-
-    # print([(ap.id, len(ap.user)) for ap in q])
-
-# optimization
-def optimization():
+# allocate 40, 80, 160MHz frequency channel
+def channel_enhancement(id_to_ap):
     pass

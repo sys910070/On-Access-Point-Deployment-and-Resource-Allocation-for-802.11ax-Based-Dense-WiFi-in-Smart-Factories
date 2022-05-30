@@ -25,9 +25,10 @@ def overlap(ch1, ch2):
             return True
     return False
 
-# # find the channel with minimum neighbor using
-# def min_user_channel(ap):
-#     for neighbor in ap.neighbor:
+# find the channel with minimum neighbor using
+def min_user_channel(ap):
+    for neighbor in ap.neighbor:
+        pass
         
     
 #graph

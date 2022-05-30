@@ -43,10 +43,10 @@ class AP:
     def adduser(self, user):
         self.user.append(user)
 
-    def neighbors_cci_calculation(self):
+    def cci_calculation(self, id_to_ap):
         self.cci = 0
-        for ap in self.neighbor:
-            if ap.channel == self.channel and ap != self:
+        for neighbor_id in self.neighbor:
+            if id_to_ap[neighbor_id].channel == self.channel:
                 self.cci = self.cci + 1
 
     def check_state_change(self, t, timer, user, lowerbound):

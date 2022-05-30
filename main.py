@@ -28,18 +28,18 @@ device_list = [DEVICE(random.uniform(0, 180), random.uniform(0, 200), random.ran
 init(ap_list, device_list) 
 power_allocation(ap_list)
 channel_allocation(id_to_ap)
+for aps in ap_list:
+    for ap in aps:
+        ap.cci_calculation(id_to_ap)
 
 for aps in ap_list:    
     for ap in aps:
-        print(ap.id, [user.id for user in ap.user], ap.power, ap.neighbor)
+        print(ap.id, [user.id for user in ap.user], ap.power, ap.channel, ap.cci)
 
 for devices in device_list:
     print(devices.id, devices.ap)
 
 graph_device(ap_list, device_list)
-
-# for _ap in ap_list:
-#     _ap.neighbors_cci_calculation()
 
 while t!=operation_time:
     t = t+1

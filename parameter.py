@@ -8,7 +8,7 @@ class Type(IntEnum):
 
 #ap, device setup
 ap_num = 10
-device_num = 100
+device_num = 500
 operation_time = 300
 lowerbound = 1 #minimum device for an AP
 p_max = 30 #dbm
