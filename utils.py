@@ -1,6 +1,7 @@
 #this file is for small function
 import matplotlib.pyplot as plt
 from parameter import*
+import random
 
 #distance between two device(AP or STA)
 def distance(a, b):
@@ -27,8 +28,25 @@ def overlap(ch1, ch2):
 
 # find the channel with minimum neighbor using
 def min_user_channel(ap):
+    def find_min_user_channel(dic):
+        min_user = float("inf")
+        candidate_channel = []
+        for key, value in dic.items():
+            if value < min_user:
+                min_user = value
+                candidate_channel = [key]
+            elif value == min_user:
+                candidate_channel.append(key)
+        return random.choice(candidate_channel)
+    dic = {}
     for neighbor in ap.neighbor:
-        pass
+        if neighbor.channel == 0:
+            continue
+        if neighbor.channel not in dic.keys():
+            dic[neighbor.channel] = 1
+        else:
+            dic[neighbor.channel] += 1
+    return find_min_user_channel(dic)
         
     
 #graph
@@ -43,3 +61,14 @@ def graph_device(ap_list, device_list):
 
     plt.axis([0, 200, 0, 180])
     plt.show()
+
+
+# performance matric
+# fairness index
+def fairness(ap_to_id):
+    x1 = 0
+    x2 = 0
+    for ap in ap_to_id:
+        x1 = x1+ap.throughput/len(ap.user)
+        x2 = x2+(ap.throughput/len(ap.user))**2
+    return x1**2/(ap_num*x2)

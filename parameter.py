@@ -1,5 +1,6 @@
 #this file is for all parameter
 from enum import(IntEnum, unique)
+import numpy as np
 
 @unique
 class Type(IntEnum):
@@ -8,15 +9,15 @@ class Type(IntEnum):
 
 #ap, device setup
 ap_num = 10
-device_num = 500
-operation_time = 300
+device_num = 100
+operation_time = 5
 lowerbound = 1 #minimum device for an AP
 p_max = 30 #dbm
 power_level = [0, 22, 24, 26, 28, 30]
-frequency_channel_20 = [1,2,3,4,5,6,7,8,9,10,11]
-frequency_channel_40 = [12,13,14,15,16]
-frequency_channel_80 = [17,18]
-frequency_channel_160 = [19]
+frequency_channel_20 = np.arange(1,12)
+frequency_channel_40 = np.arange(12,17)
+frequency_channel_80 = np.arange(17,19)
+frequency_channel_160 = np.arange(19,20)
 ch_dic = {}
 ch_dic[2] = [12]
 ch_dic[3] = [12]

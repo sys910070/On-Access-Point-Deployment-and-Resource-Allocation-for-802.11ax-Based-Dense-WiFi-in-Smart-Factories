@@ -17,7 +17,7 @@ def init(ap_list, device_list):
                 if(distance((device.x, device.y), (ap.x, ap.y))<dis):
                     dis = distance((device.x, device.y), (ap.x, ap.y))
                     selected_ap = ap
-        device.ap = selected_ap.id
+        device.ap = selected_ap
         selected_ap.adduser(device)
 
 # allocate lowest power level to cover all associated device
@@ -41,15 +41,23 @@ def channel_allocation(id_to_ap):
     set_neighbor = set()
     for ap in q:
         if len(ap.user) == 0:
-            continue
+            break
         else:
-            set_neighbor = {id_to_ap[neighbor_id].channel for neighbor_id in ap.neighbor}
+            set_neighbor = {neighbor.channel for neighbor in ap.neighbor}
             set_diff = set_20.difference(set_neighbor)
             if len(set_diff) != 0:
                 ap.channel = random.choice(list(set_diff))
             else:
-                ap.channel = random.choice(list(set_20))
+                # ap.channel = random.choice(list(set_20))
+                ap.channel = min_user_channel(ap)
+    for ap in id_to_ap.values():
+        ap.cci_calculation(id_to_ap)
 
 # allocate 40, 80, 160MHz frequency channel
-def channel_enhancement(id_to_ap):
-    pass
+# def channel_enhancement(id_to_ap):
+#     q = sorted(id_to_ap.values(), key = lambda ap: len(ap.user), reverse = True)
+#     for ap in q:
+#         if len(ap.user) == 0:
+#             continue
+#         else:
+

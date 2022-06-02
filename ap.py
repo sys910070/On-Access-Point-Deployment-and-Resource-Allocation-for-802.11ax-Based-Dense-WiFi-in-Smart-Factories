@@ -27,6 +27,7 @@ class AP:
         self.neighbor = []
         self.interference_range = 0
         self.communication_range = 0
+        self.throughput = 0
 
     def power_change(self, power):
         self.power = power
@@ -37,16 +38,16 @@ class AP:
     def add_neighbor_ap(self, ap_list):
         for aps in ap_list:
             for ap in aps:
-                if self.interference_range + ap.interference_range >= distance((self.x, self.y), (ap.x, ap.y)) and ap != self and ap.power and self.power:
-                    self.neighbor.append(ap.id)
+                if self.interference_range + ap.interference_range >= distance((self.x, self.y), (ap.x, ap.y)) and ap != self and ap.power!=0 and self.power!=0:
+                    self.neighbor.append(ap)
 
     def adduser(self, user):
         self.user.append(user)
 
     def cci_calculation(self, id_to_ap):
         self.cci = 0
-        for neighbor_id in self.neighbor:
-            if id_to_ap[neighbor_id].channel == self.channel:
+        for neighbor in self.neighbor:
+            if neighbor.channel == self.channel:
                 self.cci = self.cci + 1
 
     def check_state_change(self, t, timer, user, lowerbound):
