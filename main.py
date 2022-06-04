@@ -1,6 +1,7 @@
 import numpy as np
 import random
 import math
+from itertools import chain
 from ap import AP 
 from device import DEVICE
 from information_center import*
@@ -31,12 +32,9 @@ t = 0
 
 # first simulation setup
 # creare ap list
-ap_list = [[AP(18 * (i + 1), 20 * (j + 1),10, 9 * i + j + 1, 1) for j in range(9)] for i in range(9)] #2D array
-# dictionay map 2d to 1d
-id_to_ap = {}
-for aps in ap_list:
-    for ap in aps:
-        id_to_ap[ap.id] = ap
+temp_ap = [[AP(18 * (i + 1), 20 * (j + 1),10, 9 * i + j + 1, 1) for j in range(9)] for i in range(9)] #2D array
+# turn 2D list into 1D list
+ap_list = list(chain.from_iterable(temp_ap))
 
 # create device list
 device_list = [DEVICE(random.uniform(0, 180), random.uniform(0, 200), random.randint(1, 3), random.randint(1, 3), i+1, 1) for i in range(device_num)]
@@ -44,22 +42,21 @@ device_list = [DEVICE(random.uniform(0, 180), random.uniform(0, 200), random.ran
 # initialization
 init(ap_list, device_list) 
 power_allocation(ap_list)
-channel_allocation(id_to_ap)
+channel_allocation(ap_list)
 # channel_enhancement(id_to_ap)
 
 ap_logger.info('id, users, power, channel, cci, neighbor, neighbor channel')
-for aps in ap_list:    
-    for ap in aps:
-        ap_logger.info(f'{ap.id}, {[user.id for user in ap.user]}, {ap.power}, {ap.channel}, {ap.cci}, {[neighbor.id for neighbor in ap.neighbor]}, {[neighbor.channel for neighbor in ap.neighbor]}')
+for ap in ap_list:    
+    ap_logger.info(f'{ap.id}, {[user.id for user in ap.user]}, {ap.power}, {ap.channel}, {ap.cci}, {[neighbor.id for neighbor in ap.neighbor]}, {[neighbor.channel for neighbor in ap.neighbor]}')
 
 device_logger.info('id, ap')
 for device in device_list:
     device_logger.info(f'{device.id}, {device.ap.id}')
 
-# while t!=operation_time:
-#     t = t+1
-#     for device in device_list:
-#         device.move()
+while t!=operation_time:
+    t = t+1
+    for device in device_list:
+        device.move()
 graph_device(ap_list, device_list)
   
 # while t!=operation_time:

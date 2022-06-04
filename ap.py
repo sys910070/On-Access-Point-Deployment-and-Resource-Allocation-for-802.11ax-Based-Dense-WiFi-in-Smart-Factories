@@ -36,10 +36,9 @@ class AP:
 
     # define neighbor ap(power!=0) as is there exist ap in interference range
     def add_neighbor_ap(self, ap_list):
-        for aps in ap_list:
-            for ap in aps:
-                if self.interference_range + ap.interference_range >= distance((self.x, self.y), (ap.x, ap.y)) and ap != self and ap.power!=0 and self.power!=0:
-                    self.neighbor.append(ap)
+        for ap in ap_list:
+            if self.interference_range + ap.interference_range >= distance((self.x, self.y), (ap.x, ap.y)) and ap != self and ap.power!=0 and self.power!=0:
+                self.neighbor.append(ap)
 
     def adduser(self, user):
         self.user.append(user)

@@ -12,31 +12,28 @@ from parameter import*
 def init(ap_list, device_list):
     for device in device_list:
         dis = float('inf') # make dis the largest at first and update later
-        for aps in ap_list:
-            for ap in aps:
-                if(distance((device.x, device.y), (ap.x, ap.y))<dis):
-                    dis = distance((device.x, device.y), (ap.x, ap.y))
-                    selected_ap = ap
+        for ap in ap_list:
+            if(distance((device.x, device.y), (ap.x, ap.y))<dis):
+                dis = distance((device.x, device.y), (ap.x, ap.y))
+                selected_ap = ap
         device.ap = selected_ap
         selected_ap.adduser(device)
 
 # allocate lowest power level to cover all associated device
 def power_allocation(ap_list):
-    for aps in ap_list:
-        for ap in aps:
-            if len(ap.user) != 0:
-                for power in power_level:
-                    if range_(power) >= max_dis_device(ap):
-                        ap.power_change(power)
-                        break
-    for aps in ap_list:
-        for ap in aps:
-            ap.add_neighbor_ap(ap_list)
+    for ap in ap_list:
+        if len(ap.user) != 0:
+            for power in power_level:
+                if range_(power) >= max_dis_device(ap):
+                    ap.power_change(power)
+                    break
+    for ap in ap_list:
+        ap.add_neighbor_ap(ap_list)
 
 # allocate 20MHz frequency channel
-def channel_allocation(id_to_ap):
+def channel_allocation(ap_list):
     # firstly sort the quene indecending order for the most users ap in the first position
-    q = sorted(id_to_ap.values(), key = lambda ap: len(ap.user), reverse = True)
+    q = sorted(ap_list, key = lambda ap: len(ap.user), reverse = True)
     set_20 = set(frequency_channel_20)
     set_neighbor = set()
     for ap in q:
@@ -50,7 +47,7 @@ def channel_allocation(id_to_ap):
             else:
                 # ap.channel = random.choice(list(set_20))
                 ap.channel = min_user_channel(ap)
-    for ap in id_to_ap.values():
+    for ap in ap_list:
         ap.cci_calculation()
 
 # allocate 40, 80, 160MHz frequency channel

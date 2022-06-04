@@ -27,8 +27,8 @@ class DEVICE:
         self.x = self.x + self.vx
         self.y = self.y + self.vy
 
-    def throughput_cal(self, ap_to_id):
-        return ap_to_id[self.ap].throughput/len(ap_to_id[self.ap].user)
+    def throughput_cal(self, ap):
+        return ap.throughput/len(ap.user)
 
     def state_change():
         pass
