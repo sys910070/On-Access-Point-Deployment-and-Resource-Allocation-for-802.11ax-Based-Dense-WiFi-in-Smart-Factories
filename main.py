@@ -61,8 +61,7 @@ for device in device_list:
 #     for device in device_list:
 #         device.move()
 graph_device(ap_list, device_list)
-
-
+  
 # while t!=operation_time:
 #     t = t+1
 #     while t%30 != 0:

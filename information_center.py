@@ -51,7 +51,7 @@ def channel_allocation(id_to_ap):
                 # ap.channel = random.choice(list(set_20))
                 ap.channel = min_user_channel(ap)
     for ap in id_to_ap.values():
-        ap.cci_calculation(id_to_ap)
+        ap.cci_calculation()
 
 # allocate 40, 80, 160MHz frequency channel
 # def channel_enhancement(id_to_ap):

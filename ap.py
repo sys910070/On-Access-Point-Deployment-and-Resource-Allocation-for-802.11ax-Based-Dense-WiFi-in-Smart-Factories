@@ -44,7 +44,7 @@ class AP:
     def adduser(self, user):
         self.user.append(user)
 
-    def cci_calculation(self, id_to_ap):
+    def cci_calculation(self):
         self.cci = 0
         for neighbor in self.neighbor:
             if neighbor.channel == self.channel:
