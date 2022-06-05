@@ -46,8 +46,9 @@ class AP:
     def cci_calculation(self):
         self.cci = 0
         for neighbor in self.neighbor:
-            if neighbor.channel == self.channel:
-                self.cci = self.cci + 1
+            for ch in ch_dic[neighbor.channel]:
+                if ch == self.channel:
+                    self.cci = self.cci + 1
 
     def check_state_change(self, t, timer, user, lowerbound):
         if timer == 0 or t%30 == 0 or len(user)< lowerbound: 

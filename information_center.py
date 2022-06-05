@@ -51,10 +51,53 @@ def channel_allocation(ap_list):
         ap.cci_calculation()
 
 # allocate 40, 80, 160MHz frequency channel
-# def channel_enhancement(id_to_ap):
-#     q = sorted(id_to_ap.values(), key = lambda ap: len(ap.user), reverse = True)
-#     for ap in q:
-#         if len(ap.user) == 0:
-#             continue
-#         else:
-
+def channel_enhancement(ap_list):
+    q = sorted(ap_list, key = lambda ap: len(ap.user), reverse = True)
+    # 40MGz channel allocation
+    for ap in q:
+        pre_cci = ap.cci
+        if len(ap.user) == 0:
+            break
+        else:
+            for ch_40 in frequency_channel_40:
+                for ch in ch_dic[ch_40]:
+                    if ap.channel == ch:
+                        temp_channel = ap.channel
+                        ap.channel = ch_40
+                        ap.cci_calculation()
+                        if ap.cci != pre_cci:
+                            ap.cci = pre_cci
+                            ap.channel = temp_channel
+                        break
+    # 80MGz channel allocation                
+    for ap in q:
+        pre_cci = ap.cci
+        if len(ap.user) == 0:
+            break
+        else:
+            for ch_80 in frequency_channel_80:
+                for ch in ch_dic[ch_80]:
+                    if ap.channel == ch:
+                        temp_channel = ap.channel
+                        ap.channel = ch_80
+                        ap.cci_calculation()
+                        if ap.cci != pre_cci:
+                            ap.cci = pre_cci
+                            ap.channel = temp_channel
+                        break
+    # 160MGz channel allocation
+    for ap in q:
+        pre_cci = ap.cci
+        if len(ap.user) == 0:
+            break
+        else:
+            for ch_160 in frequency_channel_160:
+                for ch in ch_dic[ch_160]:
+                    if ap.channel == ch:
+                        temp_channel = ap.channel
+                        ap.channel = ch_160
+                        ap.cci_calculation()
+                        if ap.cci != pre_cci:
+                            ap.cci = pre_cci
+                            ap.channel = temp_channel
+                        break

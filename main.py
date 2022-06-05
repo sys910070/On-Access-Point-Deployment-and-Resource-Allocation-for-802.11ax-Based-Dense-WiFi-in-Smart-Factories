@@ -10,6 +10,7 @@ from utils import*
 from parameter import*
 import logging
 
+# create two log file for APs and devices
 formatter = logging.Formatter('%(levelname)s %(message)s')
 def setup_logger(name, log_file, level=logging.DEBUG):
     """To setup as many loggers as you want"""
@@ -43,7 +44,7 @@ device_list = [DEVICE(random.uniform(0, 180), random.uniform(0, 200), random.ran
 init(ap_list, device_list) 
 power_allocation(ap_list)
 channel_allocation(ap_list)
-# channel_enhancement(id_to_ap)
+channel_enhancement(ap_list)
 
 ap_logger.info('id, users, power, channel, cci, neighbor, neighbor channel')
 for ap in ap_list:    
@@ -53,10 +54,10 @@ device_logger.info('id, ap')
 for device in device_list:
     device_logger.info(f'{device.id}, {device.ap.id}')
 
-while t!=operation_time:
-    t = t+1
-    for device in device_list:
-        device.move()
+# while t!=operation_time:
+#     t = t+1
+#     for device in device_list:
+#         device.move()
 graph_device(ap_list, device_list)
   
 # while t!=operation_time:
