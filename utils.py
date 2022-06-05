@@ -51,13 +51,24 @@ def min_user_channel(ap):
     
 #graph
 def graph_device(ap_list, device_list):
-    for aps in ap_list:
-        for ap in aps:
-            plt.plot(ap.y, ap.x,'ro', color = 'green') # AP
-            plt.text(ap.y+1, ap.x+1, ap.id, color='green')
+    for ap in ap_list:
+        if ap.channel == 0:
+            continue
+        elif ch_id_to_bw[ap.channel] == 20:
+            plt.plot(ap.y, ap.x,'ro', color = 'lime') # AP
+            plt.text(ap.y+1, ap.x+1, ap.id, color='lime')
+        elif ch_id_to_bw[ap.channel] == 40:
+            plt.plot(ap.y, ap.x,'ro', color = 'red') # AP
+            plt.text(ap.y+1, ap.x+1, ap.id, color='red')
+        elif ch_id_to_bw[ap.channel] == 80:
+            plt.plot(ap.y, ap.x,'ro', color = 'blue') # AP
+            plt.text(ap.y+1, ap.x+1, ap.id, color='blue')
+        elif ch_id_to_bw[ap.channel] == 160:
+            plt.plot(ap.y, ap.x,'ro', color = 'purple') # AP
+            plt.text(ap.y+1, ap.x+1, ap.id, color='purple')
     for device in device_list:    
-        plt.plot(device.y, device.x, 'ro', color = 'red') # device
-        plt.text(device.y+1, device.x+1, device.id, color='red')
+        plt.plot(device.y, device.x, 'ro', color = 'black') # device
+        plt.text(device.y+1, device.x+1, device.id, color='black')
 
     plt.axis([0, 200, 0, 180])
     plt.show()
@@ -65,10 +76,10 @@ def graph_device(ap_list, device_list):
 
 # performance matric
 # fairness index
-def fairness(ap_to_id):
+def fairness(ap_list):
     x1 = 0
     x2 = 0
-    for ap in ap_to_id:
+    for ap in ap_list:
         x1 = x1+ap.throughput/len(ap.user)
         x2 = x2+(ap.throughput/len(ap.user))**2
     return x1**2/(ap_num*x2)

@@ -14,29 +14,39 @@ operation_time = 5
 lowerbound = 1 #minimum device for an AP
 p_max = 30 #dbm
 power_level = [0, 22, 24, 26, 28, 30]
-frequency_channel_20 = np.arange(1,12)
-frequency_channel_40 = np.arange(12,17)
-frequency_channel_80 = np.arange(17,19)
-frequency_channel_160 = np.arange(19,20)
+frequency_channel_20 = np.arange(1,12) # 1~11
+frequency_channel_40 = np.arange(12,17) # 12~16
+frequency_channel_80 = np.arange(17,19) # 17~18
+frequency_channel_160 = np.arange(19,20) #19
+
+# channel overlap dictionary
 ch_dic = {}
-ch_dic[2] = [12]
-ch_dic[3] = [12]
-ch_dic[4] = [13, 17, 19]
-ch_dic[5] = [13, 17, 19]
-ch_dic[6] = [14, 17, 19]
-ch_dic[7] = [14, 17, 19]
-ch_dic[8] = [15, 18, 19]
-ch_dic[9] = [15, 18, 19]
-ch_dic[10] = [16, 18, 19]
-ch_dic[11] = [16, 18, 19]
-ch_dic[12] = [2, 3]
-ch_dic[13] = [4, 5, 17, 19]
-ch_dic[14] = [6, 7, 17, 19]
-ch_dic[15] = [8, 9, 18, 19]
-ch_dic[16] = [10, 11, 18, 19]
-ch_dic[17] = [4, 5, 6, 7, 13, 14, 19]
-ch_dic[18] = [8, 9, 10, 11, 15, 16, 19]
-ch_dic[19] = [4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18]
+ch_dic[1] = [1]
+ch_dic[2] = [2, 12]
+ch_dic[3] = [3, 12]
+ch_dic[4] = [4, 13, 17, 19]
+ch_dic[5] = [5, 13, 17, 19]
+ch_dic[6] = [6,14, 17, 19]
+ch_dic[7] = [7, 14, 17, 19]
+ch_dic[8] = [8, 15, 18, 19]
+ch_dic[9] = [9, 15, 18, 19]
+ch_dic[10] = [10, 16, 18, 19]
+ch_dic[11] = [11, 16, 18, 19]
+ch_dic[12] = [12, 2, 3]
+ch_dic[13] = [13, 4, 5, 17, 19]
+ch_dic[14] = [14, 6, 7, 17, 19]
+ch_dic[15] = [15, 8, 9, 18, 19]
+ch_dic[16] = [16, 10, 11, 18, 19]
+ch_dic[17] = [17, 4, 5, 6, 7, 13, 14, 19]
+ch_dic[18] = [18, 8, 9, 10, 11, 15, 16, 19]
+ch_dic[19] = [19, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18]
+
+# channel id to bandwidth dictionary
+ch_id_to_bw = {}
+for idx, channel_group in enumerate((frequency_channel_20, frequency_channel_40,
+    frequency_channel_80, frequency_channel_160)):
+    for channel in channel_group:
+        ch_id_to_bw[channel] = 20 * 2 ** idx
 
 #factory setup
 factory_width = 200
