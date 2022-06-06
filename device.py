@@ -1,5 +1,6 @@
 from enum import(IntEnum, unique)
 import random
+from parameter import*
 @unique
 class State(IntEnum):
     init = 1
@@ -22,10 +23,15 @@ class DEVICE:
         self.throughput = 0
 
     def move(self):
-        self.vx = random.randint(-10, 10)
-        self.vy = random.randint(-10, 10)
-        self.x = self.x + self.vx
-        self.y = self.y + self.vy
+        while True:
+            self.vx = random.randint(-5, 5)
+            self.vy = random.randint(-5, 5)
+            if boundary(self.x + self.vx, self.y + self.vy):
+                self.x = self.x + self.vx
+                self.y = self.y + self.vy
+                break
+            else:
+                continue
 
     def throughput_cal(self, ap):
         return ap.throughput/len(ap.user)

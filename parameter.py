@@ -52,6 +52,13 @@ for idx, channel_group in enumerate((frequency_channel_20, frequency_channel_40,
 factory_width = 200
 factory_length = 180
 
+# function if device hit boundary return False, else return True
+def boundary(x, y):
+    if x < 0 or y < 0 or x > factory_length or y > factory_width:
+        return False
+    else:
+        return True
+
 #all mathematical model constant  
 GTX = 4 #sender antenna gain
 GRX = 4 #receiver antenna gain

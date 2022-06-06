@@ -24,9 +24,6 @@ def setup_logger(name, log_file, level=logging.DEBUG):
 
     return logger
 
-ap_logger = setup_logger('AP', 'AP.txt')
-device_logger = setup_logger('Device', 'Device.txt')
-
 random.seed(1126)
 
 t = 0
@@ -46,20 +43,25 @@ power_allocation(ap_list)
 channel_allocation(ap_list)
 channel_enhancement(ap_list)
 
-ap_logger.info('id, users, power, channel, cci, neighbor, neighbor channel')
-for ap in ap_list:    
-    ap_logger.info(f'{ap.id}, {[user.id for user in ap.user]}, {ap.power}, {ap.channel}, {ap.cci}, {[neighbor.id for neighbor in ap.neighbor]}, {[neighbor.channel for neighbor in ap.neighbor]}')
+while t!=operation_time:
+    # log file
+    ap_logger = setup_logger('AP', 'AP.txt')                    # open file
+    device_logger = setup_logger('Device', 'Device.txt')        # open file
+    ap_logger.info('id, users, power, channel, cci, neighbor, neighbor channel')
+    for ap in ap_list:    
+        ap_logger.info(f'{ap.id}, {[user.id for user in ap.user]}, {ap.power}, {ap.channel}, {ap.cci}, {[neighbor.id for neighbor in ap.neighbor]}, {[neighbor.channel for neighbor in ap.neighbor]}')
 
-device_logger.info('id, ap')
-for device in device_list:
-    device_logger.info(f'{device.id}, {device.ap.id}')
+    device_logger.info('id, ap')
+    
+    for device in device_list:
+        device_logger.info(f'{device.id}, {device.ap.id}, {device.x}, {device.y}')
+    
+    # gragh
+    graph_device(ap_list, device_list)
+    for device in device_list:
+        device.move()
+    t = t+1
 
-# while t!=operation_time:
-#     t = t+1
-#     for device in device_list:
-#         device.move()
-graph_device(ap_list, device_list)
-  
 # while t!=operation_time:
 #     t = t+1
 #     while t%30 != 0:
