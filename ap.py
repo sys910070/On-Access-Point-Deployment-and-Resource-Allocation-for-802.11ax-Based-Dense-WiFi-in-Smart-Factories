@@ -1,8 +1,6 @@
 from enum import(IntEnum, unique)
 from parameter import*
-from utils import distance
-
-
+from utils import*
 
 @unique
 class State(IntEnum):
@@ -12,13 +10,12 @@ class State(IntEnum):
     idle = 4
 
 class AP:
-    def __init__(self, x, y, capacity, id, type_ap):
+    def __init__(self, x, y, id, type_ap):
         self.x = x
         self.y = y
         self.power = 0
         self.channel = 0
         self.user = []
-        self.capacity = capacity
         self.id = id
         self.type = type_ap
         self.timer = 0
@@ -28,11 +25,13 @@ class AP:
         self.interference_range = 0
         self.communication_range = 0
         self.throughput = 0
+        self.lowerbound = 0
+        self.upperbound = 0
 
     def power_change(self, power):
         self.power = power
-        self.interference_range = 10**((power+GTX+GRX-P_REF-CHI-THETA_INTERFERENCE)/(10*ETA))
-        self.communication_range = 10**((power+GTX+GRX-P_REF-CHI-THETA_DECODE)/(10*ETA))
+        self.interference_range = range_interference(power)
+        self.communication_range = range_decode(power)
 
     # define neighbor ap(power!=0) as is there exist ap in interference range
     def add_neighbor_ap(self, ap_list):

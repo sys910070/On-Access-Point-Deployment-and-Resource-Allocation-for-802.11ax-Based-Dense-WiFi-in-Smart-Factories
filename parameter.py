@@ -8,10 +8,18 @@ class Type(IntEnum):
     latency = 2
 
 #ap, device setup
-ap_num = 10
-device_num = 100
-operation_time = 5
-lowerbound = 1 #minimum device for an AP
+#type 1(high throughput device, AP), type 2(delat sensitive device)
+ap_num1 = 41
+ap_num2 = 40
+ap_num = ap_num1+ap_num2
+device_num1 = 50
+device_num2 = 50
+device_num = device_num1+device_num2
+operation_time = 3 # second
+upperbound1 = 7 # maxixmum device for an AP
+upperbound2 = 10
+lowerbound1 = 2 #minimum device for an AP
+lowerbound2 = 2
 p_max = 30 #dbm
 power_level = [0, 22, 24, 26, 28, 30]
 frequency_channel_20 = np.arange(1,12) # 1~11

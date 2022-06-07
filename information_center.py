@@ -12,19 +12,45 @@ from parameter import*
 def init(ap_list, device_list):
     for device in device_list:
         dis = float('inf') # make dis the largest at first and update later
+        selected_ap = None
         for ap in ap_list:
-            if(distance((device.x, device.y), (ap.x, ap.y))<dis):
-                dis = distance((device.x, device.y), (ap.x, ap.y))
-                selected_ap = ap
-        device.ap = selected_ap
-        selected_ap.adduser(device)
+            if distance((device.x, device.y), (ap.x, ap.y)) < range_decode(30): # in AP's max decode range
+                if distance((device.x, device.y), (ap.x, ap.y)) < dis and ap.type == device.type and len(ap.user) <= ap.upperbound:
+                    dis = distance((device.x, device.y), (ap.x, ap.y))
+                    selected_ap = ap
+        if selected_ap != None:            
+            device.ap = selected_ap
+            selected_ap.adduser(device)
+    
+    # if an AP with users lower than lowerbound remove all device and connect to other AP
+    used_ap = {}
+    while not ap_lowerbound_check(ap_list):
+        for device in device_list:
+            dis = float('inf')
+            selected_ap = None
+            if device.ap != None:
+                if len(device.ap.user) < device.ap.lowerbound and len(device.ap.user) != 0:
+                    device.ap.user.remove(device)
+                    for ap in ap_list:
+                        if device not in used_ap:
+                            used_ap[device] = []
+                        if distance((device.x, device.y), (ap.x, ap.y)) < range_decode(30) and ap != device.ap and ap not in used_ap[device]:
+                            if distance((device.x, device.y), (ap.x, ap.y)) < dis and ap.type == device.type and len(ap.user) <= ap.upperbound:
+                                dis = distance((device.x, device.y), (ap.x, ap.y))
+                                selected_ap = ap
+                    if selected_ap != None:            
+                        device.ap = selected_ap
+                        used_ap[device].append(selected_ap)
+                        selected_ap.adduser(device)
+                    else:
+                        device.ap = None                        
 
 # allocate lowest power level to cover all associated device
 def power_allocation(ap_list):
     for ap in ap_list:
         if len(ap.user) != 0:
             for power in power_level:
-                if range_(power) >= max_dis_device(ap):
+                if range_decode(power) >= max_dis_device(ap):
                     ap.power_change(power)
                     break
     for ap in ap_list:

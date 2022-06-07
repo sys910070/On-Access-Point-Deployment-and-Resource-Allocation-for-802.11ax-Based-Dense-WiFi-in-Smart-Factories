@@ -19,7 +19,7 @@ class DEVICE:
         self.id = id
         self.type = type_device
         self.state = State.init
-        self.ap = 0
+        self.ap = None
         self.throughput = 0
 
     def move(self):

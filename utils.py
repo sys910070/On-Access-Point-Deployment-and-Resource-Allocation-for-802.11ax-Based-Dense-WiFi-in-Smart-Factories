@@ -7,11 +7,23 @@ import random
 def distance(a, b):
     return ((a[0]-b[0])**2+(a[1]-b[1])**2)**(1/2)
 
-# communication range or interference range
-def range_(power):
+# communication range or decode range
+def range_decode(power):
     return 10**((power+GTX+GRX-P_REF-CHI-THETA_DECODE)/(10*ETA))
 
-# maximum distance device in an ap
+# communication range or interference range
+def range_interference(power):
+    return 10**((power+GTX+GRX-P_REF-CHI-THETA_INTERFERENCE)/(10*ETA))
+
+# return True if all ap's users number > each ap's lowerbound
+def ap_lowerbound_check(ap_list):
+    for ap in ap_list:
+        if len(ap.user) < ap.lowerbound and len(ap.user) != 0:
+            print(ap.id)
+            return False
+    return True
+
+# the maximum distance device in an ap
 def max_dis_device(ap):
     dis = 0
     for device in ap.user:
@@ -83,3 +95,4 @@ def fairness(ap_list):
         x1 = x1+ap.throughput/len(ap.user)
         x2 = x2+(ap.throughput/len(ap.user))**2
     return x1**2/(ap_num*x2)
+
