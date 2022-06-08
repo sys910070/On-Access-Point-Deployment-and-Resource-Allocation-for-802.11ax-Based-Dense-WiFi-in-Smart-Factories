@@ -56,43 +56,50 @@ init(ap_list, device_list)
 power_allocation(ap_list)
 channel_allocation(ap_list)
 channel_enhancement(ap_list)
+device_resource(device_list)
 
-ap_logger = setup_logger('AP', 'AP.txt')                    # open file
-device_logger = setup_logger('Device', 'Device.txt')        # open file
+# simulation starts
+while t!=operation_time:
+    # open a log file
+    ap_logger = setup_logger('AP', 'AP.txt')                    # open file
+    device_logger = setup_logger('Device', 'Device.txt')        # open file
 
-ap_logger.info('id, users, power, channel, cci, neighbor, neighbor channel')
-for ap in ap_list:    
-    ap_logger.info(f'{ap.id}, {[user.id for user in ap.user]}, {ap.power}, {ap.channel}, {ap.cci}, {ap.type}')
-
-device_logger.info('id, ap')
-for device in device_list:
-    if device.ap != None:
-        device_logger.info(f'{device.id}, {device.ap.id}, {device.type}')
-    else:
-        device_logger.info(f'{device.id}, {0}, {device.type}')
-# graph
-graph_device(ap_list, device_list)
-
-# while t!=operation_time:
-#     # log file
-#     for device in device_list:
-#         device.move()
-#     t = t+1
+    for device in device_list:
+        device.move()
+    for device in device_list:
+        if device.state_change(ap_list):
+            pass
+        
+    ap_logger.info('id, users, power, channel, cci, neighbor, neighbor channel')
+    for ap in ap_list:    
+        ap_logger.info(f'{ap.id}, {[user.id for user in ap.user]}, {ap.power}, {ap.channel}, {ap.cci}, {[neighbor.id for neighbor in ap.neighbor]}, {[neighbor.channel for neighbor in ap.neighbor]}')
+    device_logger.info('id, ap')
+    for device in device_list:
+        if device.ap != None:
+            device_logger.info(f'{device.id}, {device.ap.id}, {device.power}, {device.channel}')
+        else:
+            device_logger.info(f'{device.id}, {0}, {device.power}, {device.channel}')
+    # graph
+    graph_device(ap_list, device_list)
+    for device in device_list:
+        device.move()
+    t = t+1
 
 # while t!=operation_time:
 #     t = t+1
 #     while t%30 != 0:
-#         for _device in device_list:
-#             _device.move()
-#             if _device.state_change():
-#                 _device.action()
-#                 _device.association()
+#         for device in device_list:
+#             device.move()
+#         for device in device_list:
+#             if device.state_change():
+#                 device.action()
+#                 device.association()
 #             else:
 #                 continue
-#         for _ap in ap_list:
-#             if _ap.check_state_change():
-#                 _ap.action()
+#         for ap in ap_list:
+#             if ap.check_state_change():
+#                 ap.action()
 #             else:
 #                 continue
 #         t = t+1
-#     _ap.update()
+#     ap.update()

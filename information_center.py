@@ -4,12 +4,14 @@
 # nighboring ap, cci
 import random
 from logging.handlers import QueueListener
-from ap import AP 
+from ap import State
+from device import State
 from utils import*
 from parameter import*
 
-# initialization
+# AP-device association
 def init(ap_list, device_list):
+    initial_clear(ap_list, device_list)
     for device in device_list:
         dis = float('inf') # make dis the largest at first and update later
         selected_ap = None
@@ -43,7 +45,12 @@ def init(ap_list, device_list):
                         used_ap[device].append(selected_ap)
                         selected_ap.adduser(device)
                     else:
-                        device.ap = None                        
+                        device.ap = None
+    for ap in ap_list:
+        if len(ap.user) != 0:
+            ap.state = State.active
+        else:
+            ap.state = State.idle                   
 
 # allocate lowest power level to cover all associated device
 def power_allocation(ap_list):
@@ -127,3 +134,13 @@ def channel_enhancement(ap_list):
                             ap.cci = pre_cci
                             ap.channel = temp_channel
                         break
+
+def device_resource(device_list):
+    for device in device_list:
+        if device.ap != None:
+            device.channel = device.ap.channel
+            device.power = device.ap.power
+            device.state = State.connected
+        else:
+            device.state = State.detached
+        

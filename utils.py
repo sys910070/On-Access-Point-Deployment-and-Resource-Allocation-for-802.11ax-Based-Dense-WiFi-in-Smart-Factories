@@ -19,7 +19,6 @@ def range_interference(power):
 def ap_lowerbound_check(ap_list):
     for ap in ap_list:
         if len(ap.user) < ap.lowerbound and len(ap.user) != 0:
-            print(ap.id)
             return False
     return True
 
@@ -59,10 +58,25 @@ def min_user_channel(ap):
         else:
             dic[neighbor.channel] += 1
     return find_min_user_channel(dic)
-        
     
+def initial_clear(ap_list, device_list):
+    for ap in ap_list:
+        ap.power = 0
+        ap.channel = 0
+        ap.user = []
+        ap.neighbor = []
+
+    for device in device_list:
+        device.ap = None
+        device.power = 0
+        device.channel = 0
+
 #graph
 def graph_device(ap_list, device_list):
+    plt.title('simulation display')
+    plt.xlabel('x-axis')
+    plt.ylabel('y-axis')
+   
     for ap in ap_list:
         if ap.channel == 0:
             continue

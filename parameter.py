@@ -7,6 +7,8 @@ class Type(IntEnum):
     throughput = 1
     latency = 2
 
+operation_time = 3 # second
+
 #ap, device setup
 #type 1(high throughput device, AP), type 2(delat sensitive device)
 ap_num1 = 41
@@ -15,7 +17,6 @@ ap_num = ap_num1+ap_num2
 device_num1 = 50
 device_num2 = 50
 device_num = device_num1+device_num2
-operation_time = 3 # second
 upperbound1 = 7 # maxixmum device for an AP
 upperbound2 = 10
 lowerbound1 = 2 #minimum device for an AP
@@ -73,5 +74,5 @@ GRX = 4 #receiver antenna gain
 ETA = 4 #path-loss exponent
 CHI = 5 #standard deviation association with the degree of shadow fading
 P_REF = 46 #the path loss at a reference distance(1m)
-THETA_DECODE = -68 #threshold of decode signal strength
-THETA_INTERFERENCE = -77 #threshold of interference signal strength
+THETA_DECODE = -68 #threshold of decode signal strength(dBm)
+THETA_INTERFERENCE = -77 #threshold of interference signal strength(dBm)
