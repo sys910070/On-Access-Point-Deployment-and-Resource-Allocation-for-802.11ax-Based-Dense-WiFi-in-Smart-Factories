@@ -66,14 +66,20 @@ while t!=operation_time:
     ap_logger.info('id, users, power, channel, cci, neighbor, neighbor channel')
     for ap in ap_list:    
         ap_logger.info(f'{ap.id}, {[user.id for user in ap.user]}, {ap.power}, {ap.channel}, {ap.cci}, {[neighbor.id for neighbor in ap.neighbor]}, {[neighbor.channel for neighbor in ap.neighbor]}')
-    device_logger.info('id, ap, device_state')
+    device_logger.info('id, ap, x, y, device_state')
     for device in device_list:
         if device.ap != None:
-            device_logger.info(f'{device.id}, {device.ap.id}, {device.power}, {device.state}')
+            device_logger.info(f'{device.id}, {device.ap.id}, {device.x}, {device.y}, {device.state.name}')
         else:
-            device_logger.info(f'{device.id}, {None}, {device.power}, {device.channel}, {device.state}')
+            device_logger.info(f'{device.id}, {None}, {device.x}, {device.y}, {device.state.name}')
     # graph
     graph_device(ap_list, device_list)
+    count = 0
+    for device in device_list:
+        if device.ap == None:
+            count += 1
+    print(count)
+
     for device in device_list:
         device.move()
     for device in device_list:
@@ -81,11 +87,9 @@ while t!=operation_time:
         if flag:
             device.action(device_next_state, ap_list)
             device.timer -= 1
-    # count = 0
-    # for device in device_list:
-    #     if device.ap == None:
-    #         count += 1
-    # print(count)
+        else:
+            device.timer -= 1
+    
     t += 1
 
 # while t!=operation_time:

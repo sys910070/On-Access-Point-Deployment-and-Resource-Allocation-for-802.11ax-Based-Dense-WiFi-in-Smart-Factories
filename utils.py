@@ -9,11 +9,17 @@ def distance(a, b):
 
 # communication range or decode range
 def range_decode(power):
-    return 10**((power+GTX+GRX-P_REF-CHI-THETA_DECODE)/(10*ETA))
+    if power != 0:
+        return 10**((power+GTX+GRX-P_REF-CHI-THETA_DECODE)/(10*ETA))
+    else:
+        return 0
 
 # communication range or interference range
 def range_interference(power):
-    return 10**((power+GTX+GRX-P_REF-CHI-THETA_INTERFERENCE)/(10*ETA))
+    if power != 0:
+        return 10**((power+GTX+GRX-P_REF-CHI-THETA_INTERFERENCE)/(10*ETA))
+    else:
+        return 0
 
 # return True if all ap's users number > each ap's lowerbound
 def ap_lowerbound_check(ap_list):
@@ -70,6 +76,17 @@ def initial_clear(ap_list, device_list):
         device.ap = None
         device.power = 0
         device.channel = 0
+
+# device find the ap based on the strongest signal 
+def find_ap(device, ap_list):
+    dis = float('inf')
+    selected_ap = None
+    for ap in ap_list:
+        if distance((device.x, device.y), (ap.x, ap.y)) < range_decode(ap.power): # all AP that cover the device
+            if distance((device.x, device.y), (ap.x, ap.y)) < dis and ap.type == device.type and len(ap.user) <= ap.upperbound:
+                dis = distance((device.x, device.y), (ap.x, ap.y))
+                selected_ap = ap
+    return selected_ap
 
 #graph
 def graph_device(ap_list, device_list):

@@ -38,53 +38,34 @@ class DEVICE:
         # device move out of range
         if self.ap != None:
             if distance((self.x, self.y), (self.ap.x, self.ap.y)) > range_decode(self.ap.power):
-                if self.state == D_State.connected or self.state == D_State.handover:
-                    dis = float('inf')
-                    selected_ap = None
-                    for ap in ap_list:
-                        if distance((self.x, self.y), (ap.x, ap.y)) < range_decode(ap.power): # all AP that cover the device
-                            if distance((self.x, self.y), (ap.x, ap.y)) < dis and ap.type == self.type and len(ap.user) <= ap.upperbound:
-                                dis = distance((self.x, self.y), (ap.x, ap.y))
-                                selected_ap = ap
-                    if selected_ap != None:
-                        next_state = D_State.connected
-                        flag = True
-                    else:
-                        next_state = D_State.detached
-                        flag = True
+                if find_ap(self, ap_list) != None:
+                    next_state = D_State.connected
+                    flag = True
+                else:
+                    next_state = D_State.detached
+                    flag = True
 
         # connected to handover
         if self.ap != None and self.state == D_State.connected:
             for ap in ap_list:
-                if ap.type == self.type and distance((self.x, self.y), (self.ap.x, self.ap.y)) > distance((self.x, self.y), (ap.x, ap.y)):
-                    next_state = D_State.handover
-                    flag = True
-                        
+                # in ap's decode range
+                if distance((self.x, self.y), (ap.x, ap.y)) < range_decode(ap.power):
+                    if ap.type == self.type and distance((self.x, self.y), (self.ap.x, self.ap.y)) > distance((self.x, self.y), (ap.x, ap.y)):
+                        next_state = D_State.handover
+                        flag = True
+                        break
+                    
         # device timer expired
         if self.timer == 0:
             if self.state == D_State.detached:
-                dis = float('inf')
-                selected_ap = None
-                for ap in ap_list:
-                    if distance((self.x, self.y), (ap.x, ap.y)) < range_decode(ap.power): # all AP that cover the device
-                        if distance((self.x, self.y), (ap.x, ap.y)) < dis and ap.type == self.type and len(ap.user) <= ap.upperbound:
-                            dis = distance((self.x, self.y), (ap.x, ap.y))
-                            selected_ap = ap
-                if selected_ap != None:  
+                if find_ap(self, ap_list) != None:  
                     next_state = D_State.connected
                     flag = True
                 else:
                     next_state = D_State.detached
                     flag = True
             elif self.state == D_State.handover:
-                dis = float('inf')
-                selected_ap = None
-                for ap in ap_list:
-                    if distance((self.x, self.y), (ap.x, ap.y)) < range_decode(ap.power): # all AP that cover the device
-                        if distance((self.x, self.y), (ap.x, ap.y)) < dis and ap.type == self.type and len(ap.user) <= ap.upperbound:
-                            dis = distance((self.x, self.y), (ap.x, ap.y))
-                            selected_ap = ap   
-                if selected_ap != None:  
+                if find_ap(self, ap_list) != None:  
                     next_state = D_State.connected
                     flag = True
                 else:
