@@ -3,7 +3,7 @@ from parameter import*
 from utils import*
 
 @unique
-class State(IntEnum):
+class A_State(IntEnum):
     init = 1
     active = 2
     underpopulated = 3
@@ -19,7 +19,7 @@ class AP:
         self.id = id
         self.type = type_ap
         self.timer = 0
-        self.state = State.init
+        self.state = A_State.init
         self.cci = 0
         self.neighbor = []
         self.interference_range = 0

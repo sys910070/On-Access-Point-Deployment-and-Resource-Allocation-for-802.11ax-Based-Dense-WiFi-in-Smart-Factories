@@ -1,13 +1,7 @@
-from enum import(IntEnum, unique)
 import random
 from parameter import*
-from utils import distance, range_decode
-@unique
-class State(IntEnum):
-    init = 1
-    connected = 2
-    detached = 3
-    handover = 4
+from action import*
+from utils import*
 
 class DEVICE:
     def __init__(self, x, y, vx, vy, id, type_device):
@@ -19,7 +13,7 @@ class DEVICE:
         self.channel = 0
         self.id = id
         self.type = type_device
-        self.state = State.init
+        self.state = D_State.init
         self.ap = None
         self.throughput = 0
         self.timer = float('inf')
@@ -40,19 +34,78 @@ class DEVICE:
 
     def state_change(self, ap_list):
         flag = False
+        next_state = None
         # device move out of range
         if self.ap != None:
-            if distance((self.x, self.y), (self.ap.x, self.ap.y)) > range_decode(self.power):
-                flag = True
+            if distance((self.x, self.y), (self.ap.x, self.ap.y)) > range_decode(self.ap.power):
+                if self.state == D_State.connected or self.state == D_State.handover:
+                    dis = float('inf')
+                    selected_ap = None
+                    for ap in ap_list:
+                        if distance((self.x, self.y), (ap.x, ap.y)) < range_decode(ap.power): # all AP that cover the device
+                            if distance((self.x, self.y), (ap.x, ap.y)) < dis and ap.type == self.type and len(ap.user) <= ap.upperbound:
+                                dis = distance((self.x, self.y), (ap.x, ap.y))
+                                selected_ap = ap
+                    if selected_ap != None:
+                        next_state = D_State.connected
+                        flag = True
+                    else:
+                        next_state = D_State.detached
+                        flag = True
+
+        # connected to handover
+        if self.ap != None and self.state == D_State.connected:
+            for ap in ap_list:
+                if ap.type == self.type and distance((self.x, self.y), (self.ap.x, self.ap.y)) > distance((self.x, self.y), (ap.x, ap.y)):
+                    next_state = D_State.handover
+                    flag = True
+                        
         # device timer expired
         if self.timer == 0:
-            flag = True
-        # device move to overlapp BSS
-        if self.ap != None:
-            for ap in ap_list:
-                if distance((self.x, self.y), (self.ap.x, self.ap.y)) > distance((self.x, self.y), (ap.x, ap.y)):
+            if self.state == D_State.detached:
+                dis = float('inf')
+                selected_ap = None
+                for ap in ap_list:
+                    if distance((self.x, self.y), (ap.x, ap.y)) < range_decode(ap.power): # all AP that cover the device
+                        if distance((self.x, self.y), (ap.x, ap.y)) < dis and ap.type == self.type and len(ap.user) <= ap.upperbound:
+                            dis = distance((self.x, self.y), (ap.x, ap.y))
+                            selected_ap = ap
+                if selected_ap != None:  
+                    next_state = D_State.connected
                     flag = True
-        return flag
+                else:
+                    next_state = D_State.detached
+                    flag = True
+            elif self.state == D_State.handover:
+                dis = float('inf')
+                selected_ap = None
+                for ap in ap_list:
+                    if distance((self.x, self.y), (ap.x, ap.y)) < range_decode(ap.power): # all AP that cover the device
+                        if distance((self.x, self.y), (ap.x, ap.y)) < dis and ap.type == self.type and len(ap.user) <= ap.upperbound:
+                            dis = distance((self.x, self.y), (ap.x, ap.y))
+                            selected_ap = ap   
+                if selected_ap != None:  
+                    next_state = D_State.connected
+                    flag = True
+                else:
+                    next_state = D_State.detached
+                    flag = True
+        return flag, next_state
         
-    def action():
-        pass
+    def action(self, next_state, ap_list):
+        transition_table = {
+            D_State.connected : {
+                D_State.connected : connected_connected, 
+                D_State.detached : connected_detached, 
+                D_State.handover : connected_handover
+            }, 
+            D_State.detached : {
+                D_State.connected : detached_connected, 
+                D_State.detached : detached_detached
+            }, 
+            D_State.handover : {
+                D_State.connected : handover_connected, 
+                D_State.detached : handover_detached
+            }
+        }
+        transition_table[self.state][next_state](self, ap_list)

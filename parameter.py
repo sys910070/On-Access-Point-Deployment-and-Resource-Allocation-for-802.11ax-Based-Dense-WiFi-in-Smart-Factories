@@ -27,6 +27,8 @@ frequency_channel_20 = np.arange(1,12) # 1~11
 frequency_channel_40 = np.arange(12,17) # 12~16
 frequency_channel_80 = np.arange(17,19) # 17~18
 frequency_channel_160 = np.arange(19,20) #19
+d_state_timer_handover = 3
+d_state_timer_detached = 3
 
 # channel overlap dictionary
 ch_dic = {}

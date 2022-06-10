@@ -1,14 +1,13 @@
 import numpy as np
 import random
 import math
+import logging
 from itertools import chain
 from ap import AP 
 from device import DEVICE
 from information_center import*
-import optimization
 from utils import* 
 from parameter import*
-import logging
 
 # create two log file for APs and devices
 formatter = logging.Formatter('%(levelname)s %(message)s')
@@ -64,26 +63,30 @@ while t!=operation_time:
     ap_logger = setup_logger('AP', 'AP.txt')                    # open file
     device_logger = setup_logger('Device', 'Device.txt')        # open file
 
-    for device in device_list:
-        device.move()
-    for device in device_list:
-        if device.state_change(ap_list):
-            pass
-        
     ap_logger.info('id, users, power, channel, cci, neighbor, neighbor channel')
     for ap in ap_list:    
         ap_logger.info(f'{ap.id}, {[user.id for user in ap.user]}, {ap.power}, {ap.channel}, {ap.cci}, {[neighbor.id for neighbor in ap.neighbor]}, {[neighbor.channel for neighbor in ap.neighbor]}')
-    device_logger.info('id, ap')
+    device_logger.info('id, ap, device_state')
     for device in device_list:
         if device.ap != None:
-            device_logger.info(f'{device.id}, {device.ap.id}, {device.power}, {device.channel}')
+            device_logger.info(f'{device.id}, {device.ap.id}, {device.power}, {device.state}')
         else:
-            device_logger.info(f'{device.id}, {0}, {device.power}, {device.channel}')
+            device_logger.info(f'{device.id}, {None}, {device.power}, {device.channel}, {device.state}')
     # graph
     graph_device(ap_list, device_list)
     for device in device_list:
         device.move()
-    t = t+1
+    for device in device_list:
+        flag, device_next_state = device.state_change(ap_list)
+        if flag:
+            device.action(device_next_state, ap_list)
+            device.timer -= 1
+    # count = 0
+    # for device in device_list:
+    #     if device.ap == None:
+    #         count += 1
+    # print(count)
+    t += 1
 
 # while t!=operation_time:
 #     t = t+1
@@ -91,8 +94,9 @@ while t!=operation_time:
 #         for device in device_list:
 #             device.move()
 #         for device in device_list:
-#             if device.state_change():
-#                 device.action()
+#             flag, next_state = device.state_change()
+#             if flag:
+#                 device.action(next_state)
 #                 device.association()
 #             else:
 #                 continue
