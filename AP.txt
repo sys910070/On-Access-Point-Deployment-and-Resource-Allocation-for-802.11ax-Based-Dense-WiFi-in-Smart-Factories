@@ -1,82 +1,82 @@
 INFO id, users, power, state, timer
-INFO 1, [], 0, idle, 2
-INFO 2, [], 0, idle, 2
-INFO 3, [67], 22, underpopulated, 1
-INFO 4, [], 0, idle, 2
-INFO 5, [], 0, idle, 2
-INFO 6, [80, 48], 30, active, inf
-INFO 7, [], 0, idle, 2
-INFO 8, [], 0, idle, 2
-INFO 9, [87, 47], 26, active, inf
+INFO 1, [], 0, idle, 0
+INFO 2, [], 0, idle, 0
+INFO 3, [67], 22, underpopulated, 2
+INFO 4, [], 0, idle, 0
+INFO 5, [], 0, idle, 0
+INFO 6, [80], 30, underpopulated, 0
+INFO 7, [], 0, idle, 0
+INFO 8, [], 0, idle, 0
+INFO 9, [65, 87], 26, active, inf
 INFO 10, [32, 92, 24], 30, active, inf
-INFO 11, [], 0, idle, 2
-INFO 12, [56], 22, underpopulated, 0
-INFO 13, [], 0, idle, 2
-INFO 14, [40, 76, 58], 28, active, inf
-INFO 15, [79], 22, underpopulated, 1
-INFO 16, [62], 22, underpopulated, 0
+INFO 11, [], 0, idle, 0
+INFO 12, [56], 22, underpopulated, 1
+INFO 13, [], 0, idle, 0
+INFO 14, [40, 76], 28, active, inf
+INFO 15, [79], 22, underpopulated, 2
+INFO 16, [62], 22, underpopulated, 1
 INFO 17, [3, 27], 22, active, inf
-INFO 18, [26, 12], 28, active, inf
-INFO 19, [11], 30, underpopulated, 0
-INFO 20, [], 0, idle, 2
+INFO 18, [26], 28, underpopulated, 0
+INFO 19, [11], 30, underpopulated, 1
+INFO 20, [], 0, idle, 0
 INFO 21, [1, 33, 45, 51], 30, active, inf
-INFO 22, [], 0, idle, 2
-INFO 23, [73, 5], 24, active, inf
-INFO 24, [], 0, idle, 2
-INFO 25, [], 0, idle, 2
-INFO 26, [], 0, idle, 2
-INFO 27, [], 26, underpopulated, 0
+INFO 22, [], 0, idle, 0
+INFO 23, [73, 5], 24, underpopulated, 0
+INFO 24, [], 0, idle, 0
+INFO 25, [], 0, idle, 0
+INFO 26, [], 0, idle, 0
+INFO 27, [], 26, underpopulated, 1
 INFO 28, [18, 44], 22, active, inf
-INFO 29, [], 0, idle, 2
-INFO 30, [54, 72], 24, underpopulated, 1
-INFO 31, [], 0, idle, 2
-INFO 32, [], 0, idle, 2
-INFO 33, [71, 97], 28, active, inf
-INFO 34, [16, 52, 36, 22], 30, active, inf
-INFO 35, [], 0, idle, 2
-INFO 36, [], 0, idle, 2
-INFO 37, [], 0, idle, 2
-INFO 38, [], 0, idle, 2
-INFO 39, [], 0, idle, 2
-INFO 40, [2, 74], 22, active, inf
-INFO 41, [], 0, idle, 2
-INFO 42, [], 0, idle, 2
-INFO 43, [], 0, idle, 2
-INFO 44, [], 0, idle, 2
-INFO 45, [], 0, idle, 2
-INFO 46, [], 0, idle, 2
-INFO 47, [], 0, idle, 2
-INFO 48, [], 0, idle, 2
-INFO 49, [], 0, idle, 2
-INFO 50, [70], 30, underpopulated, 0
-INFO 51, [], 0, idle, 2
-INFO 52, [], 0, idle, 2
-INFO 53, [89, 99], 22, active, inf
-INFO 54, [], 0, idle, 2
-INFO 55, [], 0, idle, 2
+INFO 29, [], 0, idle, 0
+INFO 30, [54], 24, underpopulated, 2
+INFO 31, [], 0, idle, 0
+INFO 32, [], 0, idle, 0
+INFO 33, [71, 97, 55], 28, active, inf
+INFO 34, [10, 16, 52, 36], 30, active, inf
+INFO 35, [], 0, idle, 0
+INFO 36, [], 0, idle, 0
+INFO 37, [], 0, idle, 0
+INFO 38, [], 0, idle, 0
+INFO 39, [], 0, idle, 0
+INFO 40, [2], 22, underpopulated, 0
+INFO 41, [], 0, idle, 0
+INFO 42, [], 0, idle, 0
+INFO 43, [], 0, idle, 0
+INFO 44, [], 0, idle, 0
+INFO 45, [], 0, idle, 0
+INFO 46, [], 0, idle, 0
+INFO 47, [], 0, idle, 0
+INFO 48, [], 0, idle, 0
+INFO 49, [], 0, idle, 0
+INFO 50, [70], 30, underpopulated, 1
+INFO 51, [], 0, idle, 0
+INFO 52, [], 0, idle, 0
+INFO 53, [89], 22, underpopulated, 0
+INFO 54, [], 0, idle, 0
+INFO 55, [], 0, idle, 0
 INFO 56, [4, 78], 22, active, inf
-INFO 57, [], 0, idle, 2
-INFO 58, [], 0, idle, 2
-INFO 59, [], 0, idle, 2
-INFO 60, [], 0, idle, 2
-INFO 61, [], 0, idle, 2
+INFO 57, [], 0, idle, 0
+INFO 58, [], 0, idle, 0
+INFO 59, [], 0, idle, 0
+INFO 60, [], 0, idle, 0
+INFO 61, [], 0, idle, 0
 INFO 62, [34, 96, 100], 26, active, inf
-INFO 63, [], 0, idle, 2
-INFO 64, [8, 86, 30], 28, active, inf
-INFO 65, [], 0, idle, 2
-INFO 66, [], 0, idle, 2
+INFO 63, [], 0, idle, 0
+INFO 64, [8, 86], 28, active, inf
+INFO 65, [], 0, idle, 0
+INFO 66, [], 0, idle, 0
 INFO 67, [41, 85, 25], 30, active, inf
-INFO 68, [], 0, idle, 2
-INFO 69, [], 0, idle, 2
-INFO 70, [], 0, idle, 2
-INFO 71, [], 0, idle, 2
-INFO 72, [38, 64], 30, active, inf
+INFO 68, [], 0, idle, 0
+INFO 69, [], 0, idle, 0
+INFO 70, [], 0, idle, 0
+INFO 71, [], 0, idle, 0
+INFO 72, [38], 30, underpopulated, 0
 INFO 73, [9, 81], 26, active, inf
-INFO 74, [], 0, idle, 2
-INFO 75, [], 0, idle, 2
-INFO 76, [20, 60], 30, active, inf
-INFO 77, [63, 95, 23], 24, active, inf
-INFO 78, [], 0, idle, 2
-INFO 79, [17, 21, 59, 77, 83], 28, active, inf
-INFO 80, [], 0, idle, 2
+INFO 74, [], 0, idle, 0
+INFO 75, [], 0, idle, 0
+INFO 76, [20, 60, 14], 30, active, inf
+INFO 77, [63, 95], 24, active, inf
+INFO 78, [], 0, idle, 0
+INFO 79, [17, 21, 59, 77, 83, 69], 28, active, inf
+INFO 80, [], 0, idle, 0
 INFO 81, [31, 49, 57, 91], 26, active, inf

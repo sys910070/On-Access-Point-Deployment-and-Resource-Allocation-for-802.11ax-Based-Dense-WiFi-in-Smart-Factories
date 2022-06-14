@@ -157,7 +157,7 @@ def graph_device(ap_list, device_list):
         else:
             plt.plot(device.y, device.x, 'ro', color = 'dimgrey') # device
             plt.text(device.y+1, device.x+1, device.id, color='dimgrey')
-    plt.axis([0, 200, 0, 180])
+    plt.axis([0, factory_width, 0, factory_length])
     plt.show()
 
 

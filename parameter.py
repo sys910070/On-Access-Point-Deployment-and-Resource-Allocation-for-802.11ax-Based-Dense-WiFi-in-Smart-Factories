@@ -84,3 +84,16 @@ CHI = 5 #standard deviation association with the degree of shadow fading
 P_REF = 46 #the path loss at a reference distance(1m)
 THETA_DECODE = -68 #threshold of decode signal strength(dBm)
 THETA_INTERFERENCE = -77 #threshold of interference signal strength(dBm)
+
+# color
+# background
+WHITE = (255, 255, 255)
+# AP
+LIME = (204, 255, 0)
+RED = (255, 0, 0)
+BLUE = (0, 0, 255)
+PURPLE = (128, 0, 128)
+# Device
+BLACK = (0, 0, 0)
+DIMGRAY = (105, 105, 105)
+
