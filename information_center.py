@@ -49,8 +49,10 @@ def init(ap_list, device_list):
     for ap in ap_list:
         if len(ap.user) != 0:
             ap.state = A_State.active
+            ap.timer = float('inf')
         else:
-            ap.state = A_State.idle                   
+            ap.state = A_State.idle
+            ap.timer = a_state_timer_idle                   
 
 # allocate lowest power level to cover all associated device
 def power_allocation(ap_list):
@@ -58,10 +60,8 @@ def power_allocation(ap_list):
         if len(ap.user) != 0:
             for power in power_level:
                 if range_decode(power) >= max_dis_device(ap):
-                    ap.power_change(power)
+                    ap.power_change(power, ap_list)
                     break
-    for ap in ap_list:
-        ap.add_neighbor_ap(ap_list)
 
 # allocate 20MHz frequency channel
 def channel_allocation(ap_list):

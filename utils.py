@@ -88,6 +88,47 @@ def find_ap(device, ap_list):
                 selected_ap = ap
     return selected_ap
 
+# device find ap but not the one it is connecting right now    
+def find_other_ap(device, ap_list):
+    dis = float('inf')
+    selected_ap = None
+    for ap in ap_list:
+        if distance((device.x, device.y), (ap.x, ap.y)) < range_decode(ap.power) and ap != device.ap: # all AP that cover the device
+            if distance((device.x, device.y), (ap.x, ap.y)) < dis and ap.type == device.type and len(ap.user) <= ap.upperbound:
+                dis = distance((device.x, device.y), (ap.x, ap.y))
+                selected_ap = ap
+    return selected_ap
+
+def device_connect(device, ap):
+    ap.adduser(device)
+    device.ap = ap
+    device.power = ap.power
+    device.channel = ap.channel
+
+def device_disconnect(device):
+    device.ap.user.remove(device)
+    device.ap = None
+    device.power = 0
+    device.channel = 0
+
+# only 20 MHz channel would be selected (revise lated)
+def select_channel(ap, ap_list):
+    set_20 = set(frequency_channel_20)
+    set_neighbor = set()
+    set_neighbor = {neighbor.channel for neighbor in ap.neighbor}
+    set_diff = set_20.difference(set_neighbor)
+    if len(set_diff) != 0:
+        ap.channel = random.choice(list(set_diff))
+    else:
+        ap.channel = min_user_channel(ap)
+
+def power_adjustment(ap, ap_list):
+    if len(ap.user) != 0:
+        for power in power_level:
+            if range_decode(power) >= max_dis_device(ap):
+                ap.power_change(power, ap_list)
+                break
+
 #graph
 def graph_device(ap_list, device_list):
     plt.title('simulation display')
@@ -109,10 +150,13 @@ def graph_device(ap_list, device_list):
         elif ch_id_to_bw[ap.channel] == 160:
             plt.plot(ap.y, ap.x,'ro', color = 'purple') # AP
             plt.text(ap.y+1, ap.x+1, ap.id, color='purple')
-    for device in device_list:    
-        plt.plot(device.y, device.x, 'ro', color = 'black') # device
-        plt.text(device.y+1, device.x+1, device.id, color='black')
-
+    for device in device_list:
+        if device.ap != None:
+            plt.plot(device.y, device.x, 'ro', color = 'black') # device
+            plt.text(device.y+1, device.x+1, device.id, color='black')
+        else:
+            plt.plot(device.y, device.x, 'ro', color = 'dimgrey') # device
+            plt.text(device.y+1, device.x+1, device.id, color='dimgrey')
     plt.axis([0, 200, 0, 180])
     plt.show()
 

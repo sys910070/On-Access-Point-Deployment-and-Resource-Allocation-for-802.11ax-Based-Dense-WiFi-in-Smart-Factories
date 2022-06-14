@@ -1,13 +1,12 @@
 #this file is for all parameter
 from enum import(IntEnum, unique)
+from turtle import delay
 import numpy as np
 
 @unique
 class Type(IntEnum):
     throughput = 1
-    latency = 2
-
-operation_time = 3 # second
+    delay = 2
 
 #ap, device setup
 #type 1(high throughput device, AP), type 2(delat sensitive device)
@@ -17,18 +16,25 @@ ap_num = ap_num1+ap_num2
 device_num1 = 50
 device_num2 = 50
 device_num = device_num1+device_num2
-upperbound1 = 7 # maxixmum device for an AP
-upperbound2 = 10
-lowerbound1 = 2 #minimum device for an AP
-lowerbound2 = 2
+upperbound_throughput = 7 # maxixmum device for an AP
+upperbound_delay = 10
+lowerbound_throughput = 2 #minimum device for an AP
+lowerbound_delay = 2
+transition_upperbound = 5
 p_max = 30 #dbm
 power_level = [0, 22, 24, 26, 28, 30]
 frequency_channel_20 = np.arange(1,12) # 1~11
 frequency_channel_40 = np.arange(12,17) # 12~16
 frequency_channel_80 = np.arange(17,19) # 17~18
 frequency_channel_160 = np.arange(19,20) #19
+
+# all timer parameter
+operation_time = 10 # second
 d_state_timer_handover = 3
 d_state_timer_detached = 3
+d_state_timer_search = 3
+a_state_timer_underpopulate = 3
+a_state_timer_idle = 3
 
 # channel overlap dictionary
 ch_dic = {}

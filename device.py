@@ -17,6 +17,7 @@ class DEVICE:
         self.ap = None
         self.throughput = 0
         self.timer = float('inf')
+        self.selected = None
 
     def move(self):
         while True:
@@ -45,7 +46,7 @@ class DEVICE:
                     next_state = D_State.detached
                     flag = True
 
-        # connected to handover
+        # overlapped BSS
         if self.ap != None and self.state == D_State.connected:
             for ap in ap_list:
                 # in ap's decode range
@@ -55,6 +56,27 @@ class DEVICE:
                         flag = True
                         break
                     
+        # device in search state
+        if self.state == D_State.search and self.timer !=0:
+            dis = float('inf')
+            selected_ap = None
+            for ap in ap_list:
+                # check if there exist avialable active AP
+                if ap.state == A_State.active:
+                    if distance((self.x, self.y), (ap.x, ap.y)) < range_decode(ap.power) and ap != self.ap: # all AP that cover the device
+                        if distance((self.x, self.y), (ap.x, ap.y)) < dis and ap.type == self.type and len(ap.user) <= ap.upperbound:
+                            dis = distance((self.x, self.y), (ap.x, ap.y))
+                            selected_ap = ap
+                # for idle AP, try power with p_max and check if exist idle AP convering detached device
+                elif ap.state == A_State.idle and ap.timer == 0:
+                    if distance((self.x, self.y), (ap.x, ap.y)) < range_decode(p_max) and ap != self.ap:
+                        if distance((self.x, self.y), (ap.x, ap.y)) < dis and ap.type == self.type and len(ap.user) <= ap.upperbound:
+                            dis = distance((self.x, self.y), (ap.x, ap.y))
+                            selected_ap = ap
+            if selected_ap != None:
+                next_state = D_State.connected
+                flag = True
+
         # device timer expired
         if self.timer == 0:
             if self.state == D_State.detached:
@@ -62,7 +84,7 @@ class DEVICE:
                     next_state = D_State.connected
                     flag = True
                 else:
-                    next_state = D_State.detached
+                    next_state = D_State.search
                     flag = True
             elif self.state == D_State.handover:
                 if find_ap(self, ap_list) != None:  
@@ -71,6 +93,14 @@ class DEVICE:
                 else:
                     next_state = D_State.detached
                     flag = True
+            elif self.state == D_State.search:
+                if find_ap(self, ap_list) != None:  
+                    next_state = D_State.connected
+                    flag = True
+                else:
+                    next_state = D_State.detached
+                    flag = True
+                    
         return flag, next_state
         
     def action(self, next_state, ap_list):
@@ -82,11 +112,16 @@ class DEVICE:
             }, 
             D_State.detached : {
                 D_State.connected : detached_connected, 
-                D_State.detached : detached_detached
+                D_State.search : detached_search
             }, 
             D_State.handover : {
                 D_State.connected : handover_connected, 
                 D_State.detached : handover_detached
+            },
+            D_State.search : {
+                D_State.connected : search_connected, 
+                D_State.detached : search_detached
             }
+
         }
         transition_table[self.state][next_state](self, ap_list)
