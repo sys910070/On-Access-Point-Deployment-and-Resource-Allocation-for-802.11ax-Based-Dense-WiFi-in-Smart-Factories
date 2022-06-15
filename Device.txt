@@ -1,101 +1,101 @@
-INFO id, ap, power, state, timer
-INFO 1, 21, 30, connected, inf
-INFO 2, 40, 22, connected, inf
-INFO 3, 17, 22, connected, inf
-INFO 4, 56, 22, connected, inf
-INFO 5, 23, 24, connected, inf
-INFO 6, None, 0, detached, 0
-INFO 7, None, 0, detached, 2
-INFO 8, 64, 28, connected, inf
-INFO 9, 73, 26, connected, inf
-INFO 10, 34, 30, connected, inf
-INFO 11, 19, 30, connected, inf
-INFO 12, None, 0, detached, 0
-INFO 13, None, 0, detached, 1
-INFO 14, 76, 30, connected, inf
+INFO id, ap, power, state, timer, x, y
+INFO 1, 21, 30, connected, inf, 51.991679694798215, 56.25464341114052
+INFO 2, 40, 22, connected, inf, 85.7112003966058, 89.62525212507599
+INFO 3, 17, 22, connected, inf, 29.20096782366808, 164.81325921619387
+INFO 4, 56, 22, connected, inf, 125.39523665101089, 32.58058152614018
+INFO 5, None, 0, detached, 2
+INFO 6, 64, 28, connected, inf, 162.60034489919394, 14.188501780536711
+INFO 7, None, 0, detached, 0
+INFO 8, None, 0, search, 2
+INFO 9, 73, 26, connected, inf, 157.16769292118516, 15.91262476480166
+INFO 10, None, 0, detached, 1
+INFO 11, 19, 30, connected, inf, 63.986875738518485, 2.572467803642752
+INFO 12, 18, 28, connected, inf, 26.243466719988746, 173.38297587405046
+INFO 13, 35, 30, connected, inf, 70.50470219498234, 159.1232307052885
+INFO 14, None, 0, search, 0
 INFO 15, None, 0, detached, 0
-INFO 16, 34, 30, connected, inf
-INFO 17, 79, 28, connected, inf
-INFO 18, 28, 22, connected, inf
+INFO 16, 34, 30, connected, inf, 72.82373485662026, 127.74460059777164
+INFO 17, 79, 28, connected, inf, 161.24605410478105, 132.1389754484643
+INFO 18, 28, 22, connected, inf, 72.92977494987157, 8.235327950453183
 INFO 19, None, 0, detached, 0
-INFO 20, 76, 30, connected, inf
-INFO 21, 79, 28, connected, inf
+INFO 20, None, 0, detached, 0
+INFO 21, 79, 28, connected, inf, 160.23917502168547, 121.80500745966623
 INFO 22, None, 0, detached, 0
-INFO 23, None, 0, detached, 0
-INFO 24, 10, 30, connected, inf
-INFO 25, 67, 30, connected, inf
-INFO 26, 18, 28, connected, inf
-INFO 27, 17, 22, connected, inf
-INFO 28, None, 0, detached, 1
-INFO 29, None, 0, detached, 2
-INFO 30, None, 0, detached, 0
-INFO 31, 81, 26, connected, inf
-INFO 32, 10, 30, connected, inf
-INFO 33, 21, 30, connected, inf
-INFO 34, 62, 26, connected, inf
-INFO 35, None, 0, detached, 2
-INFO 36, 34, 30, connected, inf
-INFO 37, None, 0, detached, 2
-INFO 38, 72, 30, connected, inf
-INFO 39, None, 0, detached, 2
-INFO 40, 14, 28, connected, inf
-INFO 41, 67, 30, connected, inf
-INFO 42, None, 0, detached, 2
+INFO 23, 77, 24, connected, inf, 170.24479844773415, 103.18797762481596
+INFO 24, 10, 30, connected, inf, 54.64851195514412, 33.54585742969262
+INFO 25, None, 0, detached, 0
+INFO 26, 18, 28, connected, inf, 31.744402164302336, 174.90047267609748
+INFO 27, 17, 22, connected, inf, 37.20038955199091, 157.71057743964212
+INFO 28, None, 0, detached, 0
+INFO 29, 21, 30, connected, inf, 46.21839654708704, 46.57927482769936
+INFO 30, None, 0, detached, 2
+INFO 31, 81, 26, connected, inf, 161.9774715083408, 179.0595436697052
+INFO 32, 10, 30, connected, inf, 33.38397670968515, 27.630676129096013
+INFO 33, 21, 30, connected, inf, 55.0654437656962, 47.26804241442689
+INFO 34, 62, 26, connected, inf, 138.14973919860466, 165.7907137148268
+INFO 35, 27, 30, connected, inf, 57.48466357710595, 196.6031307263657
+INFO 36, 34, 30, connected, inf, 60.988195317760194, 128.98969246629343
+INFO 37, 79, 28, connected, inf, 170.37023460063654, 157.02697617446626
+INFO 38, None, 0, detached, 1
+INFO 39, 39, 30, connected, inf, 80.06516737228654, 48.186853645520245
+INFO 40, 14, 28, connected, inf, 31.237725052390864, 92.6006192115509
+INFO 41, 67, 30, connected, inf, 141.84996706397166, 94.11644411823454
+INFO 42, 32, 30, connected, inf, 79.23612233738076, 89.67732327376699
 INFO 43, None, 0, detached, 0
-INFO 44, 28, 22, connected, inf
-INFO 45, 21, 30, connected, inf
+INFO 44, 28, 22, connected, inf, 76.78246303413715, 15.608420896179844
+INFO 45, 21, 30, connected, inf, 68.40735862040196, 50.41831232787251
 INFO 46, None, 0, detached, 0
-INFO 47, None, 0, detached, 0
-INFO 48, None, 0, detached, 0
-INFO 49, 81, 26, connected, inf
-INFO 50, None, 0, detached, 2
-INFO 51, 21, 30, connected, inf
-INFO 52, 34, 30, connected, inf
-INFO 53, None, 0, detached, 1
-INFO 54, 30, 24, connected, inf
-INFO 55, 33, 28, connected, inf
-INFO 56, 12, 22, connected, inf
-INFO 57, 81, 26, connected, inf
-INFO 58, None, 0, detached, 0
-INFO 59, 79, 28, connected, inf
-INFO 60, 76, 30, connected, inf
+INFO 47, 9, 26, connected, inf, 30.493766473914434, 182.15282917859847
+INFO 48, 6, 30, connected, inf, 4.910844919671799, 131.64911475229215
+INFO 49, 81, 26, connected, inf, 160.68479104383667, 176.22206928851804
+INFO 50, 30, 24, connected, inf, 61.473660160753155, 62.56320973268977
+INFO 51, None, 0, detached, 1
+INFO 52, 34, 30, connected, inf, 67.88845211875856, 128.0540818554802
+INFO 53, 79, 28, connected, inf, 174.3478112205146, 135.69337356246544
+INFO 54, None, 0, search, 1
+INFO 55, None, 0, detached, 1
+INFO 56, 30, 24, connected, inf, 61.58962616646067, 64.61115282406038
+INFO 57, 81, 26, connected, inf, 160.50122258041773, 184.81813040190949
+INFO 58, None, 0, detached, 2
+INFO 59, 79, 28, connected, inf, 169.96039446378995, 121.75171518841265
+INFO 60, 76, 30, connected, inf, 162.69361253326903, 94.10665923190709
 INFO 61, None, 0, detached, 0
-INFO 62, 16, 22, connected, inf
-INFO 63, 77, 24, connected, inf
-INFO 64, None, 0, detached, 0
-INFO 65, 9, 26, connected, inf
+INFO 62, 34, 30, connected, inf, 52.35173406963497, 137.22844849737382
+INFO 63, 77, 24, connected, inf, 154.2655591331302, 89.5057677913221
+INFO 64, 72, 30, connected, inf, 161.85871587765288, 171.34036271057806
+INFO 65, 9, 26, connected, inf, 13.141016905883419, 193.92344990807487
 INFO 66, None, 0, detached, 0
-INFO 67, 3, 22, connected, inf
-INFO 68, None, 0, detached, 1
-INFO 69, 79, 28, connected, inf
-INFO 70, 50, 30, handover, 2
-INFO 71, 33, 28, connected, inf
+INFO 67, None, 0, search, 2
+INFO 68, 2, 30, connected, inf, 25.72738089594256, 42.460335309487704
+INFO 69, 79, 28, connected, inf, 160.75115300201543, 129.30070654938362
+INFO 70, 50, 30, connected, inf, 119.6522841091533, 81.2036883788754
+INFO 71, 33, 28, connected, inf, 83.97623719166704, 122.21904148379083
 INFO 72, None, 0, detached, 0
-INFO 73, 23, 24, handover, 2
-INFO 74, None, 0, detached, 0
-INFO 75, None, 0, detached, 1
-INFO 76, 14, 28, connected, inf
-INFO 77, 79, 28, connected, inf
-INFO 78, 56, 22, connected, inf
-INFO 79, 15, 22, connected, inf
-INFO 80, 6, 30, connected, inf
-INFO 81, 73, 26, connected, inf
-INFO 82, None, 0, detached, 0
-INFO 83, 79, 28, connected, inf
+INFO 73, None, 0, detached, 0
+INFO 74, 40, 22, connected, inf, 86.17004569861756, 77.19698215555468
+INFO 75, None, 0, detached, 0
+INFO 76, 6, 30, connected, inf, 29.139487982754805, 118.94938268016851
+INFO 77, None, 0, detached, 1
+INFO 78, 56, 22, connected, inf, 137.02261687320276, 40.99791814379493
+INFO 79, 15, 30, connected, inf, 23.334429714712115, 106.3434413081905
+INFO 80, 6, 30, connected, inf, 28.898747363520105, 113.96176451861302
+INFO 81, 73, 26, connected, inf, 167.71000829804603, 23.293124955248576
+INFO 82, 64, 28, connected, inf, 131.15483362435106, 19.086814764291223
+INFO 83, 79, 28, connected, inf, 177.90357257923802, 140.53149322684195
 INFO 84, None, 0, detached, 0
-INFO 85, 67, 30, connected, inf
-INFO 86, 64, 28, connected, inf
-INFO 87, 9, 26, connected, inf
-INFO 88, None, 0, detached, 0
-INFO 89, 53, 22, connected, inf
+INFO 85, 67, 30, connected, inf, 144.90723215273627, 58.02162052783984
+INFO 86, 64, 28, connected, inf, 138.2882847402885, 5.746941020332667
+INFO 87, 27, 30, connected, inf, 43.118173348865334, 194.09101970588276
+INFO 88, 2, 22, connected, inf, 17.56693910226512, 32.23709097165497
+INFO 89, 35, 30, connected, inf, 90.38244535214484, 157.8080360293099
 INFO 90, None, 0, detached, 0
-INFO 91, 81, 26, connected, inf
-INFO 92, 10, 30, connected, inf
+INFO 91, 81, 26, connected, inf, 159.71329746158895, 176.0628837074702
+INFO 92, None, 0, detached, 0
 INFO 93, None, 0, detached, 0
 INFO 94, None, 0, detached, 0
-INFO 95, 77, 24, connected, inf
-INFO 96, 62, 26, connected, inf
-INFO 97, 33, 28, connected, inf
+INFO 95, None, 0, detached, 1
+INFO 96, 62, 26, connected, inf, 119.90828285304612, 163.295040758912
+INFO 97, 35, 30, connected, inf, 82.409303594877, 138.76307312344287
 INFO 98, None, 0, detached, 0
-INFO 99, None, 0, detached, 0
-INFO 100, 62, 26, connected, inf
+INFO 99, 35, 30, connected, inf, 92.27065313253627, 154.5415101557977
+INFO 100, 72, 30, connected, inf, 142.291838891181, 180.0078589833725

@@ -24,7 +24,7 @@ def init(ap_list, device_list):
             device.ap = selected_ap
             selected_ap.adduser(device)
     
-    # if an AP with users lower than lowerbound remove all device and connect to other AP
+    # for AP with users lower than lowerbound, remove all device and connect to other AP if possible
     used_ap = {}
     while not ap_lowerbound_check(ap_list):
         for device in device_list:
@@ -36,7 +36,7 @@ def init(ap_list, device_list):
                     for ap in ap_list:
                         if device not in used_ap:
                             used_ap[device] = []
-                        if distance((device.x, device.y), (ap.x, ap.y)) < range_decode(30) and ap != device.ap and ap not in used_ap[device]:
+                        if distance((device.x, device.y), (ap.x, ap.y)) < range_decode(p_max) and ap != device.ap and ap not in used_ap[device]:
                             if distance((device.x, device.y), (ap.x, ap.y)) < dis and ap.type == device.type and len(ap.user) <= ap.upperbound:
                                 dis = distance((device.x, device.y), (ap.x, ap.y))
                                 selected_ap = ap

@@ -2,6 +2,7 @@
 import matplotlib.pyplot as plt
 from parameter import*
 import random
+import logging
 
 #distance between two device(AP or STA)
 def distance(a, b):
@@ -129,6 +130,21 @@ def power_adjustment(ap, ap_list):
                 ap.power_change(power, ap_list)
                 break
 
+# log file
+formatter = logging.Formatter('%(levelname)s %(message)s')
+def setup_logger(name, log_file, level=logging.DEBUG):
+    """To setup as many loggers as you want"""
+
+    handler = logging.FileHandler(log_file, mode='w')        
+    handler.setFormatter(formatter)
+
+    logger = logging.getLogger(name)
+    logger.setLevel(level)
+    logger.handlers = []
+    logger.addHandler(handler)
+
+    return logger
+
 #graph
 def graph_device(ap_list, device_list):
     plt.title('simulation display')
@@ -160,8 +176,15 @@ def graph_device(ap_list, device_list):
     plt.axis([0, factory_width, 0, factory_length])
     plt.show()
 
-
 # performance matric
+# disconnected device count
+def loss_device_count(device_list):
+    count = 0
+    for device in device_list:
+        if device.ap == None:
+            count += 1
+    return count
+
 # fairness index
 def fairness(ap_list):
     x1 = 0
@@ -170,4 +193,3 @@ def fairness(ap_list):
         x1 = x1+ap.throughput/len(ap.user)
         x2 = x2+(ap.throughput/len(ap.user))**2
     return x1**2/(ap_num*x2)
-

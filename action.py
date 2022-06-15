@@ -71,6 +71,7 @@ def search_connected(device, ap_list):
     # if ap is idle, allocate all resource in AP action, not here. And change device state in AP action
     elif selected_ap.state == A_State.idle:
         device.selected = selected_ap
+
 # i
 def connected_handover(device, _):
     device.timer = d_state_timer_handover
@@ -114,6 +115,7 @@ def idle_active(ap, ap_list, device_list):
             device_connect(device, ap)
             device.state = D_State.connected
             device.selected = None
+            device.timer = float('inf')
     ap.state = A_State.active
     ap.timer = float('inf')
 # g
