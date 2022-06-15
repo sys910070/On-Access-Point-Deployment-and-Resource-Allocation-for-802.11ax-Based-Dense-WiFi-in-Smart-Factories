@@ -96,4 +96,6 @@ PURPLE = (128, 0, 128)
 # Device
 BLACK = (0, 0, 0)
 DIMGRAY = (105, 105, 105)
+# text
+GREEN = (0, 255, 0)
 

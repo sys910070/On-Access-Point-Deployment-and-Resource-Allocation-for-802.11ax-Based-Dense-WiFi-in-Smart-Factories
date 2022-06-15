@@ -57,7 +57,7 @@ channel_allocation(ap_list)
 channel_enhancement(ap_list)
 device_resource(device_list)
 
- ####################test####################
+ ####################animation####################
 
 pygame.init()
 
@@ -78,6 +78,11 @@ class Device_animate():
         self.ap = device.ap
         self.throughput = device.throughput
         self.timer = device.timer
+
+    def add_ap(self, ap_animate):
+        for ap in ap_animate:
+            if ap.id == self.ap.id:
+                self.ap =  ap
 
     def move(self):
         while True:
@@ -111,12 +116,21 @@ class AP_animate():
 
 device_animate = []
 ap_animate = []
-for device in device_list:
-    device_animate.append(Device_animate(device)) 
 for ap in ap_list:
     ap_animate.append(AP_animate(ap))
+for device in device_list:
+    device_animate.append(Device_animate(device)) 
+# add devie_animate ap since the origin is connect to ap_list no ap_animate
+for device in device_animate:
+    if device.ap != None:
+        device.add_ap(ap_animate)
 
-fullscreen = False
+def txt(obj):
+    font = pygame.font.Font('freesansbold.ttf', 10)
+    text = font.render(str(obj.id), True, BLACK, WHITE)
+    textRect = text.get_rect()
+    textRect.center = (obj.y+10, obj.x-10)
+    return text, textRect
 
 #main loop
 run = True
@@ -126,9 +140,27 @@ while run :
 
     win.fill(WHITE)
     for device in device_animate:
-        pygame.draw.circle(win, BLACK, (device.y, device.x), 3)    
+        if device.ap != None:
+            pygame.draw.circle(win, BLACK, (device.y, device.x), 3)
+            pygame.draw.line(win, BLACK, (device.y, device.x), (device.ap.y, device.ap.x), 1) 
+        else:   
+            pygame.draw.circle(win, DIMGRAY, (device.y, device.x), 3)
+        text, textRect = txt(device)
+        win.blit(text, textRect)       
     for ap in ap_animate:
-        pygame.draw.circle(win, LIME, (ap.y, ap.x), 3) 
+        if ap.channel == 0:
+            continue
+        elif ch_id_to_bw[ap.channel] == 20:
+            pygame.draw.circle(win, LIME, (ap.y, ap.x), 3)
+        elif ch_id_to_bw[ap.channel] == 40:
+            pygame.draw.circle(win, RED, (ap.y, ap.x), 3)
+        elif ch_id_to_bw[ap.channel] == 80:
+            pygame.draw.circle(win, BLUE, (ap.y, ap.x), 3)
+        elif ch_id_to_bw[ap.channel] == 160:
+            pygame.draw.circle(win, PURPLE, (ap.y, ap.x), 3)
+        pygame.draw.circle(win, (255, 160, 122), (ap.y, ap.x), ap.interference_range, 1)
+        text, textRect = txt(ap)
+        win.blit(text, textRect)  
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT :
@@ -181,62 +213,3 @@ pygame.quit()
 #     for ap in ap_list:
 #         ap.timer -= 1
 #     t += 1
-
-    #################### Animation ########################
-
-# animation initialization
-# pygame.init()
-# screen = pygame.display.set_mode((factory_width, factory_length))
-# clock = pygame.time.Clock()
-# pygame.display.set_caption('simulation display')
-
-# class Device_animate(pygame.sprite.Sprite):
-#     def __init__(self, device):
-#         pygame.sprite.Sprite.__init__(self)
-#         self.image = pygame.Surface(10, 20)
-#         self.image.fill(LIME)
-#         self.rect = self.image.get_rect() # 框框
-#         self.rect.center = (device.x, device.y)
-#         self.vx = device.vx
-#         self.vy = device.vy
-    
-#     def update(self):
-#         key_pressed = pygame.key.get_pressed()
-#         if key_pressed[pygame.K_RIGHT]:
-#             self.rect.centerx += self.vx
-#             self.rect.centery += self.vy
-
-# class AP_animate(pygame.sprite.Sprite):
-#     def __init__(self, ap):
-#         pygame.sprite.Sprite.__init__(self)
-#         self.image = pygame.Surface((30, 20))
-#         self.image.fill(LIME)
-#         self.rect = self.image.get_rect()
-#         self.rect.center = (ap.x, ap.y)
-
-# all_sprites = pygame.sprite.Group()
-# for device in device_list:
-#     all_sprites.add(Device_animate(device))
-
-# for ap in ap_list:
-#     all_sprites.add(AP_animate(ap))
-
-# running = True
-# while running:
-#     clock.tick(60) # control FPS
-#     # input
-#     for event in pygame.event.get():
-#         if event.type == pygame.QUIT:
-#             running = False
-#         elif event.type == pygame.Keydown:
-#             if pygame.mouse.get_pressed() and pygame.mouse.getpos() == device:
-#                 pass
-#     # update
-#     all_sprites.update()
-
-#     # display
-#     screen.fill((255, 255, 255))
-#     all_sprites.draw(screen)
-#     pygame.display.update()
-
-# pygame.quit()
