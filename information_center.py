@@ -144,4 +144,3 @@ def device_resource(device_list):
         else:
             device.state = D_State.detached
             device.timer = d_state_timer_detached
-        

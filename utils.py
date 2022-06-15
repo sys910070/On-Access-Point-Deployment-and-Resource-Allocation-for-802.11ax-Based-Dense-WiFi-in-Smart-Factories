@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from parameter import*
 import random
 import logging
+import pygame
 
 #distance between two device(AP or STA)
 def distance(a, b):
@@ -145,6 +146,21 @@ def setup_logger(name, log_file, level=logging.DEBUG):
 
     return logger
 
+def log_info(ap_list, device_list):
+    # open a log file
+    ap_logger = setup_logger('AP', 'AP.txt')                    # open file
+    device_logger = setup_logger('Device', 'Device.txt')        # open file
+    ap_logger.info('id, users, power, state, timer')
+    for ap in ap_list:    
+        ap_logger.info(f'{ap.id}, {[user.id for user in ap.user]}, {ap.power}, {ap.state.name}, {ap.timer}, {ap.type}')
+    device_logger.info('id, ap, power, state, timer, x, y')
+    for device in device_list:
+        if device.ap != None:
+            device_logger.info(f'{device.id}, {device.ap.id}, {device.power}, {device.state.name}, {device.timer}, {device.x}, {device.y}, {device.type}')
+        else:
+            device_logger.info(f'{device.id}, {None}, {device.power}, {device.state.name}, {device.timer}, {device.type}')
+    
+
 #graph
 def graph_device(ap_list, device_list):
     plt.title('simulation display')
@@ -193,3 +209,11 @@ def fairness(ap_list):
         x1 = x1+ap.throughput/len(ap.user)
         x2 = x2+(ap.throughput/len(ap.user))**2
     return x1**2/(ap_num*x2)
+
+# animation text
+def txt(obj):
+    font = pygame.font.Font('freesansbold.ttf', 10)
+    text = font.render(str(obj.id), True, BLACK, WHITE)
+    textRect = text.get_rect()
+    textRect.center = (obj.y+10, obj.x-10)
+    return text, textRect
