@@ -125,6 +125,8 @@ channel_allocation(ap_list)
 channel_enhancement(ap_list)
 device_resource(device_list)
 log_info(ap_list, device_list)
+print(loss_device_count(device_list))
+print(t)
 
 # creare device and ap animation list
 device_animate = []
@@ -184,13 +186,18 @@ while run :
                 pygame.quit()
         if keys[pygame.K_SPACE]:
             t += 1
+            print('t = ', t)
             for device in device_list:
                 device.move()
             for device in device_list:
+                # if device.id == 44 and t == 49:
+                #      print('here')
                 flag_device, device_next_state = device.state_change(ap_list)
                 if flag_device:
                     device.action(device_next_state, ap_list)
             for ap in ap_list:
+                # if ap.id == 20 or ap.id == 28:
+                #     print('here') 
                 flag_ap, ap_next_state = ap.state_change(ap_list, device_list)
                 if flag_ap:
                     ap.action(ap_next_state, ap_list, device_list)
@@ -198,9 +205,7 @@ while run :
                 device.timer -= 1
             for ap in ap_list:
                 ap.timer -= 1
-            log_info(ap_list, device_list)
-            # print(t)
-            # print(loss_device_count(device_list))
-
+            log_info(ap_list, device_list)  
+            print(loss_device_count(device_list))
     pygame.display.update()
-pygame.quit()
+pygame.quit()  

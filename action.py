@@ -64,13 +64,15 @@ def search_connected(device, ap_list):
                 if distance((device.x, device.y), (ap.x, ap.y)) < dis and ap.type == device.type and len(ap.user) <= ap.upperbound:
                     dis = distance((device.x, device.y), (ap.x, ap.y))
                     selected_ap = ap
-    if selected_ap.state == A_State.active:
-        device_connect(device, selected_ap)
-        device.state = D_State.connected
-        device.timer = float('inf')
-    # if ap is idle, allocate all resource in AP action, not here. And change device state in AP action
-    elif selected_ap.state == A_State.idle:
-        device.selected = selected_ap
+##########################test############################
+        if selected_ap != None:
+            if selected_ap.state == A_State.active:
+                device_connect(device, selected_ap)
+                device.state = D_State.connected
+                device.timer = float('inf')
+            # if ap is idle, allocate all resource in AP action, not here. And change device state in AP action
+            elif selected_ap.state == A_State.idle:
+                device.selected = selected_ap
 
 # i
 def connected_handover(device, _):

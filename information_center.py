@@ -46,10 +46,28 @@ def init(ap_list, device_list):
                         selected_ap.adduser(device)
                     else:
                         device.ap = None
+
+    # # for device not connected to ap, connect them to the closest ap and ap state set underpopulated
+    # for device in device_list:
+    #     if device.ap == None:
+    #         dis = float('inf')
+    #         selected_ap = None
+    #         for ap in ap_list:
+    #             if ap.power == 0 and distance((device.x, device.y), (ap.x, ap.y)) < range_decode(p_max): # all AP that cover the device
+    #                 if distance((device.x, device.y), (ap.x, ap.y)) < dis and ap.type == device.type and len(ap.user) <= ap.upperbound:
+    #                     dis = distance((device.x, device.y), (ap.x, ap.y))
+    #                     selected_ap = ap
+    #         if selected_ap != None:
+    #             device.ap = selected_ap
+    #             selected_ap.adduser(device)
+
     for ap in ap_list:
-        if len(ap.user) != 0:
+        if len(ap.user) != 0 and len(ap.user) >= ap.lowerbound:
             ap.state = A_State.active
             ap.timer = float('inf')
+        elif len(ap.user) < ap.lowerbound and len(ap.user) > 0:
+            ap.state = A_State.underpopulated
+            ap.timer = a_state_timer_underpopulate
         else:
             ap.state = A_State.idle
             ap.timer = a_state_timer_idle                   
