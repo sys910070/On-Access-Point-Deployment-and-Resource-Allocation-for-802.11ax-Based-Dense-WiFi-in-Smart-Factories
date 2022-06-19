@@ -53,26 +53,24 @@ def search_connected(device, ap_list):
     selected_ap = None
     for ap in ap_list:
         # check if there exist avialable active AP
-        if ap.state == A_State.active:
-            if distance((device.x, device.y), (ap.x, ap.y)) < range_decode(ap.power) and ap != device.ap: # all AP that cover the device
-                if distance((device.x, device.y), (ap.x, ap.y)) < dis and ap.type == device.type and len(ap.user) <= ap.upperbound:
-                    dis = distance((device.x, device.y), (ap.x, ap.y))
-                    selected_ap = ap
-        # for idle AP, try power with p_max and check if exist idle AP convering detached device
-        elif ap.state == A_State.idle and ap.timer == 0:
+        if ap.state == A_State.idle:
             if distance((device.x, device.y), (ap.x, ap.y)) < range_decode(p_max) and ap != device.ap:
                 if distance((device.x, device.y), (ap.x, ap.y)) < dis and ap.type == device.type and len(ap.user) <= ap.upperbound:
                     dis = distance((device.x, device.y), (ap.x, ap.y))
                     selected_ap = ap
-##########################test############################
-        if selected_ap != None:
-            if selected_ap.state == A_State.active:
-                device_connect(device, selected_ap)
-                device.state = D_State.connected
-                device.timer = float('inf')
-            # if ap is idle, allocate all resource in AP action, not here. And change device state in AP action
-            elif selected_ap.state == A_State.idle:
-                device.selected = selected_ap
+        # for idle AP, try power with p_max and check if exist idle AP convering detached device
+        else:
+            if distance((device.x, device.y), (ap.x, ap.y)) < range_decode(ap.power) and ap != device.ap: # all AP that cover the device
+                if distance((device.x, device.y), (ap.x, ap.y)) < dis and ap.type == device.type and len(ap.user) <= ap.upperbound:
+                    dis = distance((device.x, device.y), (ap.x, ap.y))
+                    selected_ap = ap
+    if selected_ap.state == A_State.idle:
+        device.selected = selected_ap
+    # if ap is idle, allocate all resource in AP action, not here. And change device state in AP action
+    else:
+        device_connect(device, selected_ap)
+        device.state = D_State.connected
+        device.timer = float('inf')
 
 # i
 def connected_handover(device, _):

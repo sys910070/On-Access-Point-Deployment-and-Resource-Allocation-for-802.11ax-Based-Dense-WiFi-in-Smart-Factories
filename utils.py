@@ -5,6 +5,7 @@ import random
 import logging
 import pygame
 
+
 #distance between two device(AP or STA)
 def distance(a, b):
     return ((a[0]-b[0])**2+(a[1]-b[1])**2)**(1/2)
@@ -191,6 +192,15 @@ def graph_device(ap_list, device_list):
             plt.text(device.y+1, device.x+1, device.id, color='dimgrey')
     plt.axis([0, factory_width, 0, factory_length])
     plt.show()
+
+# check the whole system if there is a device connected to two different ap
+def check_device_connect_one_ap(ap_list):
+    for ap in ap_list:
+        for user in ap.user:
+            for other_ap in ap_list: 
+                for other_ap_user in other_ap.user:
+                    if other_ap != ap and user == other_ap_user:
+                        return user
 
 # performance matric
 # disconnected device count

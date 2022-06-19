@@ -30,7 +30,7 @@ class Device_animate():
             for ap in ap_animate:
                 if ap.id == self.ap.id:
                     self.ap =  ap
-
+         
     def animation_attribute_update(self, device_list):
         for device in device_list:
             if device.id == self.id:
@@ -174,7 +174,7 @@ while run :
             pygame.draw.circle(win, BLUE, (ap.y, ap.x), 3)
         elif ch_id_to_bw[ap.channel] == 160:
             pygame.draw.circle(win, PURPLE, (ap.y, ap.x), 3)
-        pygame.draw.circle(win, (255, 160, 122), (ap.y, ap.x), ap.interference_range, 1)
+        pygame.draw.circle(win, (255, 160, 122), (ap.y, ap.x), ap.communication_range, 1)
         text, textRect = txt(ap)
         win.blit(text, textRect)  
         
@@ -184,20 +184,16 @@ while run :
         if event.type == KEYDOWN:
             if event.key == K_ESCAPE:
                 pygame.quit()
-        if keys[pygame.K_SPACE]:
+        if keys[pygame.K_DOWN]:
             t += 1
             print('t = ', t)
             for device in device_list:
                 device.move()
             for device in device_list:
-                # if device.id == 44 and t == 49:
-                #      print('here')
                 flag_device, device_next_state = device.state_change(ap_list)
                 if flag_device:
                     device.action(device_next_state, ap_list)
             for ap in ap_list:
-                # if ap.id == 20 or ap.id == 28:
-                #     print('here') 
                 flag_ap, ap_next_state = ap.state_change(ap_list, device_list)
                 if flag_ap:
                     ap.action(ap_next_state, ap_list, device_list)
@@ -207,5 +203,6 @@ while run :
                 ap.timer -= 1
             log_info(ap_list, device_list)  
             print(loss_device_count(device_list))
+            # print(check_device_connect_one_ap(ap_list))
     pygame.display.update()
 pygame.quit()  
