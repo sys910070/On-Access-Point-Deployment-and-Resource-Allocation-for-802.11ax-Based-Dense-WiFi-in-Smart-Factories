@@ -5,7 +5,6 @@ import random
 import logging
 import pygame
 
-
 #distance between two device(AP or STA)
 def distance(a, b):
     return ((a[0]-b[0])**2+(a[1]-b[1])**2)**(1/2)
@@ -79,9 +78,15 @@ def initial_clear(ap_list, device_list):
         device.ap = None
         device.power = 0
         device.channel = 0
+    
+def all_timer_minus_one(device_list, ap_list):
+    for device in device_list:
+        device.timer -= 1
+    for ap in ap_list:
+        ap.timer -= 1    
 
-# device find the ap based on the strongest signal 
-def find_ap(device, ap_list):
+# device find the active ap based on the closest distance 
+def find_active_ap(device, ap_list):
     dis = float('inf')
     selected_ap = None
     for ap in ap_list:
@@ -92,15 +97,22 @@ def find_ap(device, ap_list):
     return selected_ap
 
 # device find ap but not the one it is connecting right now    
-def find_other_ap(device, ap_list):
+def find_other_active_ap(device, ap_list):
     dis = float('inf')
     selected_ap = None
     for ap in ap_list:
         if distance((device.x, device.y), (ap.x, ap.y)) < range_decode(ap.power) and ap != device.ap: # all AP that cover the device
-            if distance((device.x, device.y), (ap.x, ap.y)) < dis and ap.type == device.type and len(ap.user) <= ap.upperbound:
+            if distance((device.x, device.y), (ap.x, ap.y)) < dis and ap.type == device.type and len(ap.user) < ap.upperbound:
                 dis = distance((device.x, device.y), (ap.x, ap.y))
                 selected_ap = ap
     return selected_ap
+
+# for an ap, check if there are devices select it as service ap
+def selected_device_check(ap, device_list):
+    for device in device_list:
+        if device.selected == ap:
+            return True
+    return False
 
 def device_connect(device, ap):
     ap.adduser(device)
@@ -113,6 +125,24 @@ def device_disconnect(device):
     device.ap = None
     device.power = 0
     device.channel = 0
+
+# initialization: allocate 20, 40, 80, 160 channel to initial
+def channel_enhance(q, channel_list):
+    for ap in q:
+        pre_cci = ap.cci
+        if len(ap.user) == 0:
+            break
+        else:
+            for channel in channel_list:
+                for ch in ch_dic[channel]:
+                    if ap.channel == ch:
+                        temp_channel = ap.channel
+                        ap.channel = channel
+                        ap.cci_calculation()
+                        if ap.cci != pre_cci:
+                            ap.cci = pre_cci
+                            ap.channel = temp_channel
+                        break
 
 # only 20 MHz channel would be selected (revise lated)
 def select_channel(ap, ap_list):
@@ -153,13 +183,13 @@ def log_info(ap_list, device_list):
     device_logger = setup_logger('Device', 'Device.txt')        # open file
     ap_logger.info('id, users, power, state, timer')
     for ap in ap_list:    
-        ap_logger.info(f'{ap.id}, {[user.id for user in ap.user]}, {ap.power}, {ap.state.name}, {ap.timer}, {ap.type}')
+        ap_logger.info(f'{ap.id}, {[user.id for user in ap.user]}, {ap.power}, {ap.state.name}, {ap.timer}, {ap.type}, {ap.communication_range}')
     device_logger.info('id, ap, power, state, timer, x, y')
     for device in device_list:
         if device.ap != None:
-            device_logger.info(f'{device.id}, {device.ap.id}, {device.power}, {device.state.name}, {device.timer}, {device.x}, {device.y}, {device.type}')
+            device_logger.info(f'{device.id}, {device.ap.id}, {device.power}, {device.state.name}, {device.timer}, {device.selected}')
         else:
-            device_logger.info(f'{device.id}, {None}, {device.power}, {device.state.name}, {device.timer}, {device.type}')
+            device_logger.info(f'{device.id}, {None}, {device.power}, {device.state.name}, {device.timer}, {device.selected}')
     
 
 #graph
@@ -200,9 +230,9 @@ def check_device_connect_one_ap(ap_list):
             for other_ap in ap_list: 
                 for other_ap_user in other_ap.user:
                     if other_ap != ap and user == other_ap_user:
-                        return user
+                        return user  
 
-# performance matric
+# check feasibility
 # disconnected device count
 def loss_device_count(device_list):
     count = 0
@@ -211,6 +241,16 @@ def loss_device_count(device_list):
             count += 1
     return count
 
+def everything_ok(ap_list, device_list):
+    for ap in ap_list:
+        if not ap.ok():
+            return False
+    for device in device_list:
+        if not device.ok():
+            return False
+    return True
+
+# performance matric
 # fairness index
 def fairness(ap_list):
     x1 = 0

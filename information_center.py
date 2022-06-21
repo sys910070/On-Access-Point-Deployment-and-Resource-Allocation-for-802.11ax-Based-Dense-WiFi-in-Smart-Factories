@@ -16,7 +16,7 @@ def init(ap_list, device_list):
         dis = float('inf') # make dis the largest at first and update later
         selected_ap = None
         for ap in ap_list:
-            if distance((device.x, device.y), (ap.x, ap.y)) < range_decode(30): # in AP's max decode range
+            if distance((device.x, device.y), (ap.x, ap.y)) < range_decode(p_max): # in AP's max decode range
                 if distance((device.x, device.y), (ap.x, ap.y)) < dis and ap.type == device.type and len(ap.user) <= ap.upperbound:
                     dis = distance((device.x, device.y), (ap.x, ap.y))
                     selected_ap = ap
@@ -47,19 +47,19 @@ def init(ap_list, device_list):
                     else:
                         device.ap = None
 
-    # # for device not connected to ap, connect them to the closest ap and ap state set underpopulated
-    # for device in device_list:
-    #     if device.ap == None:
-    #         dis = float('inf')
-    #         selected_ap = None
-    #         for ap in ap_list:
-    #             if ap.power == 0 and distance((device.x, device.y), (ap.x, ap.y)) < range_decode(p_max): # all AP that cover the device
-    #                 if distance((device.x, device.y), (ap.x, ap.y)) < dis and ap.type == device.type and len(ap.user) <= ap.upperbound:
-    #                     dis = distance((device.x, device.y), (ap.x, ap.y))
-    #                     selected_ap = ap
-    #         if selected_ap != None:
-    #             device.ap = selected_ap
-    #             selected_ap.adduser(device)
+    # for device not connected to ap, connect them to the closest ap and ap state set underpopulated
+    for device in device_list:
+        if device.ap == None:
+            dis = float('inf')
+            selected_ap = None
+            for ap in ap_list:
+                if ap.power == 0 and distance((device.x, device.y), (ap.x, ap.y)) < range_decode(p_max): # all AP that cover the device
+                    if distance((device.x, device.y), (ap.x, ap.y)) < dis and ap.type == device.type and len(ap.user) <= ap.upperbound:
+                        dis = distance((device.x, device.y), (ap.x, ap.y))
+                        selected_ap = ap
+            if selected_ap != None:
+                device.ap = selected_ap
+                selected_ap.adduser(device)
 
     for ap in ap_list:
         if len(ap.user) != 0 and len(ap.user) >= ap.lowerbound:
@@ -96,7 +96,6 @@ def channel_allocation(ap_list):
             if len(set_diff) != 0:
                 ap.channel = random.choice(list(set_diff))
             else:
-                # ap.channel = random.choice(list(set_20))
                 ap.channel = min_user_channel(ap)
     for ap in ap_list:
         ap.cci_calculation()
@@ -104,54 +103,9 @@ def channel_allocation(ap_list):
 # allocate 40, 80, 160MHz frequency channel
 def channel_enhancement(ap_list):
     q = sorted(ap_list, key = lambda ap: len(ap.user), reverse = True)
-    # 40MGz channel allocation
-    for ap in q:
-        pre_cci = ap.cci
-        if len(ap.user) == 0:
-            break
-        else:
-            for ch_40 in frequency_channel_40:
-                for ch in ch_dic[ch_40]:
-                    if ap.channel == ch:
-                        temp_channel = ap.channel
-                        ap.channel = ch_40
-                        ap.cci_calculation()
-                        if ap.cci != pre_cci:
-                            ap.cci = pre_cci
-                            ap.channel = temp_channel
-                        break
-    # 80MGz channel allocation                
-    for ap in q:
-        pre_cci = ap.cci
-        if len(ap.user) == 0:
-            break
-        else:
-            for ch_80 in frequency_channel_80:
-                for ch in ch_dic[ch_80]:
-                    if ap.channel == ch:
-                        temp_channel = ap.channel
-                        ap.channel = ch_80
-                        ap.cci_calculation()
-                        if ap.cci != pre_cci:
-                            ap.cci = pre_cci
-                            ap.channel = temp_channel
-                        break
-    # 160MGz channel allocation
-    for ap in q:
-        pre_cci = ap.cci
-        if len(ap.user) == 0:
-            break
-        else:
-            for ch_160 in frequency_channel_160:
-                for ch in ch_dic[ch_160]:
-                    if ap.channel == ch:
-                        temp_channel = ap.channel
-                        ap.channel = ch_160
-                        ap.cci_calculation()
-                        if ap.cci != pre_cci:
-                            ap.cci = pre_cci
-                            ap.channel = temp_channel
-                        break
+    channel_enhance(q, frequency_channel_40)
+    channel_enhance(q, frequency_channel_80)
+    channel_enhance(q, frequency_channel_160)
 
 def device_resource(device_list):
     for device in device_list:
@@ -159,6 +113,7 @@ def device_resource(device_list):
             device.channel = device.ap.channel
             device.power = device.ap.power
             device.state = D_State.connected
+            device.dis_cal()
         else:
             device.state = D_State.detached
             device.timer = d_state_timer_detached

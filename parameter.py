@@ -30,11 +30,11 @@ frequency_channel_160 = np.arange(19,20) #19
 
 # all timer parameter
 operation_time = 10 # second
-d_state_timer_handover = 3
-d_state_timer_detached = 3
-d_state_timer_search = 3
-a_state_timer_underpopulate = 3
-a_state_timer_idle = 3
+d_state_timer_handover = 2
+d_state_timer_detached = 2
+d_state_timer_search = 5
+a_state_timer_underpopulate = 2
+a_state_timer_idle = 2
 
 # channel overlap dictionary
 ch_dic = {}
@@ -98,3 +98,5 @@ BLACK = (0, 0, 0)
 DIMGRAY = (105, 105, 105)
 # text
 GREEN = (0, 255, 0)
+
+CADEBLUE1 = (152,245,255)

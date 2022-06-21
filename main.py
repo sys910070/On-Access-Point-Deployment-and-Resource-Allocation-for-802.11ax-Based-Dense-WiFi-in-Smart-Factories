@@ -117,6 +117,9 @@ device_list = [DEVICE(random.uniform(0, 180), random.uniform(0, 200), random.ran
 for i in range(len(device_list)):
     if i%2 != 0:
         device_list[i].type = Type.delay
+    else:
+        device_list[i].vx = 0
+        device_list[i].vy = 0
 
 # resource initialization
 init(ap_list, device_list) 
@@ -125,8 +128,8 @@ channel_allocation(ap_list)
 channel_enhancement(ap_list)
 device_resource(device_list)
 log_info(ap_list, device_list)
+print('t = ', t)
 print(loss_device_count(device_list))
-print(t)
 
 # creare device and ap animation list
 device_animate = []
@@ -165,7 +168,7 @@ while run :
     for ap in ap_animate:
         ap.animation_attribute_update(ap_list)
         if ap.channel == 0:
-            continue
+            pygame.draw.circle(win, CADEBLUE1, (ap.y, ap.x), 3)
         elif ch_id_to_bw[ap.channel] == 20:
             pygame.draw.circle(win, GREEN, (ap.y, ap.x), 3)
         elif ch_id_to_bw[ap.channel] == 40:
@@ -178,9 +181,10 @@ while run :
         text, textRect = txt(ap)
         win.blit(text, textRect)  
         
-    for event in pygame.event.get():
+    events = pygame.event.get()
+    for event in events:
         if event.type == pygame.QUIT :
-            run = False
+            run = False 
         if event.type == KEYDOWN:
             if event.key == K_ESCAPE:
                 pygame.quit()
@@ -193,16 +197,25 @@ while run :
                 flag_device, device_next_state = device.state_change(ap_list)
                 if flag_device:
                     device.action(device_next_state, ap_list)
+                device.dis_cal()
             for ap in ap_list:
                 flag_ap, ap_next_state = ap.state_change(ap_list, device_list)
                 if flag_ap:
                     ap.action(ap_next_state, ap_list, device_list)
-            for device in device_list:
-                device.timer -= 1
-            for ap in ap_list:
-                ap.timer -= 1
-            log_info(ap_list, device_list)  
+                # user selected_ap reset
+                if ap.state == A_State.active:
+                    for user in ap.user:
+                        user.selected = None
+                elif ap.state == A_State.underpopulated:
+                    for user in ap.user:
+                        user.selected = None  
+            all_timer_minus_one(device_list, ap_list)
+            log_info(ap_list, device_list)
             print(loss_device_count(device_list))
+            if  not everything_ok(ap_list, device_list):
+                print('no ok')
+            else:
+                print('ok')
             # print(check_device_connect_one_ap(ap_list))
     pygame.display.update()
-pygame.quit()  
+pygame.quit()

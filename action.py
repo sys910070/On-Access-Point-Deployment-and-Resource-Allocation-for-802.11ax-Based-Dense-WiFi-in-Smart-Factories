@@ -1,6 +1,6 @@
 # device's action and AP's action
 from enum import(IntEnum, unique)
-from utils import*
+from utils import *
 from parameter import*
 
 @unique
@@ -23,10 +23,9 @@ class A_State(IntEnum):
 # c(device connect from one AP to another AP)
 def connected_connected(device, ap_list):
     # choose next AP to connect but not the previous one
-    selected_ap = find_ap(device, ap_list)
-    if device.ap != None:
-        device.ap.user.remove(device)         
-        device_connect(device, selected_ap)
+    selected_ap = find_active_ap(device, ap_list)
+    device.ap.user.remove(device)        
+    device_connect(device, selected_ap)
 # d
 def connected_detached(device, _):
     device_disconnect(device)
@@ -34,11 +33,11 @@ def connected_detached(device, _):
     device.state = D_State.detached
 # e
 def detached_connected(device, ap_list):
-    selected_ap = find_ap(device, ap_list)
-    if selected_ap != None:  
-        device_connect(device, selected_ap)
-        device.state = D_State.connected
-        device.timer = float('inf')
+    selected_ap = find_active_ap(device, ap_list)
+    device.selected = selected_ap
+    device_connect(device, selected_ap)
+    device.state = D_State.connected
+    device.timer = float('inf')
 # f
 def detached_search(device, _):
     device.timer = d_state_timer_search
@@ -64,9 +63,9 @@ def search_connected(device, ap_list):
                 if distance((device.x, device.y), (ap.x, ap.y)) < dis and ap.type == device.type and len(ap.user) <= ap.upperbound:
                     dis = distance((device.x, device.y), (ap.x, ap.y))
                     selected_ap = ap
+    # if ap is idle, allocate all resource in AP action, not here. And change device state in AP action
     if selected_ap.state == A_State.idle:
         device.selected = selected_ap
-    # if ap is idle, allocate all resource in AP action, not here. And change device state in AP action
     else:
         device_connect(device, selected_ap)
         device.state = D_State.connected
@@ -78,16 +77,15 @@ def connected_handover(device, _):
     device.state = D_State.handover
 # j
 def handover_connected(device, ap_list):
-    selected_ap = find_ap(device, ap_list)
-    if selected_ap != None: 
-        if selected_ap != device.ap:
-            device.ap.user.remove(device)
-            device_connect(device, selected_ap)
-            device.state = D_State.connected
-            device.timer = float('inf')
-        else:
-            device.timer = float('inf')
-            device.state = D_State.connected
+    selected_ap = find_active_ap(device, ap_list) 
+    if selected_ap != device.ap:
+        device.ap.user.remove(device)
+        device_connect(device, selected_ap)
+        device.state = D_State.connected
+        device.timer = float('inf')
+    else:
+        device.timer = float('inf')
+        device.state = D_State.connected
 # k
 def handover_detached(device, _):
     device_disconnect(device)
@@ -99,29 +97,37 @@ def handover_detached(device, _):
 
 # d
 def active_underpopulated(ap, _, __):
+    for user in ap.user:
+        user.selected = None
     ap.timer = a_state_timer_underpopulate
     ap.state = A_State.underpopulated
 # e
-def underpopulated_active(ap, _, __):
+def underpopulated_active(ap, _, device_list):
+    for device in device_list:
+        if device.selected == ap:
+            device_connect(device, ap)
+    for user in ap.user:
+        user.selected = None
     ap.timer = float('inf')
     ap.state = A_State.active
 # f
 def idle_active(ap, ap_list, device_list):
     for device in device_list:
-        if device.selected == ap and device.state == D_State.search and distance((device.x, device.y), (ap.x, ap.y)) < range_decode(p_max) and ap.type == device.type and len(ap.user) <= ap.upperbound:
+        if device.selected == ap and device.state == D_State.search and distance((device.x, device.y), (ap.x, ap.y)) < range_decode(p_max) and len(ap.user) <= ap.upperbound:
             ap.power_change(p_max, ap_list)
             select_channel(ap, ap_list)
             power_adjustment(ap, ap_list)
             device_connect(device, ap)
             device.state = D_State.connected
-            device.selected = None
             device.timer = float('inf')
+    for user in ap.user:
+        user.selected = None
     ap.state = A_State.active
     ap.timer = float('inf')
 # g
 def active_idle(ap, ap_list, __):
     for user in ap.user:
-        device_connect(user, find_other_ap(user, ap_list))
+        device_connect(user, find_other_active_ap(user, ap_list))
         ap.user.remove(user)
     ap.power_change(0, ap_list)
     ap.channel = 0
@@ -130,8 +136,11 @@ def active_idle(ap, ap_list, __):
 # h
 def underpopulated_idle(ap, ap_list, _):
     for user in ap.user:
-        assert(find_other_ap(user, ap_list) != None) # 當find_other_ap==None時會報錯
-        device_connect(user, find_other_ap(user, ap_list))
+        selected_ap = find_other_active_ap(user, ap_list)
+        device_connect(user, selected_ap)
+        if selected_ap.state == A_State.underpopulated:
+            if len(selected_ap.user) >= selected_ap.lowerbound:
+                selected_ap.state = A_State.active
         ap.user.remove(user)
     ap.power_change(0, ap_list)
     ap.channel = 0
@@ -140,12 +149,33 @@ def underpopulated_idle(ap, ap_list, _):
 # i
 def idle_idle(ap, _, __):
     ap.timer = a_state_timer_idle
+
 # j
-def active_transition(ap, ap_list, __):
+def idle_underpopulated(ap, ap_list, device_list):
+    for device in device_list:
+        if device.selected == ap and device.state == D_State.search and distance((device.x, device.y), (ap.x, ap.y)) < range_decode(p_max) and ap.type == device.type and len(ap.user) <= ap.upperbound:
+            ap.power_change(p_max, ap_list)
+            select_channel(ap, ap_list)
+            power_adjustment(ap, ap_list)
+            device_connect(device, ap)
+            device.state = D_State.connected
+            device.timer = float('inf')
+    for user in ap.user:
+        user.selected = None
+    ap.state = A_State.underpopulated
+    ap.timer = float('inf')
+
+# j
+def active_transition(ap, _, __):
     ap.upperbound = transition_upperbound
 # k
-def transition_active(ap, ap_list, __):
+def transition_active(ap, _, __):
     if ap.type == Type.throughput:
         ap.upperbound =  upperbound_throughput
     elif ap.type == Type.delay:
         ap.upperbound =  upperbound_delay
+
+def underpopulated_underpopulated(ap, _, __):
+    for user in ap.user:
+        user.selected = None
+    ap.timer = a_state_timer_underpopulate
