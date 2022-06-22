@@ -13,8 +13,8 @@ class Type(IntEnum):
 ap_num1 = 41
 ap_num2 = 40
 ap_num = ap_num1+ap_num2
-device_num1 = 50
-device_num2 = 50
+device_num1 = 100
+device_num2 = 100
 device_num = device_num1+device_num2
 upperbound_throughput = 7 # maxixmum device for an AP
 upperbound_delay = 10
@@ -22,7 +22,7 @@ lowerbound_throughput = 2 #minimum device for an AP
 lowerbound_delay = 2
 transition_upperbound = 5
 p_max = 30 #dbm
-power_level = [0, 22, 24, 26, 28, 30]
+power_level = [0, 22, 24, 26, 28, 30] 
 frequency_channel_20 = np.arange(1,12) # 1~11
 frequency_channel_40 = np.arange(12,17) # 12~16
 frequency_channel_80 = np.arange(17,19) # 17~18
@@ -84,6 +84,18 @@ CHI = 5 #standard deviation association with the degree of shadow fading
 P_REF = 46 #the path loss at a reference distance(1m)
 THETA_DECODE = -68 #threshold of decode signal strength(dBm)
 THETA_INTERFERENCE = -77 #threshold of interference signal strength(dBm)
+NOISE = -90 # in db
+TRANSMITTING_RATE = 7500000/8 #MB/s
+T_TF = 68/TRANSMITTING_RATE # 68B
+T_MBA = 118/TRANSMITTING_RATE
+T_OFDMABA = 32/TRANSMITTING_RATE
+T_SIFS = 0.00001
+TXOP = 0.003
+T_ULPPDU = TXOP-2*T_SIFS-T_TF-T_MBA
+T_DLPPDU = 2*T_ULPPDU
+T_UL = TXOP
+T_DL = 2*T_SIFS+T_DLPPDU+T_OFDMABA
+
 
 # color
 # background

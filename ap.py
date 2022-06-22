@@ -2,6 +2,7 @@ from enum import(IntEnum, unique)
 from parameter import*
 from utils import*
 from action import*
+import math
 
 class AP:
     def __init__(self, x, y, id, type_ap):
@@ -29,16 +30,25 @@ class AP:
         self.communication_range = range_decode(power)
         self.neighbor_cal(ap_list)
 
+    def throughput_cal(self):
+        if self.power != 0:
+            self.throughput = ch_id_to_bw[self.channel]*math.log2(1+(self.power-NOISE))
+        else:
+            self.throughput = 0
+            
     # define neighbor ap(power!=0) as if there exist ap in interference range
     def neighbor_cal(self, ap_list):
+        list_remove_neighbor = []
         for ap in ap_list:
             if ap not in self.neighbor and self.interference_range + ap.interference_range >= distance((self.x, self.y), (ap.x, ap.y)) and ap != self and ap.power!=0 and self.power!=0:
                 self.neighbor.append(ap)
                 ap.neighbor.append(self)
         for neighbor in self.neighbor:
-            if self.interference_range + neighbor.interference_range < distance((self.x, self.y), (neighbor.x, neighbor.y)) or neighbor.power!=0 or self.power!=0:
-                self.neighbor.remove(neighbor)
-                neighbor.neighbor.remove(self)
+            if self.interference_range + neighbor.interference_range < distance((self.x, self.y), (neighbor.x, neighbor.y)) or neighbor.power == 0 or self.power == 0:
+                list_remove_neighbor.append(neighbor)
+        for neighbor in list_remove_neighbor:
+            self.neighbor.remove(neighbor)
+            neighbor.neighbor.remove(self) 
 
     def adduser(self, users):
         if users not in self.user:

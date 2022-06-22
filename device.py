@@ -21,6 +21,7 @@ class DEVICE:
         self.timer = float('inf')
         self.selected = None
         self.dis = 0
+        self.throughput = 0
 
     def move(self):
         if self.type == 2:
@@ -38,9 +39,11 @@ class DEVICE:
         else:
             self.dis = distance((self.x, self.y), (self.ap.x, self.ap.y))
 
-    def throughput_cal(self, ap):
-        return ap.throughput/len(ap.user)
-
+    def throughput_cal(self):
+        if self.ap != None:
+            self.throughput = (self.ap.throughput*(T_ULPPDU+T_DLPPDU)/((self.ap.cci+1)*(T_UL+T_DL)))/len(self.ap.user)
+        else:
+            self.throughput = 0
 
     def state_change(self, ap_list):
         flag = False
@@ -158,3 +161,5 @@ class DEVICE:
                 print('device', self.id)
                 return False                
         return True
+
+    

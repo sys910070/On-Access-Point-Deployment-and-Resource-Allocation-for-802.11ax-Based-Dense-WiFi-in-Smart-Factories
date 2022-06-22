@@ -183,15 +183,14 @@ def log_info(ap_list, device_list):
     device_logger = setup_logger('Device', 'Device.txt')        # open file
     ap_logger.info('id, users, power, state, timer')
     for ap in ap_list:    
-        ap_logger.info(f'{ap.id}, {[user.id for user in ap.user]}, {ap.power}, {ap.state.name}, {ap.timer}, {ap.type}, {ap.communication_range}')
+        ap_logger.info(f'{ap.id}, {ap.power}, {ap.throughput}')
     device_logger.info('id, ap, power, state, timer, x, y')
     for device in device_list:
         if device.ap != None:
-            device_logger.info(f'{device.id}, {device.ap.id}, {device.power}, {device.state.name}, {device.timer}, {device.selected}')
+            device_logger.info(f'{device.id}, {device.ap.id}, {device.power}, {device.state.name}, {device.timer}, {device.throughput}')
         else:
-            device_logger.info(f'{device.id}, {None}, {device.power}, {device.state.name}, {device.timer}, {device.selected}')
+            device_logger.info(f'{device.id}, {None}, {device.power}, {device.state.name}, {device.timer}, {device.throughput}')
     
-
 #graph
 def graph_device(ap_list, device_list):
     plt.title('simulation display')
@@ -251,13 +250,34 @@ def everything_ok(ap_list, device_list):
     return True
 
 # performance matric
+# channel conflict indicator
+def cci_calculation(ap_list):
+    for ap in ap_list:
+        if ap.power != 0:
+            ap.cci = 0
+            for neighbor in ap.neighbor:
+                for ch in ch_dic[neighbor.channel]:
+                    if ch == ap.channel:
+                        ap.cci = ap.cci + 1
+        else:
+            ap.cci = 0
+
+# throughput calculation
+def throughput_cal(ap_list, device_list):
+    for ap in ap_list:
+        ap.throughput_cal()
+    for device in device_list:
+        device.throughput_cal()
+
 # fairness index
 def fairness(ap_list):
     x1 = 0
     x2 = 0
     for ap in ap_list:
-        x1 = x1+ap.throughput/len(ap.user)
-        x2 = x2+(ap.throughput/len(ap.user))**2
+        if len(ap.user) != 0:
+            user_throughput = ap.user[0].throughput
+        x1 = x1+user_throughput
+        x2 = x2+user_throughput**2
     return x1**2/(ap_num*x2)
 
 # animation text

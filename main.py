@@ -204,18 +204,21 @@ while run :
                     ap.action(ap_next_state, ap_list, device_list)
                 # user selected_ap reset
                 if ap.state == A_State.active:
-                    for user in ap.user:
+                    for user in ap.user: 
                         user.selected = None
                 elif ap.state == A_State.underpopulated:
                     for user in ap.user:
-                        user.selected = None  
+                        user.selected = None
+            cci_calculation(ap_list)  
+            throughput_cal(ap_list, device_list)
             all_timer_minus_one(device_list, ap_list)
             log_info(ap_list, device_list)
             print(loss_device_count(device_list))
-            if  not everything_ok(ap_list, device_list):
-                print('no ok')
-            else:
-                print('ok')
+            print(fairness(ap_list))
+            # if  not everything_ok(ap_list, device_list):
+            #     print('no ok')
+            # else:
+            #     print('ok')
             # print(check_device_connect_one_ap(ap_list))
     pygame.display.update()
 pygame.quit()
