@@ -96,6 +96,8 @@ T_DLPPDU = 2*T_ULPPDU
 T_UL = TXOP
 T_DL = 2*T_SIFS+T_DLPPDU+T_OFDMABA
 
+# animation factor
+scale = 4
 
 # color
 # background

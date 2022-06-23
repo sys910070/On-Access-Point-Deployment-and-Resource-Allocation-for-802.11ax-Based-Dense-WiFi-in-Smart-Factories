@@ -8,13 +8,15 @@ from device import DEVICE
 from information_center import*
 from utils import* 
 from parameter import*
+from optimization import*
+from data_visualization import*
 
 class Device_animate():
     def __init__(self, device):
-        self.x = device.x*5
-        self.y = device.y*5
-        self.vx = device.vx*5
-        self.vy = device.vy*5
+        self.x = device.x*scale
+        self.y = device.y*scale
+        self.vx = device.vx*scale
+        self.vy = device.vy*scale
         self.power = device.power
         self.channel = device.channel
         self.id = device.id
@@ -34,10 +36,10 @@ class Device_animate():
     def animation_attribute_update(self, device_list):
         for device in device_list:
             if device.id == self.id:
-                self.x = device.x*5
-                self.y = device.y*5
-                self.vx = device.vx*5
-                self.vy = device.vy*5
+                self.x = device.x*scale
+                self.y = device.y*scale
+                self.vx = device.vx*scale
+                self.vy = device.vy*scale
                 self.power = device.power
                 self.channel = device.channel
                 self.id = device.id
@@ -51,7 +53,7 @@ class Device_animate():
         while True:
             self.vx = random.randint(-10, 10)
             self.vy = random.randint(-10, 10)
-            if boundary((self.x + self.vx)/5, (self.y + self.vy)/5):
+            if boundary((self.x + self.vx)/scale, (self.y + self.vy)/scale):
                 self.x = self.x + self.vx
                 self.y = self.y + self.vy
                 break
@@ -60,8 +62,8 @@ class Device_animate():
 
 class AP_animate():
     def __init__(self, ap):
-        self.x = ap.x*5
-        self.y = ap.y*5
+        self.x = ap.x*scale
+        self.y = ap.y*scale
         self.power = ap. power
         self.channel = ap.channel
         self.id = ap.id
@@ -69,8 +71,8 @@ class AP_animate():
         self.timer = ap.timer
         self.state = ap.state
         self.cci = ap.cci
-        self.interference_range = ap.interference_range*5
-        self.communication_range = ap.communication_range*5
+        self.interference_range = ap.interference_range*scale
+        self.communication_range = ap.communication_range*scale
         self.throughput = ap.throughput
         self.lowerbound = ap.lowerbound
         self.upperbound = ap.upperbound
@@ -78,8 +80,8 @@ class AP_animate():
     def animation_attribute_update(self, ap_list):
         for ap in ap_list:
             if ap.id == self.id:
-                self.x = ap.x*5
-                self.y = ap.y*5
+                self.x = ap.x*scale
+                self.y = ap.y*scale
                 self.power = ap. power
                 self.channel = ap.channel
                 self.id = ap.id
@@ -87,8 +89,8 @@ class AP_animate():
                 self.timer = ap.timer
                 self.state = ap.state
                 self.cci = ap.cci
-                self.interference_range = ap.interference_range*5
-                self.communication_range = ap.communication_range*5
+                self.interference_range = ap.interference_range*scale
+                self.communication_range = ap.communication_range*scale
                 self.throughput = ap.throughput
                 self.lowerbound = ap.lowerbound
                 self.upperbound = ap.upperbound
@@ -96,7 +98,6 @@ class AP_animate():
 random.seed(1126)
 # set global timer to 0
 t = 0
-
 # first simulation setup
 # creare ap list
 temp_ap = [[AP(18 * (i + 1), 20 * (j + 1), 9 * i + j + 1, Type.throughput) for j in range(9)] for i in range(9)] #2D array
@@ -123,10 +124,6 @@ for i in range(len(device_list)):
 
 # resource initialization
 init(ap_list, device_list) 
-power_allocation(ap_list)
-channel_allocation(ap_list)
-channel_enhancement(ap_list)
-device_resource(device_list)
 log_info(ap_list, device_list)
 print('t = ', t)
 print(loss_device_count(device_list))
@@ -145,41 +142,17 @@ for device in device_animate:
 
 # animation setup
 pygame.init()
-win = pygame.display.set_mode((factory_width*5, factory_length*5))
+win = pygame.display.set_mode((factory_width*scale, factory_length*scale))
 pygame.display.set_caption("Simulation")
 clock = pygame.time.Clock()
+
 #main loop
 run = True
 while run :
     clock.tick(60)
     keys = pygame.key.get_pressed()
-    win.fill(WHITE)
-
-    for device in device_animate:
-        device.animation_attribute_update(device_list)
-        device.add_ap(ap_animate)
-        if device.ap != None:
-            pygame.draw.circle(win, BLACK, (device.y, device.x), 3)
-            pygame.draw.line(win, BLACK, (device.y, device.x), (device.ap.y, device.ap.x), 1) 
-        else:   
-            pygame.draw.circle(win, DIMGRAY, (device.y, device.x), 3)
-        text, textRect = txt(device)
-        win.blit(text, textRect)       
-    for ap in ap_animate:
-        ap.animation_attribute_update(ap_list)
-        if ap.channel == 0:
-            pygame.draw.circle(win, CADEBLUE1, (ap.y, ap.x), 3)
-        elif ch_id_to_bw[ap.channel] == 20:
-            pygame.draw.circle(win, GREEN, (ap.y, ap.x), 3)
-        elif ch_id_to_bw[ap.channel] == 40:
-            pygame.draw.circle(win, RED, (ap.y, ap.x), 3)
-        elif ch_id_to_bw[ap.channel] == 80:
-            pygame.draw.circle(win, BLUE, (ap.y, ap.x), 3)
-        elif ch_id_to_bw[ap.channel] == 160:
-            pygame.draw.circle(win, PURPLE, (ap.y, ap.x), 3)
-        pygame.draw.circle(win, (255, 160, 122), (ap.y, ap.x), ap.communication_range, 1)
-        text, textRect = txt(ap)
-        win.blit(text, textRect)  
+    win.fill(WHITE)  
+    animation(ap_list, device_list, ap_animate, device_animate, win)
         
     events = pygame.event.get()
     for event in events:
@@ -209,12 +182,22 @@ while run :
                 elif ap.state == A_State.underpopulated:
                     for user in ap.user:
                         user.selected = None
+            if t % 30 == 0:
+                channel_adjust(ap_list)
+
             cci_calculation(ap_list)  
             throughput_cal(ap_list, device_list)
             all_timer_minus_one(device_list, ap_list)
             log_info(ap_list, device_list)
-            print(loss_device_count(device_list))
-            print(fairness(ap_list))
+
+            cci_total = 0
+            for ap in ap_list:
+                cci_total += ap.cci
+            print('total cci = ', cci_total)
+            # print(loss_device_count(device_list))
+            
+            # print(fairness(ap_list))
+            
             # if  not everything_ok(ap_list, device_list):
             #     print('no ok')
             # else:

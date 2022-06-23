@@ -126,8 +126,15 @@ def idle_active(ap, ap_list, device_list):
     ap.timer = float('inf')
 # g
 def active_idle(ap, ap_list, __):
+    list_remove = []
     for user in ap.user:
-        device_connect(user, find_other_active_ap(user, ap_list))
+        selected_ap = find_other_active_ap(user, ap_list)
+        device_connect(user, selected_ap)
+        if selected_ap.state == A_State.underpopulated:
+            if len(selected_ap.user) >= selected_ap.lowerbound:
+                selected_ap.state = A_State.active
+        list_remove.append(user)
+    for user in list_remove:
         ap.user.remove(user)
     ap.power_change(0, ap_list)
     ap.channel = 0
@@ -135,12 +142,15 @@ def active_idle(ap, ap_list, __):
     ap.timer = a_state_timer_idle
 # h
 def underpopulated_idle(ap, ap_list, _):
+    list_remove = []
     for user in ap.user:
         selected_ap = find_other_active_ap(user, ap_list)
         device_connect(user, selected_ap)
         if selected_ap.state == A_State.underpopulated:
             if len(selected_ap.user) >= selected_ap.lowerbound:
                 selected_ap.state = A_State.active
+        list_remove.append(user)
+    for user in list_remove:
         ap.user.remove(user)
     ap.power_change(0, ap_list)
     ap.channel = 0

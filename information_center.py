@@ -1,7 +1,6 @@
 # this file is for 0th round initailization
 # ap-device association
 # allocate power and frequency channel
-
 import random
 from logging.handlers import QueueListener
 from ap import A_State
@@ -70,7 +69,11 @@ def init(ap_list, device_list):
             ap.timer = a_state_timer_underpopulate
         else:
             ap.state = A_State.idle
-            ap.timer = a_state_timer_idle                   
+            ap.timer = a_state_timer_idle       
+
+    power_allocation(ap_list)            
+    channel_allocation(ap_list)
+    device_resource(device_list)
 
 # allocate lowest power level to cover all associated device
 def power_allocation(ap_list):
@@ -99,6 +102,8 @@ def channel_allocation(ap_list):
                 ap.channel = min_user_channel(ap)
     for ap in ap_list:
         ap.cci_calculation()
+    # enhance all small bandwidth to large bandwith
+    channel_enhancement(ap_list)
 
 # allocate 40, 80, 160MHz frequency channel
 def channel_enhancement(ap_list):

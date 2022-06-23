@@ -1,9 +1,6 @@
 #this file is for small function
-import matplotlib.pyplot as plt
 from parameter import*
 import random
-import logging
-import pygame
 
 #distance between two device(AP or STA)
 def distance(a, b):
@@ -162,66 +159,6 @@ def power_adjustment(ap, ap_list):
                 ap.power_change(power, ap_list)
                 break
 
-# log file
-formatter = logging.Formatter('%(levelname)s %(message)s')
-def setup_logger(name, log_file, level=logging.DEBUG):
-    """To setup as many loggers as you want"""
-
-    handler = logging.FileHandler(log_file, mode='w')        
-    handler.setFormatter(formatter)
-
-    logger = logging.getLogger(name)
-    logger.setLevel(level)
-    logger.handlers = []
-    logger.addHandler(handler)
-
-    return logger
-
-def log_info(ap_list, device_list):
-    # open a log file
-    ap_logger = setup_logger('AP', 'AP.txt')                    # open file
-    device_logger = setup_logger('Device', 'Device.txt')        # open file
-    ap_logger.info('id, users, power, state, timer')
-    for ap in ap_list:    
-        ap_logger.info(f'{ap.id}, {ap.power}, {ap.throughput}')
-    device_logger.info('id, ap, power, state, timer, x, y')
-    for device in device_list:
-        if device.ap != None:
-            device_logger.info(f'{device.id}, {device.ap.id}, {device.power}, {device.state.name}, {device.timer}, {device.throughput}')
-        else:
-            device_logger.info(f'{device.id}, {None}, {device.power}, {device.state.name}, {device.timer}, {device.throughput}')
-    
-#graph
-def graph_device(ap_list, device_list):
-    plt.title('simulation display')
-    plt.xlabel('x-axis')
-    plt.ylabel('y-axis')
-   
-    for ap in ap_list:
-        if ap.channel == 0:
-            continue
-        elif ch_id_to_bw[ap.channel] == 20:
-            plt.plot(ap.y, ap.x,'ro', color = 'lime') # AP
-            plt.text(ap.y+1, ap.x+1, ap.id, color='lime')
-        elif ch_id_to_bw[ap.channel] == 40:
-            plt.plot(ap.y, ap.x,'ro', color = 'red') # AP
-            plt.text(ap.y+1, ap.x+1, ap.id, color='red')
-        elif ch_id_to_bw[ap.channel] == 80:
-            plt.plot(ap.y, ap.x,'ro', color = 'blue') # AP
-            plt.text(ap.y+1, ap.x+1, ap.id, color='blue')
-        elif ch_id_to_bw[ap.channel] == 160:
-            plt.plot(ap.y, ap.x,'ro', color = 'purple') # AP
-            plt.text(ap.y+1, ap.x+1, ap.id, color='purple')
-    for device in device_list:
-        if device.ap != None:
-            plt.plot(device.y, device.x, 'ro', color = 'black') # device
-            plt.text(device.y+1, device.x+1, device.id, color='black')
-        else:
-            plt.plot(device.y, device.x, 'ro', color = 'dimgrey') # device
-            plt.text(device.y+1, device.x+1, device.id, color='dimgrey')
-    plt.axis([0, factory_width, 0, factory_length])
-    plt.show()
-
 # check the whole system if there is a device connected to two different ap
 def check_device_connect_one_ap(ap_list):
     for ap in ap_list:
@@ -264,26 +201,27 @@ def cci_calculation(ap_list):
 
 # throughput calculation
 def throughput_cal(ap_list, device_list):
+    total_throughput_ap = 0
+    total_throughput_device = 0
     for ap in ap_list:
         ap.throughput_cal()
+        total_throughput_ap += ap.throughput
     for device in device_list:
         device.throughput_cal()
+        total_throughput_device += device.throughput
+    print(total_throughput_ap)
 
 # fairness index
 def fairness(ap_list):
     x1 = 0
     x2 = 0
+    active_num = 0
     for ap in ap_list:
-        if len(ap.user) != 0:
-            user_throughput = ap.user[0].throughput
-        x1 = x1+user_throughput
-        x2 = x2+user_throughput**2
-    return x1**2/(ap_num*x2)
-
-# animation text
-def txt(obj):
-    font = pygame.font.Font('freesansbold.ttf', 10)
-    text = font.render(str(obj.id), True, BLACK, WHITE)
-    textRect = text.get_rect()
-    textRect.center = (obj.y+10, obj.x-10)
-    return text, textRect
+        if ap.power != 0:
+            active_num += 1
+            user_throughput = 0
+            if len(ap.user) != 0:
+                user_throughput = ap.user[0].throughput
+            x1 = x1+user_throughput
+            x2 = x2+user_throughput**2
+    return x1**2/(active_num*x2)
