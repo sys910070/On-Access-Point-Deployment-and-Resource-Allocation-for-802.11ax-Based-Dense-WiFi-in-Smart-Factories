@@ -36,6 +36,9 @@ d_state_timer_search = 5
 a_state_timer_underpopulate = 2
 a_state_timer_idle = 2
 
+# mode choose
+throughput_qos = 7000
+
 # channel overlap dictionary
 ch_dic = {}
 ch_dic[1] = [1]
@@ -97,7 +100,7 @@ T_UL = TXOP
 T_DL = 2*T_SIFS+T_DLPPDU+T_OFDMABA
 
 # animation factor
-scale = 4
+scale = 5
 
 # color
 # background

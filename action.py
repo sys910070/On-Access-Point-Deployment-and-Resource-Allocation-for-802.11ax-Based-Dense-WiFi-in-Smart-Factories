@@ -66,6 +66,7 @@ def search_connected(device, ap_list):
     # if ap is idle, allocate all resource in AP action, not here. And change device state in AP action
     if selected_ap.state == A_State.idle:
         device.selected = selected_ap
+        
     else:
         device_connect(device, selected_ap)
         device.state = D_State.connected
@@ -173,7 +174,7 @@ def idle_underpopulated(ap, ap_list, device_list):
     for user in ap.user:
         user.selected = None
     ap.state = A_State.underpopulated
-    ap.timer = float('inf')
+    ap.timer = a_state_timer_underpopulate
 
 # j
 def active_transition(ap, _, __):

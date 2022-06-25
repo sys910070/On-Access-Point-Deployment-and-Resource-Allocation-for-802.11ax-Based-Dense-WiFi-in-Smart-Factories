@@ -91,8 +91,9 @@ class AP:
             user_count = 0
             if selected_device_check(self, device_list):
                 for device in device_list:
-                    if device.selected == self:
-                        user_count += 1
+                    for user in self.user:
+                        if device.selected == self and device != user:
+                            user_count += 1
             if len(self.user)+user_count == 0:
                 next_state = A_State.idle
                 flag = True

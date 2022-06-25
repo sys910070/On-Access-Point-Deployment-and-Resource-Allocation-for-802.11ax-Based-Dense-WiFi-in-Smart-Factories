@@ -80,8 +80,8 @@ class DEVICE:
             dis = float('inf')
             selected_ap = None
             for ap in ap_list:
-                # check if there exist avialable active AP
-                if ap.state == A_State.idle:
+                # check if there exist avialable active AP or idle AP but timer needs to be 0
+                if ap.state == A_State.idle and ap.timer == 0:
                     if distance((self.x, self.y), (ap.x, ap.y)) < range_decode(p_max) and ap != self.ap:
                         if distance((self.x, self.y), (ap.x, ap.y)) < dis and ap.type == self.type and len(ap.user) <= ap.upperbound:
                             dis = distance((self.x, self.y), (ap.x, ap.y))
@@ -161,5 +161,3 @@ class DEVICE:
                 print('device', self.id)
                 return False                
         return True
-
-    

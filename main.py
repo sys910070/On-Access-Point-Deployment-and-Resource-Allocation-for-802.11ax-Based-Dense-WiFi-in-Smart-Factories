@@ -167,11 +167,15 @@ while run :
             for device in device_list:
                 device.move()
             for device in device_list:
+                # if t == 90 and device.id == 190:
+                #     print('stop')
                 flag_device, device_next_state = device.state_change(ap_list)
                 if flag_device:
                     device.action(device_next_state, ap_list)
                 device.dis_cal()
             for ap in ap_list:
+                # if t ==  90 and ap.id == 64:
+                #     print('stop')
                 flag_ap, ap_next_state = ap.state_change(ap_list, device_list)
                 if flag_ap:
                     ap.action(ap_next_state, ap_list, device_list)
@@ -183,6 +187,7 @@ while run :
                     for user in ap.user:
                         user.selected = None
             if t % 30 == 0:
+                power_adjust(ap_list)
                 channel_adjust(ap_list)
 
             cci_calculation(ap_list)  
@@ -193,15 +198,15 @@ while run :
             cci_total = 0
             for ap in ap_list:
                 cci_total += ap.cci
-            print('total cci = ', cci_total)
+            # total_throughput_ap, total_throughput_device = throughput_cal(ap_list, device_list)
+            # print('total_throughput_ap = ', total_throughput_ap)
+            # print('total_throughput_device = ', total_throughput_device)
+            # print('total cci = ', cci_total)
             # print(loss_device_count(device_list))
-            
-            # print(fairness(ap_list))
-            
-            # if  not everything_ok(ap_list, device_list):
-            #     print('no ok')
-            # else:
-            #     print('ok')
-            # print(check_device_connect_one_ap(ap_list))
+            print(fairness(ap_list))
+            if  not everything_ok(ap_list, device_list):
+                print('no ok')
+            else:
+                print('ok')
     pygame.display.update()
 pygame.quit()
