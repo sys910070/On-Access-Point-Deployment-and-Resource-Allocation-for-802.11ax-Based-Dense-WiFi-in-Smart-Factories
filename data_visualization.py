@@ -26,9 +26,9 @@ def log_info(ap_list, device_list):
     ap_logger.info('id, users, power, state, timer')
     for ap in ap_list:   
         if len(ap.neighbor) !=0:
-            ap_logger.info(f'{ap.id}, {ap.power}, {[neighbor.id for neighbor in ap.neighbor]}, {[neighbor.channel for neighbor in ap.neighbor]}, {ap.cci}')
+            ap_logger.info(f'{ap.id}, {ap.power}, {[user.id for user in ap.user]}, {ap.user_throughput}, {ap.state.name}')
         else:
-            ap_logger.info(f'{ap.id}, {ap.power}, {None}, {ap.cci}')
+            ap_logger.info(f'{ap.id}, {ap.power}, {None}, {ap.cci}, {ap.user_throughput}, {ap.state.name}')
 
     device_logger.info('id, ap, power, state, timer, x, y')
     for device in device_list:
@@ -36,14 +36,6 @@ def log_info(ap_list, device_list):
             device_logger.info(f'{device.id}, {device.ap.id}, {device.power}, {device.state.name}, {device.throughput}')
         else:
             device_logger.info(f'{device.id}, {None}, {device.power}, {device.state.name}, {device.timer}')
-
-# animation text
-def txt(obj):
-    font = pygame.font.Font('freesansbold.ttf', 10)
-    text = font.render(str(obj.id), True, BLACK, WHITE)
-    textRect = text.get_rect()
-    textRect.center = (obj.y+10, obj.x-10)
-    return text, textRect
 
 #graph
 def graph_device(ap_list, device_list):
@@ -76,6 +68,7 @@ def graph_device(ap_list, device_list):
     plt.axis([0, factory_width, 0, factory_length])
     plt.show()
 
+# animation
 def animation(ap_list, device_list, ap_animate, device_animate, win):
     for device in device_animate:
         device.animation_attribute_update(device_list)
@@ -102,3 +95,11 @@ def animation(ap_list, device_list, ap_animate, device_animate, win):
         pygame.draw.circle(win, (255, 160, 122), (ap.y, ap.x), ap.communication_range, 1)
         text, textRect = txt(ap)
         win.blit(text, textRect)
+
+# animation text
+def txt(obj):
+    font = pygame.font.Font('freesansbold.ttf', 10)
+    text = font.render(str(obj.id), True, BLACK, WHITE)
+    textRect = text.get_rect()
+    textRect.center = (obj.y+10, obj.x-10)
+    return text, textRect

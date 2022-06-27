@@ -21,8 +21,10 @@ class AP:
         self.interference_range = 0
         self.communication_range = 0
         self.throughput = 0
+        self.user_throughput = 0
         self.lowerbound = 0
         self.upperbound = 0
+        self.ranking = 0
 
     def power_change(self, power, ap_list):
         self.power = power
@@ -35,7 +37,8 @@ class AP:
             self.throughput = ch_id_to_bw[self.channel]*math.log2(1+(self.power-NOISE))
         else:
             self.throughput = 0
-            
+            self.user_throughput = 0
+    
     # define neighbor ap(power!=0) as if there exist ap in interference range
     def neighbor_cal(self, ap_list):
         list_remove_neighbor = []
@@ -107,8 +110,9 @@ class AP:
                 # need to know if there are device going to connect to this ap first
                 if selected_device_check(self, device_list):
                     for device in device_list:
-                        if device.selected == self:
-                            user_count += 1     
+                        for user in self.user:
+                            if device.selected == self and device != user:
+                                user_count += 1     
                     if user_count+len(self.user) >= self.lowerbound:
                         flag = True
                         next_state = A_State.active

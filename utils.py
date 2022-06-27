@@ -210,6 +210,7 @@ def throughput_cal(ap_list, device_list):
         device.throughput_cal()
         total_throughput_device += device.throughput
     return total_throughput_ap, total_throughput_device
+    
 # fairness index
 def fairness(ap_list):
     x1 = 0

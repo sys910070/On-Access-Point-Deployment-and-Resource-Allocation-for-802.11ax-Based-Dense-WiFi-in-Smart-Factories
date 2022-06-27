@@ -161,52 +161,53 @@ while run :
         if event.type == KEYDOWN:
             if event.key == K_ESCAPE:
                 pygame.quit()
-        if keys[pygame.K_DOWN]:
-            t += 1
-            print('t = ', t)
-            for device in device_list:
-                device.move()
-            for device in device_list:
-                # if t == 90 and device.id == 190:
-                #     print('stop')
-                flag_device, device_next_state = device.state_change(ap_list)
-                if flag_device:
-                    device.action(device_next_state, ap_list)
-                device.dis_cal()
-            for ap in ap_list:
-                # if t ==  90 and ap.id == 64:
-                #     print('stop')
-                flag_ap, ap_next_state = ap.state_change(ap_list, device_list)
-                if flag_ap:
-                    ap.action(ap_next_state, ap_list, device_list)
-                # user selected_ap reset
-                if ap.state == A_State.active:
-                    for user in ap.user: 
-                        user.selected = None
-                elif ap.state == A_State.underpopulated:
-                    for user in ap.user:
-                        user.selected = None
-            if t % 30 == 0:
-                power_adjust(ap_list)
-                channel_adjust(ap_list)
+        # if keys[pygame.K_DOWN]:
+    t += 1
+    print('t = ', t)
+    for device in device_list:
+        device.move()
+    for device in device_list:
+        flag_device, device_next_state = device.state_change(ap_list)
+        if flag_device:
+            device.action(device_next_state, ap_list)
+        device.dis_cal()
+    for ap in ap_list:
+        flag_ap, ap_next_state = ap.state_change(ap_list, device_list)
+        if flag_ap:
+            ap.action(ap_next_state, ap_list, device_list)
+        # user selected_ap reset
+        if ap.state == A_State.active:
+            for user in ap.user: 
+                user.selected = None
+        elif ap.state == A_State.underpopulated:
+            for user in ap.user:
+                user.selected = None
 
-            cci_calculation(ap_list)  
-            throughput_cal(ap_list, device_list)
-            all_timer_minus_one(device_list, ap_list)
-            log_info(ap_list, device_list)
+    cci_calculation(ap_list)  
+    throughput_cal(ap_list, device_list)
+    all_timer_minus_one(device_list, ap_list)
+    log_info(ap_list, device_list)
 
-            cci_total = 0
-            for ap in ap_list:
-                cci_total += ap.cci
+    if t == 30:
+        for ap in ap_list:
+            power_adjustment(ap, ap_list)
+        channel_amplification(ap_list)
+
+    if  not everything_ok(ap_list, device_list):
+        print('no ok')
+    else:
+        print('ok')
+
+    pygame.display.update()
+pygame.quit()
+
+# all kinds of info to print in console
+            # cci_total = 0
+            # for ap in ap_list:
+            #     cci_total += ap.cci
             # total_throughput_ap, total_throughput_device = throughput_cal(ap_list, device_list)
             # print('total_throughput_ap = ', total_throughput_ap)
             # print('total_throughput_device = ', total_throughput_device)
             # print('total cci = ', cci_total)
             # print(loss_device_count(device_list))
-            print(fairness(ap_list))
-            if  not everything_ok(ap_list, device_list):
-                print('no ok')
-            else:
-                print('ok')
-    pygame.display.update()
-pygame.quit()
+            # print(fairness(ap_list))

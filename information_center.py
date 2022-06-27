@@ -74,6 +74,8 @@ def init(ap_list, device_list):
     power_allocation(ap_list)            
     channel_allocation(ap_list)
     device_resource(device_list)
+    cci_calculation(ap_list)  
+    throughput_cal(ap_list, device_list)
 
 # allocate lowest power level to cover all associated device
 def power_allocation(ap_list):
