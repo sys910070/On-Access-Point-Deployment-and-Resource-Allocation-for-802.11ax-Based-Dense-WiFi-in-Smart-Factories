@@ -3,6 +3,7 @@ import pygame
 import matplotlib.pyplot as plt
 from parameter import*
 import logging
+import os
 
 # log file
 formatter = logging.Formatter('%(levelname)s %(message)s')
@@ -25,10 +26,10 @@ def log_info(ap_list, device_list):
     device_logger = setup_logger('Device', 'Device.txt')        # open file
     ap_logger.info('id, users, power, state, timer')
     for ap in ap_list:   
-        if len(ap.neighbor) !=0:
-            ap_logger.info(f'{ap.id}, {ap.power}, {[user.id for user in ap.user]}, {ap.user_throughput}, {ap.state.name}')
+        if ap.power!= 0 and len(ap.neighbor_decode)!=0:
+            ap_logger.info(f'{ap.id}, {ap.power}, {[neighbor.id for neighbor in ap.neighbor_decode]}, {[user.id for user in ap.user]}, {ap.state.name}')
         else:
-            ap_logger.info(f'{ap.id}, {ap.power}, {None}, {ap.cci}, {ap.user_throughput}, {ap.state.name}')
+            ap_logger.info(f'{ap.id}, {ap.power}, {None}, {None}, {ap.user_throughput}, {None}, {None}, {ap.state.name}')
 
     device_logger.info('id, ap, power, state, timer, x, y')
     for device in device_list:
@@ -66,6 +67,16 @@ def graph_device(ap_list, device_list):
             plt.plot(device.y, device.x, 'ro', color = 'dimgrey') # device
             plt.text(device.y+1, device.x+1, device.id, color='dimgrey')
     plt.axis([0, factory_width, 0, factory_length])
+    plt.show()
+
+def graph_fairness(t, fairness):
+    plt.figure(figsize=(16,12))
+    plt.title('fairness index')
+    plt.xlabel('time')
+    plt.ylabel('fairness')
+    plt.plot(t, fairness, '-o')
+
+    plt.savefig('fig/fairness index without optimize')
     plt.show()
 
 # animation

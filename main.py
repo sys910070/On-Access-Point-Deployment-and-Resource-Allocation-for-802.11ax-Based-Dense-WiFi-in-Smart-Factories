@@ -146,6 +146,8 @@ win = pygame.display.set_mode((factory_width*scale, factory_length*scale))
 pygame.display.set_caption("Simulation")
 clock = pygame.time.Clock()
 
+# save data
+fairness_record = []
 #main loop
 run = True
 while run :
@@ -160,6 +162,10 @@ while run :
             run = False 
         if event.type == KEYDOWN:
             if event.key == K_ESCAPE:
+                # if not os.path.exists('fig'):
+                #     os.mkdir('fig')
+                # x = np.arange(1, len(fairness_record)+1)
+                # graph_fairness(x, fairness_record)
                 pygame.quit()
         # if keys[pygame.K_DOWN]:
     t += 1
@@ -167,11 +173,15 @@ while run :
     for device in device_list:
         device.move()
     for device in device_list:
+        # if (device.id == 98 and t ==31) or (device.id == 104 and t ==31) or (device.id == 134 and t ==31):
+        #     print('stop')
         flag_device, device_next_state = device.state_change(ap_list)
         if flag_device:
             device.action(device_next_state, ap_list)
         device.dis_cal()
     for ap in ap_list:
+        # if ap.id == 70 and t ==31:
+        #     print('stop')
         flag_ap, ap_next_state = ap.state_change(ap_list, device_list)
         if flag_ap:
             ap.action(ap_next_state, ap_list, device_list)
@@ -183,21 +193,21 @@ while run :
             for user in ap.user:
                 user.selected = None
 
+    if t % 30 == 0:
+        fairness_adjust_version2(ap_list)
+
     cci_calculation(ap_list)  
     throughput_cal(ap_list, device_list)
     all_timer_minus_one(device_list, ap_list)
     log_info(ap_list, device_list)
-
-    if t == 30:
-        for ap in ap_list:
-            power_adjustment(ap, ap_list)
-        channel_amplification(ap_list)
-
+    print(fairness(ap_list))
+        # for ap in ap_list:
+        #     power_adjustment(ap, ap_list)
+        # channel_amplification(ap_list)
     if  not everything_ok(ap_list, device_list):
         print('no ok')
     else:
         print('ok')
-
     pygame.display.update()
 pygame.quit()
 
@@ -210,4 +220,3 @@ pygame.quit()
             # print('total_throughput_device = ', total_throughput_device)
             # print('total cci = ', cci_total)
             # print(loss_device_count(device_list))
-            # print(fairness(ap_list))

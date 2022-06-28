@@ -17,6 +17,7 @@ class AP:
         self.state = A_State.init
         self.cci = 0
         self.neighbor = []
+        self.neighbor_decode = []
         self.pre_neighbor = []
         self.interference_range = 0
         self.communication_range = 0
@@ -25,11 +26,15 @@ class AP:
         self.lowerbound = 0
         self.upperbound = 0
         self.ranking = 0
+        self.partner = None
 
     def power_change(self, power, ap_list):
         self.power = power
         self.interference_range = range_interference(power)
         self.communication_range = range_decode(power)
+        if len(self.user) != 0:
+            for user in self.user:
+                user.power = self.power
         self.neighbor_cal(ap_list)
 
     def throughput_cal(self):
@@ -39,8 +44,21 @@ class AP:
             self.throughput = 0
             self.user_throughput = 0
     
+    # define neighbor_decode ap(power!=0) as if there exist ap in decode range
     # define neighbor ap(power!=0) as if there exist ap in interference range
     def neighbor_cal(self, ap_list):
+        list_remove_neighbor_decode = []
+        for ap in ap_list:
+            if ap not in self.neighbor_decode and self.communication_range + ap.communication_range >= distance((self.x, self.y), (ap.x, ap.y)) and ap != self and ap.power!=0 and self.power!=0:
+                self.neighbor_decode.append(ap)
+                ap.neighbor_decode.append(self)
+        for neighbor_decode in self.neighbor_decode:
+            if self.communication_range + neighbor_decode.communication_range < distance((self.x, self.y), (neighbor_decode.x, neighbor_decode.y)) or neighbor_decode.power == 0 or self.power == 0:
+                list_remove_neighbor_decode.append(neighbor_decode)
+        for neighbor_decode in list_remove_neighbor_decode:
+            self.neighbor_decode.remove(neighbor_decode)
+            neighbor_decode.neighbor_decode.remove(self) 
+
         list_remove_neighbor = []
         for ap in ap_list:
             if ap not in self.neighbor and self.interference_range + ap.interference_range >= distance((self.x, self.y), (ap.x, ap.y)) and ap != self and ap.power!=0 and self.power!=0:
