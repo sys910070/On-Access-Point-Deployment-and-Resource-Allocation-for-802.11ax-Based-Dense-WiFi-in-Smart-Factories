@@ -29,15 +29,17 @@ frequency_channel_80 = np.arange(17,19) # 17~18
 frequency_channel_160 = np.arange(19,20) #19
 
 # all timer parameter
-operation_time = 10 # second
+operation_time = 30 # second
 d_state_timer_handover = 2
 d_state_timer_detached = 2
 d_state_timer_search = 5
 a_state_timer_underpopulate = 2
 a_state_timer_idle = 2
 
-# mode choose
-throughput_qos = 7000
+# qos reqirement
+total_throughput_qos = 7000
+device_throughput_qos = 20
+device_throughput_ratio_reqirment = 0.5
 
 # channel overlap dictionary
 ch_dic = {}

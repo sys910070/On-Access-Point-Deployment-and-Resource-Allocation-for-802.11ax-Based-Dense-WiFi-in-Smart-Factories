@@ -125,8 +125,19 @@ for i in range(len(device_list)):
 # resource initialization
 init(ap_list, device_list) 
 log_info(ap_list, device_list)
+cci_cal(ap_list)
+throughput_cal(ap_list, device_list)
+fairness_cal(ap_list)
+
 print('t = ', t)
-print(loss_device_count(device_list))
+
+# save all kinds of data in a list and store initial(t=0) data first
+fairness_record = []
+total_throughput_record = []
+lost_device = []
+total_throughput_record.append(throughput_cal(ap_list, device_list))
+fairness_record.append(fairness_cal(ap_list))
+lost_device.append(loss_device_count(device_list))
 
 # creare device and ap animation list
 device_animate = []
@@ -146,8 +157,6 @@ win = pygame.display.set_mode((factory_width*scale, factory_length*scale))
 pygame.display.set_caption("Simulation")
 clock = pygame.time.Clock()
 
-# save data
-fairness_record = []
 #main loop
 run = True
 while run :
@@ -155,17 +164,22 @@ while run :
     keys = pygame.key.get_pressed()
     win.fill(WHITE)  
     animation(ap_list, device_list, ap_animate, device_animate, win)
-        
+    
+    if t == operation_time:
+        if not os.path.exists('fig'):
+            os.mkdir('fig')
+        x = np.arange(0, operation_time+1)
+        graph_fairness(x, fairness_record)
+        graph_throughput(x, total_throughput_record)
+        graph_loss_device(x, lost_device)
+        pygame.quit()
+
     events = pygame.event.get()
     for event in events:
         if event.type == pygame.QUIT :
-            run = False 
+            run = False
         if event.type == KEYDOWN:
             if event.key == K_ESCAPE:
-                # if not os.path.exists('fig'):
-                #     os.mkdir('fig')
-                # x = np.arange(1, len(fairness_record)+1)
-                # graph_fairness(x, fairness_record)
                 pygame.quit()
         # if keys[pygame.K_DOWN]:
     t += 1
@@ -173,15 +187,11 @@ while run :
     for device in device_list:
         device.move()
     for device in device_list:
-        # if (device.id == 98 and t ==31) or (device.id == 104 and t ==31) or (device.id == 134 and t ==31):
-        #     print('stop')
         flag_device, device_next_state = device.state_change(ap_list)
         if flag_device:
             device.action(device_next_state, ap_list)
         device.dis_cal()
     for ap in ap_list:
-        # if ap.id == 70 and t ==31:
-        #     print('stop')
         flag_ap, ap_next_state = ap.state_change(ap_list, device_list)
         if flag_ap:
             ap.action(ap_next_state, ap_list, device_list)
@@ -194,20 +204,29 @@ while run :
                 user.selected = None
 
     if t % 30 == 0:
-        fairness_adjust_version2(ap_list)
+        if qos_requirment_throughput(device_list):
+            print('resource improvement')
+            for ap in ap_list:
+                power_adjustment(ap, ap_list)
+            channel_amplification(ap_list)
+        else:
+            print('fairness_version2')
+            fairness_adjust_version2(ap_list, device_list)
 
-    cci_calculation(ap_list)  
-    throughput_cal(ap_list, device_list)
+    cci_cal(ap_list)  
+    throughput_lower = 0
+    for device in device_list:
+        if device.throughput<device_throughput_qos:
+            throughput_lower += 1
+
     all_timer_minus_one(device_list, ap_list)
     log_info(ap_list, device_list)
-    print(fairness(ap_list))
-        # for ap in ap_list:
-        #     power_adjustment(ap, ap_list)
-        # channel_amplification(ap_list)
-    if  not everything_ok(ap_list, device_list):
-        print('no ok')
-    else:
-        print('ok')
+
+    # collect data into list every second
+    total_throughput_record.append(throughput_cal(ap_list, device_list))
+    fairness_record.append(fairness_cal(ap_list))
+    lost_device.append(loss_device_count(device_list))
+
     pygame.display.update()
 pygame.quit()
 
@@ -220,3 +239,8 @@ pygame.quit()
             # print('total_throughput_device = ', total_throughput_device)
             # print('total cci = ', cci_total)
             # print(loss_device_count(device_list))
+            # if  not everything_ok(ap_list, device_list):
+            #     print('no ok')
+            # else:
+            #     print('ok')
+            # print(throughput_lower)

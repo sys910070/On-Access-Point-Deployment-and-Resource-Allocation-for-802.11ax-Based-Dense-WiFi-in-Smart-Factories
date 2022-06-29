@@ -75,9 +75,28 @@ def graph_fairness(t, fairness):
     plt.xlabel('time')
     plt.ylabel('fairness')
     plt.plot(t, fairness, '-o')
+    # plt.xlim(0, operation_time)
+    # plt.ylim(0, 1)
+    plt.savefig('fig/fairness with optimize')
+    # plt.show()
 
-    plt.savefig('fig/fairness index without optimize')
-    plt.show()
+def graph_throughput(t, total_throughput_device):
+    plt.figure(figsize=(16,12))
+    plt.title('total throughput')
+    plt.xlabel('time')
+    plt.ylabel('fairness')
+    plt.plot(t, total_throughput_device, '-o')
+    plt.savefig('fig/total throughput with optimize')
+    # plt.show()
+
+def graph_loss_device(t, lost_device):
+    plt.figure(figsize=(16,12))
+    plt.title('loss device')
+    plt.xlabel('time')
+    plt.ylabel('loss_device')
+    plt.plot(t, lost_device, '-o')
+    plt.savefig('fig/loss device number with optimize')
+    # plt.show()
 
 # animation
 def animation(ap_list, device_list, ap_animate, device_animate, win):

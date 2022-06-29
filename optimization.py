@@ -3,13 +3,28 @@ from action import A_State, D_State
 from parameter import*
 from utils import*
 
-def mode1(ap_list, device_list):
-    pass
+# this function is for 30s update, channel would be amplify as large as possible
+def channel_amplification(ap_list):
+    # firstly sort the quene indecending order for the most users ap in the first position
+    q = sorted(ap_list, key = lambda ap: len(ap.user), reverse = True)
+    # try to increase channel bandwidth without increasing cci value
+    for ap in q:
+        if len(ap.user) == 0:
+            break
+        else:
+            pre_cci = ap.cci
+            ch_dic[ap.channel].reverse()
+            for channel in ch_dic[ap.channel]:
+                ap.channel = channel
+                ap.cci_calculation()
+                if ap.cci - pre_cci < 3:
+                    break
+            ch_dic[ap.channel].reverse()
 
 # in version1, we attemp to give away some user to other active ap for those with lower user_throughput
 # then, adjust power_level
 # finally, attemp to make half of ap(high user_throughput) use smaller bandwidth 
-def fairness_adjust_version1(ap_list):
+def fairness_adjust_version1(ap_list, device_list):
     # calculate idle_ap number
     idle_ap = 0
     for ap in ap_list:
@@ -61,8 +76,13 @@ def fairness_adjust_version1(ap_list):
                                 selected_channel = ch
                 ap.channel = selected_channel
 
+    cci_cal(ap_list)  
+    throughput_cal(ap_list, device_list)
+    fairness_index = fairness_cal(ap_list)
+    return fairness_index
+
 # in this version, we attemp to pair up two ap in each interference rage and try do balance their user_throughput 
-def fairness_adjust_version2(ap_list):
+def fairness_adjust_version2(ap_list, device_list):
     # sort the quene in decending order in order to place the least users' throughput in the first position
     q = sorted(ap_list, key = lambda ap: ap.user_throughput, reverse = False)
     for i in range(len(q)):
@@ -95,7 +115,7 @@ def fairness_adjust_version2(ap_list):
                         power_adjustment(ap, ap_list)
                         power_adjustment(ap.partner, ap_list)
     
-    # change state if necessary and adjust power_level
+    # reset state if necessary
     for ap in ap_list:
         if len(ap.user) == 0:
             ap.power_change(0, ap_list)
@@ -107,21 +127,19 @@ def fairness_adjust_version2(ap_list):
             ap.timer = float('inf')
         else:
             ap.state = A_State.underpopulated
-            ap.timer = a_state_timer_underpopulate            
+            ap.timer = a_state_timer_underpopulate 
 
-def channel_amplification(ap_list):
-    # firstly sort the quene indecending order for the most users ap in the first position
-    q = sorted(ap_list, key = lambda ap: len(ap.user), reverse = True)
-    # try to increase channel bandwidth without increasing cci value
-    for ap in q:
-        if len(ap.user) == 0:
-            break
-        else:
-            pre_cci = ap.cci
-            ch_dic[ap.channel].reverse()
-            for channel in ch_dic[ap.channel]:
-                ap.channel = channel
-                ap.cci_calculation()
-                if ap.cci - pre_cci < 3:
-                    break
-            ch_dic[ap.channel].reverse()
+    cci_cal(ap_list)  
+    throughput_cal(ap_list, device_list)
+    fairness_index = fairness_cal(ap_list)
+    return fairness_index
+
+# def fairness_choose(ap_list, device_list):
+#     if fairness_adjust_version1(ap_list, device_list) > fairness_adjust_version2(ap_list, device_list):
+#         print('version1 = ', fairness_adjust_version1(ap_list, device_list))
+#         print('version2 = ', fairness_adjust_version2(ap_list, device_list))
+#         return True
+#     else:
+#         print('version1 = ', fairness_adjust_version1(ap_list, device_list))
+#         print('version2 = ', fairness_adjust_version2(ap_list, device_list))
+#         return False

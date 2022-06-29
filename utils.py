@@ -186,9 +186,19 @@ def everything_ok(ap_list, device_list):
             return False
     return True
 
+def qos_requirment_throughput(device_list):
+    throughput_count = 0
+    for device in device_list:
+        if device.throughput < device_throughput_qos:
+            throughput_count += 1
+    if throughput_count/device_num > device_throughput_ratio_reqirment:
+        return False
+    else:
+        return True
+
 # performance matric
 # channel conflict indicator
-def cci_calculation(ap_list):
+def cci_cal(ap_list):
     for ap in ap_list:
         if ap.power != 0:
             ap.cci = 0
@@ -209,10 +219,10 @@ def throughput_cal(ap_list, device_list):
     for device in device_list:
         device.throughput_cal()
         total_throughput_device += device.throughput
-    return total_throughput_ap, total_throughput_device
+    return total_throughput_device
     
 # fairness index
-def fairness(ap_list):
+def fairness_cal(ap_list):
     x1 = 0
     x2 = 0
     active_num = 0
