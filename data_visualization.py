@@ -75,9 +75,9 @@ def graph_fairness(t, fairness):
     plt.xlabel('time')
     plt.ylabel('fairness')
     plt.plot(t, fairness, '-o')
-    # plt.xlim(0, operation_time)
-    # plt.ylim(0, 1)
-    plt.savefig('fig/fairness with optimize')
+    plt.xlim(0, operation_time+1)
+    plt.ylim(0, 1)
+    plt.savefig('fig/fairness without optimize')
     # plt.show()
 
 def graph_throughput(t, total_throughput_device):

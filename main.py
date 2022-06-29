@@ -57,8 +57,6 @@ class Device_animate():
                 self.x = self.x + self.vx
                 self.y = self.y + self.vy
                 break
-            else:
-                continue
 
 class AP_animate():
     def __init__(self, ap):
@@ -203,15 +201,15 @@ while run :
             for user in ap.user:
                 user.selected = None
 
-    if t % 30 == 0:
-        if qos_requirment_throughput(device_list):
-            print('resource improvement')
-            for ap in ap_list:
-                power_adjustment(ap, ap_list)
-            channel_amplification(ap_list)
-        else:
-            print('fairness_version2')
-            fairness_adjust_version2(ap_list, device_list)
+    # if t % update_timer == 0:
+    #     # if qos_requirment_throughput(device_list):
+    #     #     print('resource improvement')
+    #     #     for ap in ap_list:
+    #     #         power_adjustment(ap, ap_list)
+    #     #     channel_amplification(ap_list)
+    #     # else:
+    #         # print('fairness_version2')
+    #     fairness_adjust_version2(ap_list, device_list)
 
     cci_cal(ap_list)  
     throughput_lower = 0
