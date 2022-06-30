@@ -27,16 +27,16 @@ def log_info(ap_list, device_list):
     ap_logger.info('id, users, power, state, timer')
     for ap in ap_list:   
         if ap.power!= 0 and len(ap.neighbor_decode)!=0:
-            ap_logger.info(f'{ap.id}, {ap.power}, {[neighbor.id for neighbor in ap.neighbor_decode]}, {[user.id for user in ap.user]}, {ap.state.name}')
+            ap_logger.info(f'{ap.id}, {ap.power}, {ap.channel}, {[user.id for user in ap.user]}')
         else:
-            ap_logger.info(f'{ap.id}, {ap.power}, {None}, {None}, {ap.user_throughput}, {None}, {None}, {ap.state.name}')
+            ap_logger.info(f'{ap.id}, {ap.power}, {ap.channel}, {None}')
 
     device_logger.info('id, ap, power, state, timer, x, y')
     for device in device_list:
         if device.ap != None:
-            device_logger.info(f'{device.id}, {device.ap.id}, {device.power}, {device.state.name}, {device.throughput}')
+            device_logger.info(f'{device.id}, {device.ap.id}, {device.power}, {device.throughput}')
         else:
-            device_logger.info(f'{device.id}, {None}, {device.power}, {device.state.name}, {device.timer}')
+            device_logger.info(f'{device.id}, {None}, {device.power},{0}')
 
 #graph
 def graph_device(ap_list, device_list):
@@ -77,16 +77,16 @@ def graph_fairness(t, fairness):
     plt.plot(t, fairness, '-o')
     plt.xlim(0, operation_time+1)
     plt.ylim(0, 1)
-    plt.savefig('fig/fairness without optimize')
+    plt.savefig('fig/fairness with no obstacle')
     # plt.show()
 
 def graph_throughput(t, total_throughput_device):
     plt.figure(figsize=(16,12))
     plt.title('total throughput')
     plt.xlabel('time')
-    plt.ylabel('fairness')
+    plt.ylabel('total throughput device')
     plt.plot(t, total_throughput_device, '-o')
-    plt.savefig('fig/total throughput without optimize')
+    plt.savefig('fig/total throughput with no obstacle')
     # plt.show()
 
 def graph_loss_device(t, lost_device):
@@ -95,7 +95,16 @@ def graph_loss_device(t, lost_device):
     plt.xlabel('time')
     plt.ylabel('loss_device')
     plt.plot(t, lost_device, '-o')
-    plt.savefig('fig/loss device number without optimize')
+    plt.savefig('fig/loss device number with no obstacle')
+    # plt.show()
+
+def graph_active_ap(t, lost_device):
+    plt.figure(figsize=(16,12))
+    plt.title('active ap')
+    plt.xlabel('time')
+    plt.ylabel('active_ap')
+    plt.plot(t, lost_device, '-o')
+    plt.savefig('fig/active ap with no obstacle')
     # plt.show()
 
 # animation

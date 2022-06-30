@@ -28,7 +28,9 @@ class DEVICE:
             while True:
                 self.vx = random.randint(-5, 5)
                 self.vy = random.randint(-5, 5)
-                if boundary_symmetric_obstacle(self.x + self.vx, self.y + self.vy):
+                if boundary_no_obstacle(self.x + self.vx, self.y + self.vy):
+                # if boundary_symmetric_obstacle(self.x + self.vx, self.y + self.vy):
+                # if boundary_asymmetric_obstacle(self.x + self.vx, self.y + self.vy):
                     self.x = self.x + self.vx
                     self.y = self.y + self.vy
                     break

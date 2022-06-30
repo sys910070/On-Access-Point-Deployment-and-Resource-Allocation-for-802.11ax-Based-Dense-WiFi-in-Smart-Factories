@@ -2,9 +2,6 @@
 # ap-device association
 # allocate power and frequency channel
 import random
-from logging.handlers import QueueListener
-from ap import A_State
-from device import D_State
 from utils import*
 from parameter import*
 
@@ -60,20 +57,8 @@ def init(ap_list, device_list):
                 device.ap = selected_ap
                 selected_ap.adduser(device)
 
-    for ap in ap_list:
-        if len(ap.user) != 0 and len(ap.user) >= ap.lowerbound:
-            ap.state = A_State.active
-            ap.timer = float('inf')
-        elif len(ap.user) < ap.lowerbound and len(ap.user) > 0:
-            ap.state = A_State.underpopulated
-            ap.timer = a_state_timer_underpopulate
-        else:
-            ap.state = A_State.idle
-            ap.timer = a_state_timer_idle       
-
     power_allocation(ap_list)            
     channel_allocation(ap_list)
-    device_resource(device_list)
     cci_cal(ap_list)  
     throughput_cal(ap_list, device_list)
 
@@ -86,41 +71,8 @@ def power_allocation(ap_list):
                     ap.power_change(power, ap_list)
                     break
 
-# allocate 20MHz frequency channel
+# randomly allocate all frequency channel
 def channel_allocation(ap_list):
-    # firstly sort the quene indecending order for the most users ap in the first position
-    q = sorted(ap_list, key = lambda ap: len(ap.user), reverse = True)
-    set_20 = set(frequency_channel_20)
-    set_neighbor = set()
-    for ap in q:
-        if len(ap.user) == 0:
-            break
-        else:
-            set_neighbor = {neighbor.channel for neighbor in ap.neighbor}
-            set_diff = set_20.difference(set_neighbor)
-            if len(set_diff) != 0:
-                ap.channel = random.choice(list(set_diff))
-            else:
-                ap.channel = min_user_channel(ap)
     for ap in ap_list:
-        ap.cci_calculation()
-    # enhance all small bandwidth to large bandwith
-    channel_enhancement(ap_list)
-
-# allocate 40, 80, 160MHz frequency channel
-def channel_enhancement(ap_list):
-    q = sorted(ap_list, key = lambda ap: len(ap.user), reverse = True)
-    channel_enhance(q, frequency_channel_40)
-    channel_enhance(q, frequency_channel_80)
-    channel_enhance(q, frequency_channel_160)
-
-def device_resource(device_list):
-    for device in device_list:
-        if device.ap != None:
-            device.channel = device.ap.channel
-            device.power = device.ap.power
-            device.state = D_State.connected
-            device.dis_cal()
-        else:
-            device.state = D_State.detached
-            device.timer = d_state_timer_detached
+        if len(ap.user)!=0:
+            ap.channel = random.randint(1, 19)
