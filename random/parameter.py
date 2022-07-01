@@ -30,7 +30,7 @@ frequency_channel_80 = np.arange(17,19) # 17~18
 frequency_channel_160 = np.arange(19,20) #19
 
 # all timer (second)
-operation_time = 300
+operation_time = 100
 update_timer = 30
 d_state_timer_handover = 2
 d_state_timer_detached = 2

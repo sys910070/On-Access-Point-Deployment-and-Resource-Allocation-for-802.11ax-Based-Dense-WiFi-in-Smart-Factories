@@ -164,6 +164,12 @@ while run :
         graph_throughput(x, total_throughput_record)
         graph_loss_device(x, lost_device)
         graph_active_ap(x, active_ap)
+        if not os.path.exists('data'):
+            os.mkdir('data')
+        np.save('data/fairness_record', fairness_record)
+        np.save('data/total_throughput_record', total_throughput_record)
+        np.save('data/lost_device', lost_device)
+        np.save('data/active_ap', active_ap)
         pygame.quit()
 
     events = pygame.event.get()
