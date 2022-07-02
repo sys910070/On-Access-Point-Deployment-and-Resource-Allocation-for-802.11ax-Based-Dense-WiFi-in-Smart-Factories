@@ -75,17 +75,17 @@ def graph_fairness(t, fairness):
     plt.xlabel('time')
     plt.ylabel('fairness')
     plt.plot(t, fairness, '-o')
-    plt.xlim(0, operation_time+1)
-    plt.ylim(0, 1)
+    # plt.xlim(0, operation_time+1)
+    # plt.ylim(0, 1)
     plt.savefig('fig/fairness with no obstacle')
     # plt.show()
 
-def graph_throughput(t, total_throughput_device):
+def graph_throughput(t, total_throughput):
     plt.figure(figsize=(16,12))
     plt.title('total throughput')
     plt.xlabel('time')
     plt.ylabel('total throughput device')
-    plt.plot(t, total_throughput_device, '-o')
+    plt.plot(t, total_throughput, '-o')
     plt.savefig('fig/total throughput with no obstacle')
     # plt.show()
 
@@ -98,12 +98,12 @@ def graph_loss_device(t, lost_device):
     plt.savefig('fig/loss device number with no obstacle')
     # plt.show()
 
-def graph_active_ap(t, lost_device):
+def graph_active_ap(t, active_ap):
     plt.figure(figsize=(16,12))
     plt.title('active ap')
     plt.xlabel('time')
     plt.ylabel('active_ap')
-    plt.plot(t, lost_device, '-o')
+    plt.plot(t, active_ap, '-o')
     plt.savefig('fig/active ap with no obstacle')
     # plt.show()
 

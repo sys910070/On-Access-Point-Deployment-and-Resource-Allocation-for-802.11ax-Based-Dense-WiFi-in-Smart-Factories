@@ -197,6 +197,14 @@ def qos_requirment_throughput(device_list):
         return True
 
 # performance matric
+# number of active_ap
+def active_ap_count(ap_list):
+    active_ap_count = 0
+    for ap in ap_list:
+        if ap.power!=0:
+            active_ap_count += 1
+    return active_ap_count
+
 # channel conflict indicator
 def cci_cal(ap_list):
     for ap in ap_list:
@@ -235,3 +243,12 @@ def fairness_cal(ap_list):
             x1 = x1+user_throughput
             x2 = x2+user_throughput**2
     return x1**2/(active_num*x2)
+
+def calculate_interval_average(fairness_record_interval, total_throughput_record__interval, lost_device_record_interval, active_ap_record_interval):
+    fairness = sum(fairness_record_interval)/len(fairness_record_interval)
+    throughput = sum(total_throughput_record__interval)/len(total_throughput_record__interval)
+    lost_device = sum(lost_device_record_interval)/len(lost_device_record_interval)
+    active_ap = sum(active_ap_record_interval)/len(active_ap_record_interval)
+    return fairness, throughput, lost_device, active_ap
+
+

@@ -117,16 +117,14 @@ print('t = ', t)
 # save all kinds of data in a list and store initial(t=0) data first
 fairness_record = []
 total_throughput_record = []
-lost_device = []
-active_ap = []
-active_ap_count = 0
-for ap in ap_list:
-    if ap.power!=0:
-        active_ap_count += 1
-total_throughput_record.append(throughput_cal(ap_list, device_list))
-fairness_record.append(fairness_cal(ap_list))
-lost_device.append(loss_device_count(device_list))
-active_ap.append(active_ap_count)
+lost_device_record = []
+active_ap_record = []
+
+# record an interval of data
+fairness_record_interval = []
+total_throughput_record__interval = []
+lost_device_record_interval = []
+active_ap_record_interval = []
 
 # creare device and ap animation list
 device_animate = []
@@ -159,17 +157,17 @@ while run :
     if t == operation_time:
         if not os.path.exists('fig'):
             os.mkdir('fig')
-        x = np.arange(0, operation_time+1)
+        x = np.arange(0, len(fairness_record))
         graph_fairness(x, fairness_record)
         graph_throughput(x, total_throughput_record)
-        graph_loss_device(x, lost_device)
-        graph_active_ap(x, active_ap)
+        graph_loss_device(x, lost_device_record)
+        graph_active_ap(x, active_ap_record)
         if not os.path.exists('data'):
             os.mkdir('data')
         np.save('data/fairness_record', fairness_record)
         np.save('data/total_throughput_record', total_throughput_record)
-        np.save('data/lost_device', lost_device)
-        np.save('data/active_ap', active_ap)
+        np.save('data/lost_device', lost_device_record)
+        np.save('data/active_ap', active_ap_record)
         pygame.quit()
 
     events = pygame.event.get()
@@ -193,18 +191,24 @@ while run :
             ap.channel = 0
     cci_cal(ap_list)
     log_info(ap_list, device_list)
-    # collect data into list every second
-    active_ap_count = 0
-    for ap in ap_list:
-        if ap.power!=0:
-            active_ap_count += 1   
 
-    ########################################
-    total_throughput_record.append(throughput_cal(ap_list, device_list))
-    fairness_record.append(fairness_cal(ap_list))
-    lost_device.append(loss_device_count(device_list))
-    active_ap.append(active_ap_count)
-    print(active_ap_count)
+    fairness_record_interval.append(fairness_cal(ap_list))
+    total_throughput_record__interval.append(throughput_cal(ap_list, device_list))
+    lost_device_record_interval.append(loss_device_count(device_list))
+    active_ap_record_interval.append(active_ap_count(ap_list))
+
+    if t % interval == 0:
+        fairness, throughput, loss_device, active_ap = calculate_interval_average(fairness_record_interval, total_throughput_record__interval, lost_device_record_interval, active_ap_record_interval)
+        fairness_record.append(fairness)
+        total_throughput_record.append(throughput)
+        lost_device_record.append(loss_device)
+        active_ap_record.append(active_ap)
+
+        fairness_record_interval.clear()
+        total_throughput_record__interval.clear()
+        lost_device_record_interval.clear()
+        active_ap_record_interval.clear()
+
     pygame.display.update()
 pygame.quit()
 
