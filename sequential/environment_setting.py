@@ -3,7 +3,7 @@ from itertools import chain
 from parameter import*
 from ap import AP
 from device import DEVICE
-
+random.seed(1126)
 # function if device hit boundary return False, else return True
 # no obstacle    
 def create_ap():

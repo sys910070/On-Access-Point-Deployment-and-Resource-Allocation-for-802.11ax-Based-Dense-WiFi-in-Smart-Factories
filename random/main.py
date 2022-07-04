@@ -101,9 +101,12 @@ t = 0
 # creare ap list
 ap_list = create_ap()
 # create device list
-device_list = create_device_no_obstacle()
-# device_list = create_device_symmetric_obstacle()
-# device_list = create_device_asymmetric_obstacle()
+if factory_environment == 'no_obstacle':
+    device_list = create_device_no_obstacle()
+elif factory_environment == 'symmetric_obstacle':
+    device_list = create_device_symmetric_obstacle()
+elif factory_environment == 'asymmetric_obstacle':
+    device_list = create_device_asymmetric_obstacle()
 
 # resource initialization
 init(ap_list, device_list) 
@@ -150,8 +153,11 @@ while run :
     clock.tick(60)
     keys = pygame.key.get_pressed()
     win.fill(WHITE)
-    # symmetric_obstacle_draw(win)
-    # asymmetric_obstacle_draw(win)
+
+    if factory_environment == 'symmetric_obstacle':
+        symmetric_obstacle_draw(win)
+    elif factory_environment == 'asymmetric_obstacle':
+        asymmetric_obstacle_draw(win)  
     animation(ap_list, device_list, ap_animate, device_animate, win)
     
     if t == operation_time:
@@ -164,10 +170,10 @@ while run :
         graph_active_ap(x, active_ap_record)
         if not os.path.exists('data'):
             os.mkdir('data')
-        np.save('data/fairness_record', fairness_record)
-        np.save('data/total_throughput_record', total_throughput_record)
-        np.save('data/lost_device', lost_device_record)
-        np.save('data/active_ap', active_ap_record)
+        np.save(f'data/fairness_{factory_environment}', fairness_record)
+        np.save(f'data/total_throughput_{factory_environment}', total_throughput_record)
+        np.save(f'data/lost_device_{factory_environment}', lost_device_record)
+        np.save(f'data/active_ap_{factory_environment}', active_ap_record)
         pygame.quit()
 
     events = pygame.event.get()

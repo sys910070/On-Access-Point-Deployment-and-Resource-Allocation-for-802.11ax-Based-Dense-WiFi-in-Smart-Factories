@@ -14,8 +14,8 @@ class AP:
         self.id = id
         self.type = type_ap
         self.timer = 0
-        self.state = A_State.init
         self.cci = 0
+        self.state = A_State.random
         self.neighbor = []
         self.neighbor_decode = []
         self.pre_neighbor = []
@@ -82,97 +82,6 @@ class AP:
                 if ch == self.channel:
                     self.cci = self.cci + 1
 
-    def state_change(self, ap_list, device_list):
-        flag = False
-        next_state = None
-        if self.state == A_State.active:
-            if len(self.user) == 0:
-                next_state = A_State.idle
-                flag = True
-            elif len(self.user) < self.lowerbound and len(self.user) != 0:
-                next_state = A_State.underpopulated
-                flag = True
-            # if self.type == Type.throughput:
-            #     for device in device_list:
-            #         if device.type == Type.delay and device.state == D_State.search and distance((device.x, device.y), (self.x, self.y)) < range_decode(self.power) and len(self.user) < transition_upperbound:
-            #             next_state = A_State.transition
-            #             flag = True
-        
-        # if self.state == A_State.transition:
-        #     transition_flag = False
-        #     for user in self.user:
-        #         if user.type == Type.delay:
-        #             transition_flag = True
-        #             break
-        #     if not transition_flag:
-        #         next_state = A_State.active
-        #         flag = True
-        
-        if self.state == A_State.underpopulated and self.timer != 0:
-            user_count = 0
-            if selected_device_check(self, device_list):
-                for device in device_list:
-                    for user in self.user:
-                        if device.selected == self and device != user:
-                            user_count += 1
-            if len(self.user)+user_count == 0:
-                next_state = A_State.idle
-                flag = True
-            elif len(self.user)+user_count >= self.lowerbound:
-                next_state = A_State.active
-                flag = True
-
-        if self.timer == 0:
-            user_count = 0
-            if self.state == A_State.underpopulated:
-                # need to know if there are device going to connect to this ap first
-                if selected_device_check(self, device_list):
-                    for device in device_list:
-                        for user in self.user:
-                            if device.selected == self and device != user:
-                                user_count += 1     
-                    if user_count+len(self.user) >= self.lowerbound:
-                        flag = True
-                        next_state = A_State.active
-                    else:
-                        flag = True
-                        next_state = A_State.underpopulated
-                else:
-                    other_ap_flag = False
-                    dic = {}                    
-                    for user in self.user:
-                        selected_ap = find_other_active_ap(user, ap_list)
-                        if selected_ap != None:
-                            if selected_ap.id not in dic:
-                                dic[selected_ap.id] = len(selected_ap.user)
-                            dic[selected_ap.id] += 1 
-                        if selected_ap == None or dic[selected_ap.id]>selected_ap.upperbound:
-                            other_ap_flag = True
-                            break
-                    if other_ap_flag:
-                        if len(self.user) < self.lowerbound:
-                            next_state = A_State.underpopulated
-                        else: 
-                            next_state = A_State.active
-                    else:   
-                        next_state = A_State.idle
-                    flag = True
-            elif self.state == A_State.idle:
-                idle_flag = False
-                for device in device_list:
-                    if device.selected == self and device.state == D_State.search and distance((device.x, device.y), (self.x, self.y)) < range_decode(p_max) and self.type == device.type and len(self.user) <= self.upperbound:
-                        idle_flag = True
-                        user_count += 1
-                if idle_flag:
-                    if user_count < self.lowerbound:
-                        next_state = A_State.underpopulated
-                    else:
-                        next_state = A_State.active
-                else:
-                    next_state = A_State.idle
-                flag = True
-        return flag, next_state
-
     def action(self, next_state, ap_list, device_list):               
         transition_table = {
             A_State.active : {
@@ -195,18 +104,3 @@ class AP:
             }
         }
         transition_table[self.state][next_state](self, ap_list, device_list)
-
-    def ok(self):
-        if len(self.user) == 0:
-            if self.state != A_State.idle:
-                print('ap', self.id, 'idle')
-                return False
-        elif len(self.user) < self.lowerbound and len(self.user) != 0:
-            if self.state != A_State.underpopulated:
-                print('ap', self.id, 'underpopulated')
-                return False
-        else:
-            if self.state != A_State.active:
-                print('ap', self.id, 'active or transition')
-                return False
-        return True

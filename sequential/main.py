@@ -101,9 +101,12 @@ t = 0
 # creare ap list
 ap_list = create_ap()
 # create device list
-# device_list = create_device_no_obstacle()
-device_list = create_device_symmetric_obstacle()
-# device_list = create_device_asymmetric_obstacle()
+if factory_environment == 'no_obstacle':
+    device_list = create_device_no_obstacle()
+elif factory_environment == 'symmetric_obstacle':
+    device_list = create_device_symmetric_obstacle()
+elif factory_environment == 'asymmetric_obstacle':
+    device_list = create_device_asymmetric_obstacle()
 
 # resource initialization
 init(ap_list, device_list) 
@@ -117,10 +120,14 @@ print('t = ', t)
 # save all kinds of data in a list and store initial(t=0) data first
 fairness_record = []
 total_throughput_record = []
-lost_device = []
-total_throughput_record.append(throughput_cal(ap_list, device_list))
-fairness_record.append(fairness_cal(ap_list))
-lost_device.append(loss_device_count(device_list))
+lost_device_record = []
+active_ap_record = []
+
+# record an interval of data
+fairness_record_interval = []
+total_throughput_record__interval = []
+lost_device_record_interval = []
+active_ap_record_interval = []
 
 # creare device and ap animation list
 device_animate = []
@@ -146,77 +153,66 @@ while run :
     clock.tick(60)
     keys = pygame.key.get_pressed()
     win.fill(WHITE)
-    symmetric_obstacle_draw(win)
-    # asymmetric_obstacle_draw(win)
+    if factory_environment == 'symmetric_obstacle':
+        symmetric_obstacle_draw(win)
+    elif factory_environment == 'asymmetric_obstacle':
+        asymmetric_obstacle_draw(win)  
     animation(ap_list, device_list, ap_animate, device_animate, win)
     
     if t == operation_time:
         if not os.path.exists('fig'):
             os.mkdir('fig')
-        x = np.arange(0, operation_time+1)
+        x = np.arange(0, len(fairness_record))
         graph_fairness(x, fairness_record)
         graph_throughput(x, total_throughput_record)
-        graph_loss_device(x, lost_device)
+        graph_loss_device(x, lost_device_record)
+        graph_active_ap(x, active_ap_record)
+        if not os.path.exists('data'):
+            os.mkdir('data')
+        np.save(f'data/fairness_{factory_environment}', fairness_record)
+        np.save(f'data/total_throughput_{factory_environment}', total_throughput_record)
+        np.save(f'data/lost_device_{factory_environment}', lost_device_record)
+        np.save(f'data/active_ap_{factory_environment}', active_ap_record)
         pygame.quit()
 
     events = pygame.event.get()
     for event in events:
-        if event.type == pygame.QUIT :
+        if event.type == pygame.QUIT:
             run = False
         if event.type == KEYDOWN:
             if event.key == K_ESCAPE:
                 pygame.quit()
-        if keys[pygame.K_DOWN]:
-            t += 1
-            print('t = ', t)
-            for device in device_list:
-                device.move()
-            for device in device_list:
-                flag_device, device_next_state = device.state_change(ap_list)
-                if flag_device:
-                    device.action(device_next_state, ap_list)
-                device.dis_cal()
-            for ap in ap_list:
-                # if t == 75 and ap.id == 26:
-                #     print('stop')
-                flag_ap, ap_next_state = ap.state_change(ap_list, device_list)
-                if flag_ap:
-                    ap.action(ap_next_state, ap_list, device_list)
-                # user selected_ap reset
-                if ap.state == A_State.active:
-                    for user in ap.user: 
-                        user.selected = None
-                elif ap.state == A_State.underpopulated:
-                    for user in ap.user:
-                        user.selected = None
+        # if keys[pygame.K_DOWN]:
+    t += 1
+    print('t = ', t)
+    for device in device_list:
+        device.move()
+    for device in device_list:
+        device.action(ap_list)
+        device.dis_cal()
+    for ap in ap_list:
+        if len(ap.user)==0:
+            ap.power_change(0, ap_list)
+            ap.channel = 0
+    cci_cal(ap_list)
+    log_info(ap_list, device_list)
 
-            if t % update_timer == 0:
-                if qos_requirment_throughput(device_list):
-                    print('resource improvement')
-                    for ap in ap_list:
-                        power_adjustment(ap, ap_list)
-                    channel_amplification(ap_list)
-                else:
-                    print('fairness_version2')
-                    fairness_adjust_version2(ap_list, device_list)
+    fairness_record_interval.append(fairness_cal(ap_list))
+    total_throughput_record__interval.append(throughput_cal(ap_list, device_list))
+    lost_device_record_interval.append(loss_device_count(device_list))
+    active_ap_record_interval.append(active_ap_count(ap_list))
 
-            cci_cal(ap_list)  
-            throughput_lower = 0
-            for device in device_list:
-                if device.throughput<device_throughput_qos:
-                    throughput_lower += 1
+    if t % interval == 0:
+        fairness, throughput, loss_device, active_ap = calculate_interval_average(fairness_record_interval, total_throughput_record__interval, lost_device_record_interval, active_ap_record_interval)
+        fairness_record.append(fairness)
+        total_throughput_record.append(throughput)
+        lost_device_record.append(loss_device)
+        active_ap_record.append(active_ap)
 
-            all_timer_minus_one(device_list, ap_list)
-            log_info(ap_list, device_list)
-
-            # collect data into list every second
-            total_throughput_record.append(throughput_cal(ap_list, device_list))
-            fairness_record.append(fairness_cal(ap_list))
-            lost_device.append(loss_device_count(device_list))
-            if  not everything_ok(ap_list, device_list):
-                print('no ok')
-            else:
-                print('ok')
+        fairness_record_interval.clear()
+        total_throughput_record__interval.clear()
+        lost_device_record_interval.clear()
+        active_ap_record_interval.clear()
 
     pygame.display.update()
 pygame.quit()

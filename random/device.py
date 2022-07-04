@@ -4,7 +4,7 @@ from parameter import*
 from action import*
 from utils import*
 
-
+random.seed(1126)
 class DEVICE:
     def __init__(self, x, y, id, type_device):
         self.x = x
@@ -25,15 +25,30 @@ class DEVICE:
 
     def move(self):
         if self.type == 2:
-            while True:
-                self.vx = random.randint(-5, 5)
-                self.vy = random.randint(-5, 5)
-                if boundary_no_obstacle(self.x + self.vx, self.y + self.vy):
-                # if boundary_symmetric_obstacle(self.x + self.vx, self.y + self.vy):
-                # if boundary_asymmetric_obstacle(self.x + self.vx, self.y + self.vy):
-                    self.x = self.x + self.vx
-                    self.y = self.y + self.vy
-                    break
+            if factory_environment == 'no_obstacle':
+                while True:
+                    self.vx = random.randint(-5, 5)
+                    self.vy = random.randint(-5, 5)
+                    if boundary_no_obstacle(self.x + self.vx, self.y + self.vy):
+                        self.x = self.x + self.vx
+                        self.y = self.y + self.vy
+                        break
+            elif factory_environment == 'symmetric_obstacle':
+                while True:
+                    self.vx = random.randint(-5, 5)
+                    self.vy = random.randint(-5, 5)
+                    if boundary_symmetric_obstacle(self.x + self.vx, self.y + self.vy):
+                        self.x = self.x + self.vx
+                        self.y = self.y + self.vy
+                        break
+            elif factory_environment == 'asymmetric_obstacle':
+                while True:
+                    self.vx = random.randint(-5, 5)
+                    self.vy = random.randint(-5, 5)
+                    if boundary_asymmetric_obstacle(self.x + self.vx, self.y + self.vy):
+                        self.x = self.x + self.vx
+                        self.y = self.y + self.vy
+                        break
 
     def dis_cal(self):
         if self.ap == None:
@@ -71,7 +86,6 @@ class DEVICE:
                                 selected_ap = ap
                 if selected_ap != None:
                     selected_ap.power_change(p_max, ap_list)
-                    power_adjustment(selected_ap, ap_list)
                     selected_ap.channel = random.randint(1, 19)
                     device_connect(self, selected_ap)
         else:
@@ -98,6 +112,8 @@ class DEVICE:
                                     selected_ap = ap
                     if selected_ap != None:
                         selected_ap.power_change(p_max, ap_list)
-                        power_adjustment(selected_ap, ap_list)
                         selected_ap.channel = random.randint(1, 19)
                         device_connect(self, selected_ap)
+                    else:
+                        self.power = 0
+                        self.channel = 0

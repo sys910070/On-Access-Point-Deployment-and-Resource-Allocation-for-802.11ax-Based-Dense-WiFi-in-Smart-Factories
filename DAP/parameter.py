@@ -76,6 +76,7 @@ for idx, channel_group in enumerate((frequency_channel_20, frequency_channel_40,
 #factory setup
 factory_width = 200
 factory_length = 180
+factory_environment = 'asymmetric_obstacle'
 
 # animation factor
 scale = 5

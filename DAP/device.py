@@ -1,3 +1,4 @@
+from os import environ
 import random
 from matplotlib.pyplot import flag
 from parameter import*
@@ -25,15 +26,30 @@ class DEVICE:
 
     def move(self):
         if self.type == 2:
-            while True:
-                self.vx = random.randint(-5, 5)
-                self.vy = random.randint(-5, 5)
-                if boundary_no_obstacle(self.x + self.vx, self.y + self.vy):
-                # if boundary_symmetric_obstacle(self.x + self.vx, self.y + self.vy):
-                # if boundary_asymmetric_obstacle(self.x + self.vx, self.y + self.vy):
-                    self.x = self.x + self.vx
-                    self.y = self.y + self.vy
-                    break
+            if factory_environment == 'no_obstacle':
+                while True:
+                    self.vx = random.randint(-5, 5)
+                    self.vy = random.randint(-5, 5)
+                    if boundary_no_obstacle(self.x + self.vx, self.y + self.vy):
+                        self.x = self.x + self.vx
+                        self.y = self.y + self.vy
+                        break
+            elif factory_environment == 'symmetric_obstacle':
+                while True:
+                    self.vx = random.randint(-5, 5)
+                    self.vy = random.randint(-5, 5)
+                    if boundary_symmetric_obstacle(self.x + self.vx, self.y + self.vy):
+                        self.x = self.x + self.vx
+                        self.y = self.y + self.vy
+                        break
+            elif factory_environment == 'asymmetric_obstacle':
+                while True:
+                    self.vx = random.randint(-5, 5)
+                    self.vy = random.randint(-5, 5)
+                    if boundary_asymmetric_obstacle(self.x + self.vx, self.y + self.vy):
+                        self.x = self.x + self.vx
+                        self.y = self.y + self.vy
+                        break
 
     def dis_cal(self):
         if self.ap == None:

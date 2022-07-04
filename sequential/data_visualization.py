@@ -24,19 +24,19 @@ def log_info(ap_list, device_list):
     # open a log file
     ap_logger = setup_logger('AP', 'AP.txt')                    # open file
     device_logger = setup_logger('Device', 'Device.txt')        # open file
-    ap_logger.info('id, users, power, state, timer')
+    ap_logger.info('id, power, channel, user')
     for ap in ap_list:   
         if ap.power!= 0 and len(ap.neighbor_decode)!=0:
-            ap_logger.info(f'{ap.id}, {ap.power}, {[neighbor.id for neighbor in ap.neighbor_decode]}, {[user.id for user in ap.user]}, {ap.state.name}')
+            ap_logger.info(f'{ap.id}, {ap.power}, {ap.channel}, {[user.id for user in ap.user]}')
         else:
-            ap_logger.info(f'{ap.id}, {ap.power}, {None}, {None}, {ap.user_throughput}, {None}, {None}, {ap.state.name}')
+            ap_logger.info(f'{ap.id}, {ap.power}, {ap.channel}, {None}')
 
-    device_logger.info('id, ap, power, state, timer, x, y')
+    device_logger.info('id, ap, power, channel')
     for device in device_list:
         if device.ap != None:
-            device_logger.info(f'{device.id}, {device.ap.id}, {device.power}, {device.state.name}, {device.throughput}')
+            device_logger.info(f'{device.id}, {device.ap.id}, {device.power}, {device.channel}')
         else:
-            device_logger.info(f'{device.id}, {None}, {device.power}, {device.state.name}, {device.timer}')
+            device_logger.info(f'{device.id}, {None}, {device.power},{device.channel}')
 
 #graph
 def graph_device(ap_list, device_list):
@@ -75,18 +75,18 @@ def graph_fairness(t, fairness):
     plt.xlabel('time')
     plt.ylabel('fairness')
     plt.plot(t, fairness, '-o')
-    plt.xlim(0, operation_time+1)
-    plt.ylim(0, 1)
-    plt.savefig('fig/fairness without optimize')
+    # plt.xlim(0, operation_time+1)
+    # plt.ylim(0, 1)
+    plt.savefig(f'fig/fairness with_{factory_environment}')
     # plt.show()
-
-def graph_throughput(t, total_throughput_device):
+    
+def graph_throughput(t, total_throughput):
     plt.figure(figsize=(16,12))
     plt.title('total throughput')
     plt.xlabel('time')
-    plt.ylabel('fairness')
-    plt.plot(t, total_throughput_device, '-o')
-    plt.savefig('fig/total throughput without optimize')
+    plt.ylabel('total throughput device')
+    plt.plot(t, total_throughput, '-o')
+    plt.savefig(f'fig/total throughput with_{factory_environment}')
     # plt.show()
 
 def graph_loss_device(t, lost_device):
@@ -95,7 +95,16 @@ def graph_loss_device(t, lost_device):
     plt.xlabel('time')
     plt.ylabel('loss_device')
     plt.plot(t, lost_device, '-o')
-    plt.savefig('fig/loss device number without optimize')
+    plt.savefig(f'fig/loss device number with_{factory_environment}')
+    # plt.show()
+
+def graph_active_ap(t, active_ap):
+    plt.figure(figsize=(16,12))
+    plt.title('active ap')
+    plt.xlabel('time')
+    plt.ylabel('active_ap')
+    plt.plot(t, active_ap, '-o')
+    plt.savefig(f'fig/active ap with_{factory_environment}')
     # plt.show()
 
 # animation

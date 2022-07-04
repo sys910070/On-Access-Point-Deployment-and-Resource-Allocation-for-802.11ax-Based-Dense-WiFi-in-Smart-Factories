@@ -27,9 +27,9 @@ def log_info(ap_list, device_list):
     ap_logger.info('id, users, power, state, timer')
     for ap in ap_list:   
         if ap.power!= 0 and len(ap.neighbor_decode)!=0:
-            ap_logger.info(f'{ap.id}, {ap.power}, {[neighbor.id for neighbor in ap.neighbor_decode]}, {[user.id for user in ap.user]}, {ap.state.name}')
+            ap_logger.info(f'{ap.id}, {ap.power}, {[neighbor.id for neighbor in ap.neighbor_decode]}, {[user.id for user in ap.user]}, {ap.x}, {ap.y}')
         else:
-            ap_logger.info(f'{ap.id}, {ap.power}, {None}, {None}, {ap.user_throughput}, {None}, {None}, {ap.state.name}')
+            ap_logger.info(f'{ap.id}, {ap.power}, {None}, {None}, {ap.user_throughput}, {None}, {None}, {ap.x}, {ap.y}')
 
     device_logger.info('id, ap, power, state, timer, x, y')
     for device in device_list:
@@ -77,7 +77,7 @@ def graph_fairness(t, fairness):
     plt.plot(t, fairness, '-o')
     # plt.xlim(0, operation_time+1)
     # plt.ylim(0, 1)
-    plt.savefig('fig/fairness with no obstacle')
+    plt.savefig(f'fig/fairness with_{factory_environment}')
     # plt.show()
 
 def graph_throughput(t, total_throughput):
@@ -86,7 +86,7 @@ def graph_throughput(t, total_throughput):
     plt.xlabel('time')
     plt.ylabel('total throughput device')
     plt.plot(t, total_throughput, '-o')
-    plt.savefig('fig/total throughput with no obstacle')
+    plt.savefig(f'fig/total throughput with_{factory_environment}')
     # plt.show()
 
 def graph_loss_device(t, lost_device):
@@ -95,7 +95,7 @@ def graph_loss_device(t, lost_device):
     plt.xlabel('time')
     plt.ylabel('loss_device')
     plt.plot(t, lost_device, '-o')
-    plt.savefig('fig/loss device number with no obstacle')
+    plt.savefig(f'fig/loss device number with_{factory_environment}')
     # plt.show()
 
 def graph_active_ap(t, active_ap):
@@ -104,7 +104,7 @@ def graph_active_ap(t, active_ap):
     plt.xlabel('time')
     plt.ylabel('active_ap')
     plt.plot(t, active_ap, '-o')
-    plt.savefig('fig/active ap with no obstacle')
+    plt.savefig(f'fig/active ap with_{factory_environment}')
     # plt.show()
 
 # animation
@@ -122,7 +122,7 @@ def animation(ap_list, device_list, ap_animate, device_animate, win):
     for ap in ap_animate:
         ap.animation_attribute_update(ap_list)
         if ap.channel == 0:
-            continue
+            pygame.draw.circle(win, CADEBLUE1, (ap.y, ap.x), 3)
         elif ch_id_to_bw[ap.channel] == 20:
             pygame.draw.circle(win, GREEN, (ap.y, ap.x), 3)
         elif ch_id_to_bw[ap.channel] == 40:

@@ -5,19 +5,11 @@ from parameter import*
 
 @unique
 class D_State(IntEnum):
-    init = 1
-    connected = 2
-    detached = 3
-    handover = 4
-    search = 5
+    random = 1
 
 @unique
 class A_State(IntEnum):
-    init = 1
-    active = 2
-    underpopulated = 3
-    idle = 4
-    transition = 5
+    random = 1
 
 # device's action(action a and action b are both set initially)
 # c(device connect from one AP to another AP)
