@@ -24,7 +24,7 @@ def create_ap():
 
 def create_device_no_obstacle():
     # create device list
-    device_list = [DEVICE(random.uniform(0, 180), random.uniform(0, 200), i+1, Type.throughput) for i in range(device_num1+device_num2)]
+    device_list = [DEVICE(random.randint(0, 180), random.randint(0, 200), i+1, Type.throughput) for i in range(device_num1+device_num2)]
     # make half of device type 2
     for i in range(len(device_list)):
         if i%2 != 0:
