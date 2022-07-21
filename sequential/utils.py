@@ -262,3 +262,200 @@ def calculate_interval_average(fairness_record_interval, total_throughput_record
     lost_device = sum(lost_device_record_interval)/len(lost_device_record_interval)
     active_ap = sum(active_ap_record_interval)/len(active_ap_record_interval)
     return fairness, throughput, lost_device, active_ap
+
+#mobility model
+def mobility(device):
+    # region 5
+    if device.x != 0 and device.x != 180 and device.y != 0 and device.y != 200:
+        if factory_environment == 'no_obstacle':
+            num = random.randint(1, 4)
+            if num == 1:
+                device.x += 1
+            elif num == 2:
+                device.x -= 1
+            elif num == 3:
+                device.y += 1
+            else:
+                device.y -= 1
+        elif factory_environment == 'symmetric_obstacle':
+            #sym_region 1
+            if (device.x == 45 and ((device.y > 10 and device.y < 40) or (device.y > 160 and device.y < 190))) or (device.x == 10 or device.x == 140) and ((device.y > 55 and device.y < 145)):
+                num = random.randint(1, 4)
+                if num == 1 or num == 2:
+                    device.x -= 1
+                elif num == 3:
+                    device.y += 1
+                else:
+                    device.y -= 1
+            #sym_region 2
+            elif (device.y == 145 and ((device.x > 10 and device.x < 40) or (device.x > 140 and device.x < 170))) or (device.y == 40 or device.y == 190) and ((device.x > 45 and device.x < 135)):
+                num = random.randint(1, 4)
+                if num == 1 or num == 2:
+                    device.y += 1
+                elif num == 3:
+                    device.x += 1
+                else:
+                    device.x -= 1
+            #sym_region 3
+            elif (device.x == 135 and ((device.y > 10 and device.y < 40) or (device.y > 160 and device.y < 190))) or (device.x == 40 or device.x == 170) and ((device.y > 55 and device.y < 145)):
+                num = random.randint(1, 4)
+                if num == 1 or num == 2:
+                    device.x += 1
+                elif num == 3:
+                    device.y += 1
+                else:
+                    device.y -= 1
+            #sym_region 4
+            elif (device.y == 55 and ((device.x > 10 and device.x < 40) or (device.x > 140 and device.x < 170))) or (device.y == 10 or device.y == 160) and ((device.x > 45 and device.x < 135)):
+                num = random.randint(1, 4)
+                if num == 1 or num == 2:
+                    device.y -= 1
+                elif num == 3:
+                    device.x += 1
+                else:
+                    device.x -= 1
+            else:
+                num = random.randint(1, 4)
+                if num == 1:
+                    device.x += 1
+                elif num == 2:
+                    device.x -= 1
+                elif num == 3:
+                    device.y += 1
+                else:
+                    device.y -= 1
+
+        elif factory_environment == 'asymmetric_obstacle':
+            #asym_region 1
+            if (device.x == 75 and (device.y > 130 and device.y < 180)) or ((device.x == 10 or device.x == 95) and ((device.y > 0 and device.y < 75))):
+                num = random.randint(1, 4)
+                if num == 1 or num == 2:
+                    device.x -= 1
+                elif num == 3:
+                    device.y += 1
+                else:
+                    device.y -= 1
+            #asym_region 2
+            elif (device.y == 75 and ((device.x > 10 and device.x < 85) or (device.x > 95 and device.x < 170))) or (device.y == 170 and (device.x > 0 and device.x < 30)) or (device.y == 180 and (device.x > 75 and device.x < 135)):
+                num = random.randint(1, 4)
+                if num == 1 or num == 2:
+                    device.y += 1
+                elif num == 3:
+                    device.x += 1
+                else:
+                    device.x -= 1
+            #asym_region 3
+            elif (device.x == 135 and (device.y > 130 and device.y < 180)) or (device.x == 30 and (device.y > 130 and device.y < 170)) or ((device.x == 85 or device.x == 170) and ((device.y > 0 and device.y < 75))):
+                num = random.randint(1, 4)
+                if num == 1 or num == 2:
+                    device.x += 1
+                elif num == 3:
+                    device.y += 1
+                else:
+                    device.y -= 1
+            #asym_region 4
+            elif (device.y == 130 and ((device.x > 0 and device.x < 30) or (device.x > 75 and device.x < 135))):
+                num = random.randint(1, 4)
+                if num == 1 or num == 2:
+                    device.y -= 1
+                elif num == 3:
+                    device.x += 1
+                else:
+                    device.x -= 1
+            else:
+                num = random.randint(1, 4)
+                if num == 1:
+                    device.x += 1
+                elif num == 2:
+                    device.x -= 1
+                elif num == 3:
+                    device.y += 1
+                else:
+                    device.y -= 1
+
+    #specific case for asymmetric obstacle()
+    #asym_region 5
+    elif factory_environment == 'asymmetric_obstacle' and device.y == 0 and (device.x == 10 or device.x == 95):
+        num = random.randint(1, 2)
+        if num == 1:
+            device.x -= 1
+        else:
+            device.y += 1
+    #asym_region 6
+    elif factory_environment == 'asymmetric_obstacle' and (device.y == 0 and (device.x == 85 or device.x == 170)) or (device.x == 0 and device.y == 170):
+        num = random.randint(1, 2)
+        if num == 1:
+            device.x += 1
+        else:
+            device.y += 1
+    #asym_region 7
+    elif factory_environment == 'asymmetric_obstacle' and device.x == 0 and device.y == 130:
+        num = random.randint(1, 2)
+        if num == 1:
+            device.x += 1
+        else:
+            device.y -= 1
+    # region 1
+    elif device.x == 0 and device.y == 0:
+        num = random.randint(1, 2)
+        if num == 1:
+            device.x += 1
+        else:
+            device.y += 1
+    # region 2
+    elif device.x == 0 and device.y != 0 and device.y != 200:
+        num = random.randint(1, 4)
+        if num == 1 or num == 2:
+            device.x += 1
+        elif num == 3:
+            device.y += 1
+        else:
+            device.y -= 1
+    # region 3
+    elif device.x == 0 and device.y == 200:
+        num = random.randint(1, 2)
+        if num == 1:
+            device.x += 1
+        else:
+            device.y -= 1
+    # region 4
+    elif device.y == 0 and device.x != 0 and device.x != 180:
+        num = random.randint(1, 4)
+        if num == 1 or num == 2:
+            device.y += 1
+        elif num == 3:
+            device.x += 1
+        else:
+            device.x -= 1
+    # region 6
+    elif device.y == 200 and device.x != 0 and device.x != 180:
+        num = random.randint(1, 4)
+        if num == 1 or num == 2:
+            device.y -= 1
+        elif num == 3:
+            device.x += 1
+        else:
+            device.x -= 1
+    # region 7
+    elif device.x == 180 and device.y == 0:
+        num = random.randint(1, 2)
+        if num == 1:
+            device.x -= 1
+        else:
+            device.y += 1
+    # region 8
+    elif device.x == 180 and device.y != 0 and device.y != 200:
+        num = random.randint(1, 4)
+        if num == 1 or num == 2:
+            device.x -= 1
+        elif num == 3:
+            device.y += 1
+        else:
+            device.y -= 1
+    # region 9
+    elif device.x == 180 and device.y == 200:
+        num = random.randint(1, 2)
+        if num == 1:
+            device.x -= 1
+        else:
+            device.y -= 1

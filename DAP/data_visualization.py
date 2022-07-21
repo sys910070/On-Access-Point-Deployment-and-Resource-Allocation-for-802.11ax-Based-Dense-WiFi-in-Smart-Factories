@@ -31,12 +31,12 @@ def log_info(ap_list, device_list):
         else:
             ap_logger.info(f'{ap.id}, {ap.power}, {None}, {None}, {ap.user_throughput}, {None}, {None}, {ap.x}, {ap.y}')
 
-    device_logger.info('id, ap, power, state, timer, x, y')
+    device_logger.info('id, ap, x, y')
     for device in device_list:
         if device.ap != None:
-            device_logger.info(f'{device.id}, {device.ap.id}, {device.power}, {device.state.name}, {device.throughput}')
+            device_logger.info(f'{device.id}, {device.ap.id}, {device.x}, {device.y}')
         else:
-            device_logger.info(f'{device.id}, {None}, {device.power}, {device.state.name}, {device.timer}')
+            device_logger.info(f'{device.id}, {None}, {device.x}, {device.y}')
 
 #graph
 def graph_device(ap_list, device_list):

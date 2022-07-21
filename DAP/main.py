@@ -183,63 +183,63 @@ while run :
         if event.type == KEYDOWN:
             if event.key == K_ESCAPE:
                 pygame.quit()
-        # if keys[pygame.K_DOWN]:
-    t += 1
-    print('t = ', t)
-    for device in device_list:
-        device.move()
-    for device in device_list:
-        flag_device, device_next_state = device.state_change(ap_list)
-        if flag_device:
-            device.action(device_next_state, ap_list)
-        device.dis_cal()
-    for ap in ap_list:
-        flag_ap, ap_next_state = ap.state_change(ap_list, device_list)
-        if flag_ap:
-            ap.action(ap_next_state, ap_list, device_list)
-        # user selected_ap reset
-        if ap.state == A_State.active:
-            for user in ap.user: 
-                user.selected = None
-        elif ap.state == A_State.underpopulated:
-            for user in ap.user:
-                user.selected = None
-
-    if t % update_timer == 0:
-        if fairness_cal(ap_list) > 0.6:
-            print('resource improvement')
+        if keys[pygame.K_DOWN]:
+            t += 1
+            print('t = ', t)
+            for device in device_list:
+                device.move()
+            for device in device_list:
+                flag_device, device_next_state = device.state_change(ap_list)
+                if flag_device:
+                    device.action(device_next_state, ap_list)
+                device.dis_cal()
             for ap in ap_list:
-                power_adjustment(ap, ap_list)
-            channel_amplification(ap_list)
-        else:
-            print('fairness improvement')
-        fairness_adjust_version2(ap_list, device_list)
+                flag_ap, ap_next_state = ap.state_change(ap_list, device_list)
+                if flag_ap:
+                    ap.action(ap_next_state, ap_list, device_list)
+                # user selected_ap reset
+                if ap.state == A_State.active:
+                    for user in ap.user: 
+                        user.selected = None
+                elif ap.state == A_State.underpopulated:
+                    for user in ap.user:
+                        user.selected = None
 
-    cci_cal(ap_list)  
-    # throughput_lower = 0
-    # for device in device_list:
-    #     if device.throughput<device_throughput_qos:
-    #         throughput_lower += 1
+            if t % update_timer == 0:
+                if fairness_cal(ap_list) > 0.6:
+                    print('resource improvement')
+                    for ap in ap_list:
+                        power_adjustment(ap, ap_list)
+                    channel_amplification(ap_list)
+                else:
+                    print('fairness improvement')
+                fairness_adjust_version2(ap_list, device_list)
 
-    all_timer_minus_one(device_list, ap_list)
-    log_info(ap_list, device_list)
+            cci_cal(ap_list)  
+            # throughput_lower = 0
+            # for device in device_list:
+            #     if device.throughput<device_throughput_qos:
+            #         throughput_lower += 1
 
-    fairness_record_interval.append(fairness_cal(ap_list))
-    total_throughput_record__interval.append(throughput_cal(ap_list, device_list))
-    lost_device_record_interval.append(loss_device_count(device_list))
-    active_ap_record_interval.append(active_ap_count(ap_list))
+            all_timer_minus_one(device_list, ap_list)
+            log_info(ap_list, device_list)
 
-    if t % interval == 0:
-        fairness, throughput, loss_device, active_ap = calculate_interval_average(fairness_record_interval, total_throughput_record__interval, lost_device_record_interval, active_ap_record_interval)
-        fairness_record.append(fairness)
-        total_throughput_record.append(throughput)
-        lost_device_record.append(loss_device)
-        active_ap_record.append(active_ap)
+            fairness_record_interval.append(fairness_cal(ap_list))
+            total_throughput_record__interval.append(throughput_cal(ap_list, device_list))
+            lost_device_record_interval.append(loss_device_count(device_list))
+            active_ap_record_interval.append(active_ap_count(ap_list))
 
-        fairness_record_interval.clear()
-        total_throughput_record__interval.clear()
-        lost_device_record_interval.clear()
-        active_ap_record_interval.clear()
+            if t % interval == 0:
+                fairness, throughput, loss_device, active_ap = calculate_interval_average(fairness_record_interval, total_throughput_record__interval, lost_device_record_interval, active_ap_record_interval)
+                fairness_record.append(fairness)
+                total_throughput_record.append(throughput)
+                lost_device_record.append(loss_device)
+                active_ap_record.append(active_ap)
+
+                fairness_record_interval.clear()
+                total_throughput_record__interval.clear()
+                lost_device_record_interval.clear()
+                active_ap_record_interval.clear()
 
     pygame.display.update()
 pygame.quit()

@@ -84,14 +84,14 @@ scale = 5
 # factory boundary check
 # no obstacle
 def boundary_no_obstacle(x, y):
-    if x <= 0 or y <= 0 or x >= factory_length or y >= factory_width:
+    if x < 0 or y < 0 or x > factory_length or y > factory_width:
         return False
     else:
         return True
 
 # symmetric obstacle
 def boundary_symmetric_obstacle(x, y):
-    if x <= 0 or y <= 0 or x >= factory_length or y >= factory_width or ((x>=45 and x<=135) and ((y>=10 and y<=40) or (y>=160 and y<=190))) or (((x>=10 and x<=45) or (x>=140 and x<=170)) and (y>=55 and y<=145)):
+    if x < 0 or y < 0 or x > factory_length or y > factory_width or ((x>45 and x<135) and ((y>10 and y<40) or (y>160 and y<190))) or (((x>10 and x<40) or (x>140 and x<170)) and (y>55 and y<145)):
         return False
     else:
         return True
@@ -114,7 +114,7 @@ def symmetric_obstacle_draw(win):
 
 # asymmetric obstacle
 def boundary_asymmetric_obstacle(x, y):
-    if x < 0 or y < 0 or x > factory_length or y > factory_width or ((y>=0 and y<75) and ((x>10 and x<85) or (x>95 and x<170))) or ((x>=0 and x<=30) and (y>=130 and y<=170)) or ((x>=75 and x<=135) and (y>=130 and y<=180)):
+    if x < 0 or y < 0 or x > factory_length or y > factory_width or ((y>=0 and y<75) and ((x>10 and x<85) or (x>95 and x<170))) or ((x>=0 and x<30) and (y>130 and y<170)) or ((x>75 and x<135) and (y>130 and y<180)):
         return False
     else:
         return True
