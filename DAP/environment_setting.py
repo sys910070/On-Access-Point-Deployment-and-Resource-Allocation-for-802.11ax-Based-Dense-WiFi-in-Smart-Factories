@@ -64,8 +64,135 @@ def create_device_asymmetric_obstacle():
             device_list[i].type = Type.delay
     return device_list
 
-## test
-# x = random.randint(0, 180)
-# y = random.randint(0, 200)
-# print(x, y)
-# print(boundary_symmetric_obstacle(x, y))
+def create_device_real_facrory_layout():
+    dic = {} 
+    rgv_list = []
+    agv_list = []
+    pgv_list = []
+    oht_list = []
+    device_list = []
+    type1_list = []
+    device_count = 0
+
+    # create rgv device
+    rgv_count = 0
+    rgv_pos = []
+    for i in range(11, 80):
+        rgv_pos.append((i, 16))
+        rgv_pos.append((i, 29))
+    for i in range(17, 29):
+        rgv_pos.append((11, i))
+        rgv_pos.append((79, i))
+    for i in range(101, 170):
+        rgv_pos.append((i, 16))
+        rgv_pos.append((i, 29))
+    for i in range(17, 29):
+        rgv_pos.append((101, i))
+        rgv_pos.append((170, i))
+    while rgv_count != rgv_num:
+        flag = True
+        while flag:
+            pos = random.choice(list(rgv_pos))
+            if pos not in dic:
+                dic[pos] = dic.setdefault(pos, 0)
+                rgv_list.append(DEVICE(pos[0], pos[1], device_count+1, Type.delay))
+                device_count += 1
+                rgv_count += 1
+                flag = False
+
+    # create oht device
+    oht_count = 0
+    oht_pos = []
+    for i in range(11, 80):
+        oht_pos.append((i, 106))
+        oht_pos.append((i, 119))
+    for i in range(107, 119):
+        oht_pos.append((11, i))
+        oht_pos.append((79, i))
+
+    for i in range(101, 170):
+        oht_pos.append((i, 136))
+        oht_pos.append((i, 149))
+    for i in range(137, 149):
+        oht_pos.append((101, i))
+        oht_pos.append((170, i))
+    while oht_count != oht_num:
+        flag = True
+        while flag:
+            pos = random.choice(list(oht_pos))
+            if pos not in dic:
+                dic[pos] = dic.setdefault(pos, 0)
+                oht_list.append(DEVICE(pos[0], pos[1], device_count+1, Type.delay))
+                device_count += 1
+                oht_count += 1
+                flag = False
+        
+    # create agv device
+    agv_count = 0
+    agv_pos = []
+    for i in range(10, 81):
+        for j in range(45, 61):
+            agv_pos.append((i, j))
+    for i in range(100, 171):
+        for j in range(45, 61):
+            agv_pos.append((i, j))
+    for i in range(100, 171):
+        for j in range(75, 91):
+            agv_pos.append((i, j))
+    
+    while agv_count != agv_num:
+        flag = True
+        while flag:
+            pos = random.choice(list(agv_pos))
+            if pos not in dic:
+                dic[pos] = dic.setdefault(pos, 0)
+                agv_list.append(DEVICE(pos[0], pos[1], device_count+1, Type.delay))
+                device_count += 1
+                agv_count += 1
+                flag = False
+
+    # create pgv device
+    pgv_count = 0
+    pgv_pos = []
+    for i in range(10, 81):
+        for j in range(135, 151):
+            pgv_pos.append((i, j))
+    
+    while pgv_count != pgv_num:
+        flag = True
+        while flag:
+            pos = random.choice(list(pgv_pos))
+            if pos not in dic:
+                dic[pos] = dic.setdefault(pos, 0)
+                pgv_list.append(DEVICE(pos[0], pos[1], device_count+1, Type.delay))
+                device_count += 1
+                pgv_count += 1
+                flag = False
+
+    # create type 1 device
+    for i in range(1, 6):
+        type1_list.append(DEVICE(10+i*12, 75, device_count+1, Type.throughput))
+        device_count += 1
+        type1_list.append(DEVICE(10+i*12, 90, device_count+1, Type.throughput))
+        device_count += 1
+        type1_list.append(DEVICE(100+i*12, 105, device_count+1, Type.throughput))
+        device_count += 1
+        type1_list.append(DEVICE(100+i*12, 120, device_count+1, Type.throughput))
+        device_count += 1
+
+    for device in rgv_list:
+        device.gv = 1
+        device_list.append(device)
+    for device in oht_list:
+        device.gv = 2
+        device_list.append(device)
+    for device in agv_list:
+        device.gv = 3
+        device_list.append(device)
+    for device in pgv_list:
+        device.gv = 4
+        device_list.append(device)
+    for device in type1_list:
+        device_list.append(device)
+    
+    return device_list

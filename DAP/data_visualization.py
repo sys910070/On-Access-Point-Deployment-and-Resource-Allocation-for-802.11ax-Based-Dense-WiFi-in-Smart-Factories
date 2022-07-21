@@ -108,15 +108,36 @@ def graph_active_ap(t, active_ap):
     # plt.show()
 
 # animation
+human = pygame.image.load('human.png')
+human = pygame.transform.scale(human, (20, 20))
+monitor = pygame.image.load('monitor.png')
+monitor = pygame.transform.scale(monitor, (20, 20))
+
 def animation(ap_list, device_list, ap_animate, device_animate, win):
     for device in device_animate:
         device.animation_attribute_update(device_list)
         device.add_ap(ap_animate)
-        if device.ap != None:
-            pygame.draw.circle(win, BLACK, (device.y, device.x), 3)
-            pygame.draw.line(win, BLACK, (device.y, device.x), (device.ap.y, device.ap.x), 1) 
-        else:   
-            pygame.draw.circle(win, DIMGRAY, (device.y, device.x), 3)
+        if factory_environment == 'real_facrory_layout':
+            if device.type == 1:
+                win.blit(monitor, (device.y-10 , device.x-10))
+                if device.ap != None:
+                    pygame.draw.line(win, BLACK, (device.y, device.x), (device.ap.y, device.ap.x), 1)                   
+            if device.gv != 4:
+                if device.ap != None:
+                    pygame.draw.circle(win, BLACK, (device.y, device.x), 3)
+                    pygame.draw.line(win, BLACK, (device.y, device.x), (device.ap.y, device.ap.x), 1) 
+                else:   
+                    pygame.draw.circle(win, DIMGRAY, (device.y, device.x), 3)
+            else:   
+                win.blit(human, (device.y-10 , device.x-10))
+                if device.ap != None:
+                    pygame.draw.line(win, BLACK, (device.y, device.x), (device.ap.y, device.ap.x), 1)            
+        else:
+            if device.ap != None:
+                pygame.draw.circle(win, BLACK, (device.y, device.x), 3)
+                pygame.draw.line(win, BLACK, (device.y, device.x), (device.ap.y, device.ap.x), 1) 
+            else:   
+                pygame.draw.circle(win, DIMGRAY, (device.y, device.x), 3)
         text, textRect = txt(device)
         win.blit(text, textRect)       
     for ap in ap_animate:

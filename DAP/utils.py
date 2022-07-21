@@ -252,6 +252,47 @@ def calculate_interval_average(fairness_record_interval, total_throughput_record
     return fairness, throughput, lost_device, active_ap
 
 #mobility model
+def mobility_real_factory(device):
+    # rgv, oht
+    if ((device.x == 11 or device.x == 101 or device.x == 79 or device.x == 169) and (device.y >= 16 and device.y <= 29)) or ((device.y == 16 or device.y == 29) and (device.x >= 11 and device.x <= 79) or (device.x >= 101 and device.x <= 169))\
+        or ((device.x == 11 or device.x == 79) and (device.y >= 106 and device.y <= 119)) or ((device.y == 106 or device.y == 119) and (device.x >= 11 and device.x <= 79))\
+        or ((device.x == 101 or device.x == 169) and (device.y >= 136 and device.y <= 149)) or ((device.y == 136 or device.y == 149) and (device.x >= 101 and device.x <= 169)):
+        if (device.x == 11 or device.x == 101) and (device.y > 16 and device.y <= 29)\
+            or (device.x == 11) and (device.y > 106 and device.y <= 119)\
+            or (device.x == 101) and (device.y > 136 and device.y <= 149):
+            device.y -= 1
+        elif (device.x == 79 or device.x == 169) and (device.y >= 16 and device.y < 29)\
+            or (device.x == 79) and (device.y >= 106 and device.y < 119)\
+            or (device.x == 169) and (device.y >= 136 and device.y < 149):
+            device.y += 1
+        elif (device.y == 16 and ((device.x >= 11 and device.x < 79) or (device.x >= 101 and device.x < 169)))\
+            or (device.y == 106 and ((device.x >= 11 and device.x < 79)))\
+            or (device.y == 136 and ((device.x >= 101 and device.x < 169))):
+            device.x += 1
+        elif (device.y == 29 and ((device.x > 11 and device.x <= 79) or (device.x > 101 and device.x <= 169)))\
+            or (device.y == 119 and ((device.x > 11 and device.x <= 79)))\
+            or (device.y == 149 and ((device.x > 101 and device.x <= 169))):
+            device.x -= 1
+    # agv
+    if device.x >= 10 and device.x <= 80 and device.y >= 45 and device.y <= 60:
+        dis = random.randint(1, 5)
+        for _ in range(dis):
+            clean_area_mobility_model(device, 10, 80, 45, 60)
+    if device.x >= 100 and device.x <= 170 and device.y >= 45 and device.y <= 60:
+        dis = random.randint(1, 5)
+        for _ in range(dis):
+            clean_area_mobility_model(device, 100, 170, 45, 60)
+    if device.x >= 100 and device.x <= 170 and device.y >= 75 and device.y <= 90:
+        dis = random.randint(1, 5)
+        for _ in range(dis):
+            clean_area_mobility_model(device, 100, 170, 75, 90)
+    
+    # pgv
+    if device.x >= 10 and device.x <= 80 and device.y >= 135 and device.y <= 150:
+        dis = random.randint(1, 5)
+        for _ in range(dis):
+            clean_area_mobility_model(device, 10, 80, 135, 150)
+
 def mobility(device):
     # region 5
     if device.x != 0 and device.x != 180 and device.y != 0 and device.y != 200:
@@ -442,6 +483,83 @@ def mobility(device):
             device.y -= 1
     # region 9
     elif device.x == 180 and device.y == 200:
+        num = random.randint(1, 2)
+        if num == 1:
+            device.x -= 1
+        else:
+            device.y -= 1
+
+def clean_area_mobility_model(device, x_min, x_max, y_min, y_max):
+    #region 5
+    if device.x != x_min and device.x != x_max and device.y != y_min and device.y != y_max:
+        num = random.randint(1, 4)
+        if num == 1:
+            device.x += 1
+        elif num == 2:
+            device.x -= 1
+        elif num == 3:
+            device.y += 1
+        else:
+            device.y -= 1
+    # region 1
+    elif device.x == x_min and device.y == y_min:
+        num = random.randint(1, 2)
+        if num == 1:
+            device.x += 1
+        else:
+            device.y += 1
+    # region 2
+    elif device.x == x_min and device.y != y_min and device.y != y_max:
+        num = random.randint(1, 4)
+        if num == 1 or num == 2:
+            device.x += 1
+        elif num == 3:
+            device.y += 1
+        else:
+            device.y -= 1
+    # region 3
+    elif device.x == x_min and device.y == y_max:
+        num = random.randint(1, 2)
+        if num == 1:
+            device.x += 1
+        else:
+            device.y -= 1
+    # region 4
+    elif device.y == y_min and device.x != x_min and device.x != x_max:
+        num = random.randint(1, 4)
+        if num == 1 or num == 2:
+            device.y += 1
+        elif num == 3:
+            device.x += 1
+        else:
+            device.x -= 1
+    # region 6
+    elif device.y == y_max and device.x != x_min and device.x != x_max:
+        num = random.randint(1, 4)
+        if num == 1 or num == 2:
+            device.y -= 1
+        elif num == 3:
+            device.x += 1
+        else:
+            device.x -= 1
+    # region 7
+    elif device.x == x_max and device.y == y_min:
+        num = random.randint(1, 2)
+        if num == 1:
+            device.x -= 1
+        else:
+            device.y += 1
+    # region 8
+    elif device.x == x_max and device.y != y_min and device.y != y_max:
+        num = random.randint(1, 4)
+        if num == 1 or num == 2:
+            device.x -= 1
+        elif num == 3:
+            device.y += 1
+        else:
+            device.y -= 1
+    # region 9
+    elif device.x == x_max and device.y == y_max:
         num = random.randint(1, 2)
         if num == 1:
             device.x -= 1
