@@ -1,0 +1,3 @@
+INFO id, ap, power, state, timer, x, y
+INFO 1, 21, 22, 47.991679694798215, 48.25464341114052, inf, connected
+INFO 2, None, 0, 75, 0, detached
