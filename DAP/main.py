@@ -51,15 +51,6 @@ class Device_animate():
                 self.throughput = device.throughput
                 self.timer = device.timer
 
-    def move(self):
-        while True:
-            self.vx = random.randint(-10, 10)
-            self.vy = random.randint(-10, 10)
-            if boundary_no_obstacle((self.x + self.vx)/scale, (self.y + self.vy)/scale):
-                self.x = self.x + self.vx
-                self.y = self.y + self.vy
-                break
-
 class AP_animate():
     def __init__(self, ap):
         self.x = ap.x*scale
@@ -108,8 +99,8 @@ elif factory_environment == 'symmetric_obstacle':
     device_list = create_device_symmetric_obstacle()
 elif factory_environment == 'asymmetric_obstacle':
     device_list = create_device_asymmetric_obstacle()
-elif factory_environment == 'real_facrory_layout':
-    device_list = create_device_real_facrory_layout()
+elif factory_environment == 'real_factory_layout':
+    device_list = create_device_real_factory_layout()
 
 # resource initialization
 init(ap_list, device_list) 
@@ -160,8 +151,8 @@ while run :
         symmetric_obstacle_draw(win)
     elif factory_environment == 'asymmetric_obstacle':
         asymmetric_obstacle_draw(win)  
-    elif factory_environment == 'real_facrory_layout':
-        real_facrory_layout_draw(win)
+    elif factory_environment == 'real_factory_layout':
+        real_factory_layout_draw(win)
 
     animation(ap_list, device_list, ap_animate, device_animate, win)
     
@@ -192,8 +183,6 @@ while run :
     t += 1
     print('t = ', t)
     for device in device_list:
-        if device.id ==25:
-            print('stop')
         device.move()
     for device in device_list:
         flag_device, device_next_state = device.state_change(ap_list)

@@ -24,15 +24,15 @@ class DEVICE:
         self.dis = 0
         self.throughput = 0
         self.gv = 0 # 1 for RGV, 2 for OHT, 3 for AGV, 4 for human
+        self.destination_dis = 0
+        self.direction = 0
 
     def move(self):
         if self.type == Type.delay:
-            if factory_environment == 'real_facrory_layout':
+            if factory_environment == 'real_factory_layout':
                 mobility_real_factory(self)
             else:
-                dis = random.randint(1, 20)
-                for _ in range(dis):
-                    mobility(self)
+                mobility(self)
 
     def dis_cal(self):
         if self.ap == None:

@@ -38,7 +38,7 @@ def create_device_symmetric_obstacle():
     while device_count != device_num:
         x = random.randint(0, 180)
         y = random.randint(0, 200)
-        if boundary_symmetric_obstacle(x, y):
+        if symmetric_obstacle(x, y):
             device_list.append(DEVICE(x, y, device_count+1, Type.throughput))
             device_count += 1
 
@@ -55,7 +55,7 @@ def create_device_asymmetric_obstacle():
     while device_count != device_num:
         x = random.randint(0, 180)
         y = random.randint(0, 200)
-        if boundary_asymmetric_obstacle(x, y):
+        if asymmetric_obstacle(x, y):
             device_list.append(DEVICE(x, y, device_count+1, Type.throughput))
             device_count += 1
     # make half of device type 2
@@ -64,7 +64,7 @@ def create_device_asymmetric_obstacle():
             device_list[i].type = Type.delay
     return device_list
 
-def create_device_real_facrory_layout():
+def create_device_real_factory_layout():
     dic = {} 
     rgv_list = []
     agv_list = []
