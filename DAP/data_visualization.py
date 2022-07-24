@@ -34,9 +34,9 @@ def log_info(ap_list, device_list):
     device_logger.info('id, ap, x, y')
     for device in device_list:
         if device.ap != None:
-            device_logger.info(f'{device.id}, {device.ap.id}, {device.x}, {device.y}')
+            device_logger.info(f'{device.id}, {device.ap.id}, {device.x}, {device.y}, {device.destination_dis}, {device.direction}')
         else:
-            device_logger.info(f'{device.id}, {None}, {device.x}, {device.y}')
+            device_logger.info(f'{device.id}, {None}, {device.x}, {device.y}, {device.destination_dis}, {device.direction}')
 
 #graph
 def graph_device(ap_list, device_list):

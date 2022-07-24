@@ -183,6 +183,8 @@ while run :
     t += 1
     print('t = ', t)
     for device in device_list:
+        if device.id == 84 and t == 76:
+            print('stop')
         device.move()
     for device in device_list:
         flag_device, device_next_state = device.state_change(ap_list)

@@ -83,15 +83,21 @@ for idx, channel_group in enumerate((frequency_channel_20, frequency_channel_40,
 #factory setup
 factory_width = 200
 factory_length = 180
-factory_environment = 'real_factory_layout'
+factory_environment = 'asymmetric_obstacle'
 
 # animation factor
-scale = 4
+scale = 5
 
-# factory boundary
+# factory boundary include obstacle in each environment
 def factory_boundary(x, y):
     if x == 0 or x == 180 or y == 0 or y == 200:
         return True
+    elif factory_environment == 'symmetric_obstacle':
+        if ((x>=45 and x<=135) and ((y>=10 and y<=40) or (y>=160 and y<=190))) or (((x>=10 and x<=40) or (x>=140 and x<=170)) and (y>=55 and y<=145)):
+            return True 
+    elif factory_environment == 'asymmetric_obstacle':
+        if ((y>=0 and y<=75) and ((x>=10 and x<=85) or (x>=95 and x<=170))) or ((x>=0 and x<=30) and (y>=130 and y<=170)) or ((x>=75 and x<=135) and (y>=130 and y<=180)):
+            return True
     else:
         return False
 

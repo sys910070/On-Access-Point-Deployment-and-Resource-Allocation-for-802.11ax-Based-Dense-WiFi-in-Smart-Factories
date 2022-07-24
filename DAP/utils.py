@@ -277,7 +277,7 @@ def mobility_real_factory(device):
     if device.x >= 10 and device.x <= 80 and device.y >= 45 and device.y <= 60:
         if device.destination_dis == 0 or device.x == 10 or device.x == 80 or device.y == 45 or device.y == 60:
             device.destination_dis = random.randint(1, 20)
-            clean_area_mobility_model(device, 10, 80, 45, 60, 'no_obstacle')
+            mobility_model(device, 10, 80, 45, 60, 'no_obstacle')
             device.destination_dis -=1
             device.x += device.direction[0]
             device.y += device.direction[1]
@@ -288,7 +288,7 @@ def mobility_real_factory(device):
     if device.x >= 100 and device.x <= 170 and device.y >= 45 and device.y <= 60:
         if device.destination_dis == 0 or device.x == 100 or device.x == 170 or device.y == 45 or device.y == 60:
             device.destination_dis = random.randint(1, 20)
-            clean_area_mobility_model(device, 10, 80, 45, 60, 'no_obstacle')
+            mobility_model(device, 100, 170, 45, 60, 'no_obstacle')
             device.destination_dis -=1
             device.x += device.direction[0]
             device.y += device.direction[1]
@@ -299,7 +299,7 @@ def mobility_real_factory(device):
     if device.x >= 100 and device.x <= 170 and device.y >= 75 and device.y <= 90:
         if device.destination_dis == 0 or device.x == 100 or device.x == 170 or device.y == 75 or device.y == 90:
             device.destination_dis = random.randint(1, 20)
-            clean_area_mobility_model(device, 10, 80, 75, 90, 'no_obstacle')
+            mobility_model(device, 100, 170, 75, 90, 'no_obstacle')
             device.destination_dis -=1
             device.x += device.direction[0]
             device.y += device.direction[1]
@@ -312,7 +312,7 @@ def mobility_real_factory(device):
     if device.x >= 10 and device.x <= 80 and device.y >= 135 and device.y <= 150:
         if device.destination_dis == 0 or device.x == 10 or device.x == 80 or device.y == 135 or device.y == 150:
             device.destination_dis = random.randint(1, 20)
-            clean_area_mobility_model(device, 10, 80, 135, 150, 'no_obstacle')
+            mobility_model(device, 10, 80, 135, 150, 'no_obstacle')
             device.destination_dis -=1
             device.x += device.direction[0]
             device.y += device.direction[1]
@@ -323,13 +323,15 @@ def mobility_real_factory(device):
 
 def mobility(device):
     if device.destination_dis == 0 or factory_boundary(device.x, device.y):
-        device.destination_dis = random.randint(1, 20)
         if factory_environment == 'no_obstacle':
-            clean_area_mobility_model(device, 0, 180, 0, 200)
-        elif factory_environment == 'symmetric_obstacle' and symmetric_obstacle_boundary(device.x, device.y):
-            clean_area_mobility_model(device, 0, 180, 0, 200)
-        elif factory_environment == 'asymmetric_obstacle' and asymmetric_obstacle_boundary(device.x, device.y):
-            clean_area_mobility_model(device, 0, 180, 0, 200)
+            device.destination_dis = random.randint(1, 20)
+            mobility_model(device, 0, 180, 0, 200, 'no_obstacle')
+        elif factory_environment == 'symmetric_obstacle':
+            device.destination_dis = random.randint(1, 20)
+            mobility_model(device, 0, 180, 0, 200, 'symmetric_obstacle')
+        elif factory_environment == 'asymmetric_obstacle':
+            device.destination_dis = random.randint(1, 20)
+            mobility_model(device, 0, 180, 0, 200, 'asymmetric_obstacle')
         device.destination_dis -= 1
         device.x += device.direction[0]
         device.y += device.direction[1]
@@ -338,8 +340,8 @@ def mobility(device):
         device.x += device.direction[0]
         device.y += device.direction[1]
 
-# after revision, this function will give a direction to the device
-def clean_area_mobility_model(device, x_min, x_max, y_min, y_max, environment):
+# after revision, this function will return a direction to the device
+def mobility_model(device, x_min, x_max, y_min, y_max, environment):
     #region 5
     if device.x != x_min and device.x != x_max and device.y != y_min and device.y != y_max:
         if environment == 'no_obstacle':
@@ -439,13 +441,13 @@ def clean_area_mobility_model(device, x_min, x_max, y_min, y_max, environment):
             else:
                 num = random.randint(1, 4)
                 if num == 1:
-                    device.x += 1
+                    device.direction = (1, 0)
                 elif num == 2:
-                    device.x -= 1
+                    device.direction = (-1, 0)
                 elif num == 3:
-                    device.y += 1
+                    device.direction = (0, 1)
                 else:
-                    device.y -= 1
+                    device.direction = (0, -1)
     #specific case for asymmetric obstacle()
     #asym_region 5
     elif environment == 'asymmetric_obstacle' and device.y == 0 and (device.x == 10 or device.x == 95):
