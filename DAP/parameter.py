@@ -30,21 +30,21 @@ frequency_channel_80 = np.arange(17,19) # 17~18
 frequency_channel_160 = np.arange(19,20) #19
 
 # real factory
-rgv_num = 20
-agv_num = 30
-pgv_num = 10
-oht_num = 20
-type1_num = 10
+rgv_num = 40
+agv_num = 60
+pgv_num = 20
+oht_num = 40
+type1_num = 20
 
 # all timer (second)
 operation_time = 600
 interval = 10
 update_timer = 30
-d_state_timer_handover = 2
-d_state_timer_detached = 2
+d_state_timer_handover = 1
+d_state_timer_detached = 1
 d_state_timer_search = 5
-a_state_timer_underpopulate = 2
-a_state_timer_idle = 2
+a_state_timer_underpopulate = 1
+a_state_timer_idle = 1
 
 # qos reqirement
 total_throughput_qos = 7000
@@ -83,7 +83,7 @@ for idx, channel_group in enumerate((frequency_channel_20, frequency_channel_40,
 #factory setup
 factory_width = 200
 factory_length = 180
-factory_environment = 'asymmetric_obstacle'
+factory_environment = 'no_obstacle'
 
 # animation factor
 scale = 5

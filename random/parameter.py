@@ -29,10 +29,17 @@ frequency_channel_40 = np.arange(12,17) # 12~16
 frequency_channel_80 = np.arange(17,19) # 17~18
 frequency_channel_160 = np.arange(19,20) #19
 
+# real factory
+rgv_num = 40
+agv_num = 60
+pgv_num = 20
+oht_num = 40
+type1_num = 20
+
 # all timer (second)
 operation_time = 600
-update_timer = 30
 interval = 10
+update_timer = 30
 d_state_timer_handover = 2
 d_state_timer_detached = 2
 d_state_timer_search = 5
@@ -76,25 +83,37 @@ for idx, channel_group in enumerate((frequency_channel_20, frequency_channel_40,
 #factory setup
 factory_width = 200
 factory_length = 180
-factory_environment = 'asymmetric_obstacle'
+factory_environment = 'no_obstacle'
 
 # animation factor
 scale = 5
 
-# factory boundary check
-# no obstacle
-def boundary_no_obstacle(x, y):
-    if x < 0 or y < 0 or x > factory_length or y > factory_width:
+# factory boundary include obstacle in each environment
+def factory_boundary(x, y):
+    if x == 0 or x == 180 or y == 0 or y == 200:
+        return True
+    elif factory_environment == 'symmetric_obstacle':
+        if ((x>=45 and x<=135) and ((y>=10 and y<=40) or (y>=160 and y<=190))) or (((x>=10 and x<=40) or (x>=140 and x<=170)) and (y>=55 and y<=145)):
+            return True 
+    elif factory_environment == 'asymmetric_obstacle':
+        if ((y>=0 and y<=75) and ((x>=10 and x<=85) or (x>=95 and x<=170))) or ((x>=0 and x<=30) and (y>=130 and y<=170)) or ((x>=75 and x<=135) and (y>=130 and y<=180)):
+            return True
+    else:
+        return False
+
+# symmetric obstacle
+def symmetric_obstacle(x, y):
+    if ((x>45 and x<135) and ((y>10 and y<40) or (y>160 and y<190))) or (((x>10 and x<40) or (x>140 and x<170)) and (y>55 and y<145)):
         return False
     else:
         return True
 
-# symmetric obstacle
-def boundary_symmetric_obstacle(x, y):
-    if x < 0 or y < 0 or x > factory_length or y > factory_width or ((x>45 and x<135) and ((y>10 and y<40) or (y>160 and y<190))) or (((x>10 and x<40) or (x>140 and x<170)) and (y>55 and y<145)):
-        return False
-    else:
+# symmetric obstacle boundary
+def symmetric_obstacle_boundary(x, y):
+    if ((x==45 or x==135) and ((y>=10 and y<=40) or (y>=160 and y<=190))) or (((x>=10 and x<=40) or (x>=140 and x<=170)) and (y==55 and y==145)):
         return True
+    else:
+        return False
 
 # obstacle drawing
 symmetric_obstacle_rect1 = pygame.Rect(0, 0, 90*scale, 30*scale)
@@ -113,8 +132,15 @@ def symmetric_obstacle_draw(win):
     pygame.draw.rect(win, DIMGRAY, symmetric_obstacle_rect4)
 
 # asymmetric obstacle
-def boundary_asymmetric_obstacle(x, y):
-    if x < 0 or y < 0 or x > factory_length or y > factory_width or ((y>=0 and y<75) and ((x>10 and x<85) or (x>95 and x<170))) or ((x>=0 and x<30) and (y>130 and y<170)) or ((x>75 and x<135) and (y>130 and y<180)):
+def asymmetric_obstacle(x, y):
+    if ((y>=0 and y<75) and ((x>10 and x<85) or (x>95 and x<170))) or ((x>=0 and x<30) and (y>130 and y<170)) or ((x>75 and x<135) and (y>130 and y<180)):
+        return False
+    else:
+        return True
+
+# asymmetric obstacle boundary
+def asymmetric_obstacle_boundary(x, y):
+    if ((y>=0 or y<=75) and ((x>=10 and x<=85) or (x>=95 and x<=170))) or ((x>=0 or x==30) and (y>130 and y<170)) or ((x>75 and x<135) and (y>130 and y<180)):
         return False
     else:
         return True
@@ -134,6 +160,88 @@ def asymmetric_obstacle_draw(win):
     pygame.draw.rect(win, DIMGRAY, asymmetric_obstacle_rect2)
     pygame.draw.rect(win, DIMGRAY, asymmetric_obstacle_rect3)
     pygame.draw.rect(win, DIMGRAY, asymmetric_obstacle_rect4)
+
+#real factory draw
+# map
+real_factory_layout_rect1 = pygame.Rect(0, 0, 15*scale, 70*scale)
+real_factory_layout_rect2 = pygame.Rect(0, 0, 15*scale, 70*scale)
+real_factory_layout_rect3 = pygame.Rect(0, 0, 15*scale, 70*scale)
+real_factory_layout_rect4 = pygame.Rect(0, 0, 15*scale, 70*scale)
+real_factory_layout_rect5 = pygame.Rect(0, 0, 15*scale, 70*scale)
+real_factory_layout_rect6 = pygame.Rect(0, 0, 15*scale, 70*scale)
+real_factory_layout_rect7 = pygame.Rect(0, 0, 15*scale, 70*scale)
+real_factory_layout_rect8 = pygame.Rect(0, 0, 15*scale, 70*scale)
+real_factory_layout_rect9 = pygame.Rect(0, 0, 15*scale, 70*scale)
+real_factory_layout_rect10 = pygame.Rect(0, 0, 15*scale, 70*scale)
+real_factory_layout_rect11 = pygame.Rect(0, 0, 15*scale, 70*scale)
+real_factory_layout_rect12 = pygame.Rect(0, 0, 15*scale, 70*scale)
+real_factory_layout_rect13 = pygame.Rect(0, 0, 200*scale, 20*scale)
+real_factory_layout_rect1.center = (22.5*scale, 45*scale)
+real_factory_layout_rect2.center = (52.5*scale, 45*scale)
+real_factory_layout_rect3.center = (82.5*scale, 45*scale)
+real_factory_layout_rect4.center = (112.5*scale, 45*scale)
+real_factory_layout_rect5.center = (142.5*scale, 45*scale)
+real_factory_layout_rect6.center = (172.5*scale, 45*scale)
+real_factory_layout_rect7.center = (22.5*scale, 135*scale)
+real_factory_layout_rect8.center = (52.5*scale, 135*scale)
+real_factory_layout_rect9.center = (82.5*scale, 135*scale)
+real_factory_layout_rect10.center = (112.5*scale, 135*scale)
+real_factory_layout_rect11.center = (142.5*scale, 135*scale)
+real_factory_layout_rect12.center = (172.5*scale, 135*scale)
+real_factory_layout_rect13.center = (100*scale, 90*scale)
+
+# Interbay Stockers
+real_factory_layout_Stocker1 = pygame.Rect(0, 0, 12*scale, 6*scale)
+real_factory_layout_Stocker2 = pygame.Rect(0, 0, 12*scale, 6*scale)
+real_factory_layout_Stocker3 = pygame.Rect(0, 0, 12*scale, 6*scale)
+real_factory_layout_Stocker4 = pygame.Rect(0, 0, 12*scale, 6*scale)
+real_factory_layout_Stocker5 = pygame.Rect(0, 0, 12*scale, 6*scale)
+real_factory_layout_Stocker6 = pygame.Rect(0, 0, 12*scale, 6*scale)
+real_factory_layout_Stocker7 = pygame.Rect(0, 0, 12*scale, 6*scale)
+real_factory_layout_Stocker8 = pygame.Rect(0, 0, 12*scale, 6*scale)
+real_factory_layout_Stocker9 = pygame.Rect(0, 0, 12*scale, 6*scale)
+real_factory_layout_Stocker10 = pygame.Rect(0, 0, 12*scale, 6*scale)
+real_factory_layout_Stocker11 = pygame.Rect(0, 0, 12*scale, 6*scale)
+real_factory_layout_Stocker12 = pygame.Rect(0, 0, 12*scale, 6*scale)
+real_factory_layout_Stocker1.center = (9*scale, 77*scale)
+real_factory_layout_Stocker2.center = (39*scale, 77*scale)
+real_factory_layout_Stocker3.center = (69*scale, 77*scale)
+real_factory_layout_Stocker4.center = (99*scale, 77*scale)
+real_factory_layout_Stocker5.center = (129*scale, 77*scale)
+real_factory_layout_Stocker6.center = (159*scale, 77*scale)
+real_factory_layout_Stocker7.center = (9*scale, 103*scale)
+real_factory_layout_Stocker8.center = (39*scale, 103*scale)
+real_factory_layout_Stocker9.center = (69*scale, 103*scale)
+real_factory_layout_Stocker10.center = (99*scale, 103*scale)
+real_factory_layout_Stocker11.center = (129*scale, 103*scale)
+real_factory_layout_Stocker12.center = (159*scale, 103*scale)
+
+def real_factory_layout_draw(win):
+    pygame.draw.rect(win, DIMGRAY, real_factory_layout_rect1)
+    pygame.draw.rect(win, DIMGRAY, real_factory_layout_rect2)
+    pygame.draw.rect(win, DIMGRAY, real_factory_layout_rect3)
+    pygame.draw.rect(win, DIMGRAY, real_factory_layout_rect4)    
+    pygame.draw.rect(win, DIMGRAY, real_factory_layout_rect5)    
+    pygame.draw.rect(win, DIMGRAY, real_factory_layout_rect6)    
+    pygame.draw.rect(win, DIMGRAY, real_factory_layout_rect7)
+    pygame.draw.rect(win, DIMGRAY, real_factory_layout_rect8)
+    pygame.draw.rect(win, DIMGRAY, real_factory_layout_rect9)
+    pygame.draw.rect(win, DIMGRAY, real_factory_layout_rect10)    
+    pygame.draw.rect(win, DIMGRAY, real_factory_layout_rect11)    
+    pygame.draw.rect(win, DIMGRAY, real_factory_layout_rect12)    
+    pygame.draw.rect(win, DIMGRAY, real_factory_layout_rect13)   
+    pygame.draw.rect(win, BROWN, real_factory_layout_Stocker1)   
+    pygame.draw.rect(win, BROWN, real_factory_layout_Stocker2)   
+    pygame.draw.rect(win, BROWN, real_factory_layout_Stocker3)   
+    pygame.draw.rect(win, BROWN, real_factory_layout_Stocker4)   
+    pygame.draw.rect(win, BROWN, real_factory_layout_Stocker5)   
+    pygame.draw.rect(win, BROWN, real_factory_layout_Stocker6)   
+    pygame.draw.rect(win, BROWN, real_factory_layout_Stocker7)   
+    pygame.draw.rect(win, BROWN, real_factory_layout_Stocker8)   
+    pygame.draw.rect(win, BROWN, real_factory_layout_Stocker9)   
+    pygame.draw.rect(win, BROWN, real_factory_layout_Stocker10)   
+    pygame.draw.rect(win, BROWN, real_factory_layout_Stocker11)   
+    pygame.draw.rect(win, BROWN, real_factory_layout_Stocker12)
 
 #all mathematical model constant  
 GTX = 4 #sender antenna gain
@@ -170,3 +278,4 @@ DIMGRAY = (105, 105, 105)
 GREEN = (0, 255, 0)
 
 CADEBLUE1 = (152,245,255)
+BROWN = (175, 96, 26)

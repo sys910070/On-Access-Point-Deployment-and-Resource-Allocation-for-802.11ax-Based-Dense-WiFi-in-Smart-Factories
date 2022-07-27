@@ -390,7 +390,7 @@ def mobility_model(device, x_min, x_max, y_min, y_max, environment):
                 elif num == 3:
                     device.direction = (1, 0)
                 else:
-                    device.direction = (0, 1)
+                    device.direction = (-1, 0)
             else:
                 num = random.randint(1, 4)
                 if num == 1:

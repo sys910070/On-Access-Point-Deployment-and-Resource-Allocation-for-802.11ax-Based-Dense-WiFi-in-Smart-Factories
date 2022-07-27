@@ -50,15 +50,6 @@ class Device_animate():
                 self.throughput = device.throughput
                 self.timer = device.timer
 
-    def move(self):
-        while True:
-            self.vx = random.randint(-10, 10)
-            self.vy = random.randint(-10, 10)
-            if boundary_no_obstacle((self.x + self.vx)/scale, (self.y + self.vy)/scale):
-                self.x = self.x + self.vx
-                self.y = self.y + self.vy
-                break
-
 class AP_animate():
     def __init__(self, ap):
         self.x = ap.x*scale
@@ -94,7 +85,7 @@ class AP_animate():
                 self.lowerbound = ap.lowerbound
                 self.upperbound = ap.upperbound
 
-random.seed(1126)
+random.seed(1450)
 # set global timer to 0
 t = 0
 # first simulation setup
@@ -107,6 +98,8 @@ elif factory_environment == 'symmetric_obstacle':
     device_list = create_device_symmetric_obstacle()
 elif factory_environment == 'asymmetric_obstacle':
     device_list = create_device_asymmetric_obstacle()
+elif factory_environment == 'real_factory_layout':
+    device_list = create_device_real_factory_layout()
 
 # resource initialization
 init(ap_list, device_list) 
@@ -153,10 +146,14 @@ while run :
     clock.tick(60)
     keys = pygame.key.get_pressed()
     win.fill(WHITE)
+    
     if factory_environment == 'symmetric_obstacle':
         symmetric_obstacle_draw(win)
     elif factory_environment == 'asymmetric_obstacle':
         asymmetric_obstacle_draw(win)  
+    elif factory_environment == 'real_factory_layout':
+        real_factory_layout_draw(win)
+
     animation(ap_list, device_list, ap_animate, device_animate, win)
     
     if t == operation_time:

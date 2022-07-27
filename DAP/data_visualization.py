@@ -143,7 +143,8 @@ def animation(ap_list, device_list, ap_animate, device_animate, win):
     for ap in ap_animate:
         ap.animation_attribute_update(ap_list)
         if ap.channel == 0:
-            pygame.draw.circle(win, CADEBLUE1, (ap.y, ap.x), 3)
+            pass
+            # pygame.draw.circle(win, CADEBLUE1, (ap.y, ap.x), 3)
         elif ch_id_to_bw[ap.channel] == 20:
             pygame.draw.circle(win, GREEN, (ap.y, ap.x), 3)
         elif ch_id_to_bw[ap.channel] == 40:

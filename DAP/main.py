@@ -86,7 +86,7 @@ class AP_animate():
                 self.lowerbound = ap.lowerbound
                 self.upperbound = ap.upperbound
 
-random.seed(1126)
+random.seed(1450)
 # set global timer to 0
 t = 0
 # first simulation setup
@@ -183,8 +183,6 @@ while run :
     t += 1
     print('t = ', t)
     for device in device_list:
-        if device.id == 84 and t == 76:
-            print('stop')
         device.move()
     for device in device_list:
         flag_device, device_next_state = device.state_change(ap_list)
@@ -204,7 +202,7 @@ while run :
                 user.selected = None
 
     if t % update_timer == 0:
-        if fairness_cal(ap_list) > 0.6:
+        if fairness_cal(ap_list) > 0.5:
             print('resource improvement')
             for ap in ap_list:
                 power_adjustment(ap, ap_list)
@@ -212,8 +210,7 @@ while run :
         else:
             print('fairness improvement')
         fairness_adjust_version2(ap_list, device_list)
-
-    cci_cal(ap_list)  
+    cci_cal(ap_list)
     # throughput_lower = 0
     # for device in device_list:
     #     if device.throughput<device_throughput_qos:

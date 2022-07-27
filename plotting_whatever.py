@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-environment = ['no_obstacle', 'symmetric_obstacle', 'asymmetric_obstacle']
+environment = ['no_obstacle', 'symmetric_obstacle', 'asymmetric_obstacle', 'real_factory_layout']
 def graph_fairness(t, fairness_dap, fairness_random, fairness_sequential):
     plt.figure(figsize=(16,12))
     plt.title('fairness')
@@ -11,7 +11,9 @@ def graph_fairness(t, fairness_dap, fairness_random, fairness_sequential):
     plt.plot(t, fairness_dap, '-o', label = 'DAP')
     plt.plot(t, fairness_random, '-o', label = 'random')
     plt.plot(t, fairness_sequential, '-o', label = 'sequential')
-    plt.xlim(0, len(total_throughput_record_dap)+1)
+
+    plt.xlim(100, 601)
+    # plt.xlim(0, len(total_throughput_record_dap)+1)
     plt.ylim(0, 1)
     plt.legend()
     plt.savefig(f'fig/{factory_environment}/fairness')
@@ -80,7 +82,7 @@ for factory_environment in environment:
     if not os.path.exists(f'fig/{factory_environment}'):
         os.mkdir(f'fig/{factory_environment}')
     t = np.arange(len(fairness_dap))
-    graph_fairness(t, fairness_dap, fairness_random, fairness_sequential)
+    graph_fairness(t[10:61]*10, fairness_dap[10:61], fairness_random[10:61], fairness_sequential[10:61])
     graph_total_throughput(t, total_throughput_record_dap, total_throughput_record_random, total_throughput_record_sequential)
     graph_lost_device(t, lost_device_dap, lost_device_random, lost_device_sequential)
     graph_active_ap(t, active_ap_dap, active_ap_random, active_ap_sequential)

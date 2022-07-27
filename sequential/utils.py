@@ -264,198 +264,285 @@ def calculate_interval_average(fairness_record_interval, total_throughput_record
     return fairness, throughput, lost_device, active_ap
 
 #mobility model
+def mobility_real_factory(device):
+    # rgv, oht
+    if ((device.x == 11 or device.x == 101 or device.x == 79 or device.x == 169) and (device.y >= 16 and device.y <= 29)) or ((device.y == 16 or device.y == 29) and (device.x >= 11 and device.x <= 79) or (device.x >= 101 and device.x <= 169))\
+        or ((device.x == 11 or device.x == 79) and (device.y >= 106 and device.y <= 119)) or ((device.y == 106 or device.y == 119) and (device.x >= 11 and device.x <= 79))\
+        or ((device.x == 101 or device.x == 169) and (device.y >= 136 and device.y <= 149)) or ((device.y == 136 or device.y == 149) and (device.x >= 101 and device.x <= 169)):
+        if (device.x == 11 or device.x == 101) and (device.y > 16 and device.y <= 29)\
+            or (device.x == 11) and (device.y > 106 and device.y <= 119)\
+            or (device.x == 101) and (device.y > 136 and device.y <= 149):
+            device.y -= 1
+        elif (device.x == 79 or device.x == 169) and (device.y >= 16 and device.y < 29)\
+            or (device.x == 79) and (device.y >= 106 and device.y < 119)\
+            or (device.x == 169) and (device.y >= 136 and device.y < 149):
+            device.y += 1
+        elif (device.y == 16 and ((device.x >= 11 and device.x < 79) or (device.x >= 101 and device.x < 169)))\
+            or (device.y == 106 and ((device.x >= 11 and device.x < 79)))\
+            or (device.y == 136 and ((device.x >= 101 and device.x < 169))):
+            device.x += 1
+        elif (device.y == 29 and ((device.x > 11 and device.x <= 79) or (device.x > 101 and device.x <= 169)))\
+            or (device.y == 119 and ((device.x > 11 and device.x <= 79)))\
+            or (device.y == 149 and ((device.x > 101 and device.x <= 169))):
+            device.x -= 1
+    # agv
+    if device.x >= 10 and device.x <= 80 and device.y >= 45 and device.y <= 60:
+        if device.destination_dis == 0 or device.x == 10 or device.x == 80 or device.y == 45 or device.y == 60:
+            device.destination_dis = random.randint(1, 20)
+            mobility_model(device, 10, 80, 45, 60, 'no_obstacle')
+            device.destination_dis -=1
+            device.x += device.direction[0]
+            device.y += device.direction[1]
+        else:
+            device.destination_dis -=1
+            device.x += device.direction[0]
+            device.y += device.direction[1]
+    if device.x >= 100 and device.x <= 170 and device.y >= 45 and device.y <= 60:
+        if device.destination_dis == 0 or device.x == 100 or device.x == 170 or device.y == 45 or device.y == 60:
+            device.destination_dis = random.randint(1, 20)
+            mobility_model(device, 100, 170, 45, 60, 'no_obstacle')
+            device.destination_dis -=1
+            device.x += device.direction[0]
+            device.y += device.direction[1]
+        else:
+            device.destination_dis -=1
+            device.x += device.direction[0]
+            device.y += device.direction[1]
+    if device.x >= 100 and device.x <= 170 and device.y >= 75 and device.y <= 90:
+        if device.destination_dis == 0 or device.x == 100 or device.x == 170 or device.y == 75 or device.y == 90:
+            device.destination_dis = random.randint(1, 20)
+            mobility_model(device, 100, 170, 75, 90, 'no_obstacle')
+            device.destination_dis -=1
+            device.x += device.direction[0]
+            device.y += device.direction[1]
+        else:
+            device.destination_dis -=1
+            device.x += device.direction[0]
+            device.y += device.direction[1]
+    
+    # pgv
+    if device.x >= 10 and device.x <= 80 and device.y >= 135 and device.y <= 150:
+        if device.destination_dis == 0 or device.x == 10 or device.x == 80 or device.y == 135 or device.y == 150:
+            device.destination_dis = random.randint(1, 20)
+            mobility_model(device, 10, 80, 135, 150, 'no_obstacle')
+            device.destination_dis -=1
+            device.x += device.direction[0]
+            device.y += device.direction[1]
+        else:
+            device.destination_dis -=1
+            device.x += device.direction[0]
+            device.y += device.direction[1]
+
 def mobility(device):
-    # region 5
-    if device.x != 0 and device.x != 180 and device.y != 0 and device.y != 200:
+    if device.destination_dis == 0 or factory_boundary(device.x, device.y):
         if factory_environment == 'no_obstacle':
+            device.destination_dis = random.randint(1, 20)
+            mobility_model(device, 0, 180, 0, 200, 'no_obstacle')
+        elif factory_environment == 'symmetric_obstacle':
+            device.destination_dis = random.randint(1, 20)
+            mobility_model(device, 0, 180, 0, 200, 'symmetric_obstacle')
+        elif factory_environment == 'asymmetric_obstacle':
+            device.destination_dis = random.randint(1, 20)
+            mobility_model(device, 0, 180, 0, 200, 'asymmetric_obstacle')
+        device.destination_dis -= 1
+        device.x += device.direction[0]
+        device.y += device.direction[1]
+    else:
+        device.destination_dis -= 1
+        device.x += device.direction[0]
+        device.y += device.direction[1]
+
+# after revision, this function will return a direction to the device
+def mobility_model(device, x_min, x_max, y_min, y_max, environment):
+    #region 5
+    if device.x != x_min and device.x != x_max and device.y != y_min and device.y != y_max:
+        if environment == 'no_obstacle':
             num = random.randint(1, 4)
             if num == 1:
-                device.x += 1
+                device.direction = (1, 0)
             elif num == 2:
-                device.x -= 1
+                device.direction = (-1, 0)
             elif num == 3:
-                device.y += 1
+                device.direction = (0, 1)
             else:
-                device.y -= 1
-        elif factory_environment == 'symmetric_obstacle':
+                device.direction = (0, -1)
+        elif environment == 'symmetric_obstacle':
             #sym_region 1
             if (device.x == 45 and ((device.y > 10 and device.y < 40) or (device.y > 160 and device.y < 190))) or (device.x == 10 or device.x == 140) and ((device.y > 55 and device.y < 145)):
                 num = random.randint(1, 4)
                 if num == 1 or num == 2:
-                    device.x -= 1
+                    device.direction = (-1, 0)
                 elif num == 3:
-                    device.y += 1
+                    device.direction = (0, 1)
                 else:
-                    device.y -= 1
+                    device.direction = (0, -1)
             #sym_region 2
             elif (device.y == 145 and ((device.x > 10 and device.x < 40) or (device.x > 140 and device.x < 170))) or (device.y == 40 or device.y == 190) and ((device.x > 45 and device.x < 135)):
                 num = random.randint(1, 4)
                 if num == 1 or num == 2:
-                    device.y += 1
+                    device.direction = (0, 1)
                 elif num == 3:
-                    device.x += 1
+                    device.direction = (1, 0)
                 else:
-                    device.x -= 1
+                    device.direction = (-1, 0)
             #sym_region 3
             elif (device.x == 135 and ((device.y > 10 and device.y < 40) or (device.y > 160 and device.y < 190))) or (device.x == 40 or device.x == 170) and ((device.y > 55 and device.y < 145)):
                 num = random.randint(1, 4)
                 if num == 1 or num == 2:
-                    device.x += 1
+                    device.direction = (1, 0)
                 elif num == 3:
-                    device.y += 1
+                    device.direction = (0, 1)
                 else:
-                    device.y -= 1
+                    device.direction = (0, -1)
             #sym_region 4
             elif (device.y == 55 and ((device.x > 10 and device.x < 40) or (device.x > 140 and device.x < 170))) or (device.y == 10 or device.y == 160) and ((device.x > 45 and device.x < 135)):
                 num = random.randint(1, 4)
                 if num == 1 or num == 2:
-                    device.y -= 1
+                    device.direction = (0, -1)
                 elif num == 3:
-                    device.x += 1
+                    device.direction = (1, 0)
                 else:
-                    device.x -= 1
+                    device.direction = (-1, 0)
             else:
                 num = random.randint(1, 4)
                 if num == 1:
-                    device.x += 1
+                    device.direction = (1, 0)
                 elif num == 2:
-                    device.x -= 1
+                    device.direction = (-1, 0)
                 elif num == 3:
-                    device.y += 1
+                    device.direction = (0, 1)
                 else:
-                    device.y -= 1
-
-        elif factory_environment == 'asymmetric_obstacle':
+                    device.direction = (0, -1)
+        elif environment == 'asymmetric_obstacle':
             #asym_region 1
             if (device.x == 75 and (device.y > 130 and device.y < 180)) or ((device.x == 10 or device.x == 95) and ((device.y > 0 and device.y < 75))):
                 num = random.randint(1, 4)
                 if num == 1 or num == 2:
-                    device.x -= 1
+                    device.direction = (-1, 0)
                 elif num == 3:
-                    device.y += 1
+                    device.direction = (0, 1)
                 else:
-                    device.y -= 1
+                    device.direction = (0, -1)
             #asym_region 2
             elif (device.y == 75 and ((device.x > 10 and device.x < 85) or (device.x > 95 and device.x < 170))) or (device.y == 170 and (device.x > 0 and device.x < 30)) or (device.y == 180 and (device.x > 75 and device.x < 135)):
                 num = random.randint(1, 4)
                 if num == 1 or num == 2:
-                    device.y += 1
+                    device.direction = (0, 1)
                 elif num == 3:
-                    device.x += 1
+                    device.direction = (1, 0)
                 else:
-                    device.x -= 1
+                    device.direction = (-1, 0)
             #asym_region 3
             elif (device.x == 135 and (device.y > 130 and device.y < 180)) or (device.x == 30 and (device.y > 130 and device.y < 170)) or ((device.x == 85 or device.x == 170) and ((device.y > 0 and device.y < 75))):
                 num = random.randint(1, 4)
                 if num == 1 or num == 2:
-                    device.x += 1
+                    device.direction = (1, 0)
                 elif num == 3:
-                    device.y += 1
+                    device.direction = (0, 1)
                 else:
-                    device.y -= 1
+                    device.direction = (0, -1)
             #asym_region 4
             elif (device.y == 130 and ((device.x > 0 and device.x < 30) or (device.x > 75 and device.x < 135))):
                 num = random.randint(1, 4)
                 if num == 1 or num == 2:
-                    device.y -= 1
+                    device.direction = (0, -1)
                 elif num == 3:
-                    device.x += 1
+                    device.direction = (1, 0)
                 else:
-                    device.x -= 1
+                    device.direction = (-1, 0)
             else:
                 num = random.randint(1, 4)
                 if num == 1:
-                    device.x += 1
+                    device.direction = (1, 0)
                 elif num == 2:
-                    device.x -= 1
+                    device.direction = (-1, 0)
                 elif num == 3:
-                    device.y += 1
+                    device.direction = (0, 1)
                 else:
-                    device.y -= 1
-
+                    device.direction = (0, -1)
     #specific case for asymmetric obstacle()
     #asym_region 5
-    elif factory_environment == 'asymmetric_obstacle' and device.y == 0 and (device.x == 10 or device.x == 95):
+    elif environment == 'asymmetric_obstacle' and device.y == 0 and (device.x == 10 or device.x == 95):
         num = random.randint(1, 2)
         if num == 1:
-            device.x -= 1
+            device.direction = (-1, 0)
         else:
-            device.y += 1
+            device.direction = (0, 1)
     #asym_region 6
-    elif factory_environment == 'asymmetric_obstacle' and (device.y == 0 and (device.x == 85 or device.x == 170)) or (device.x == 0 and device.y == 170):
+    elif environment == 'asymmetric_obstacle' and (device.y == 0 and (device.x == 85 or device.x == 170)) or (device.x == 0 and device.y == 170):
         num = random.randint(1, 2)
         if num == 1:
-            device.x += 1
+            device.direction = (1, 0)
         else:
-            device.y += 1
+            device.direction = (0, 1)
     #asym_region 7
-    elif factory_environment == 'asymmetric_obstacle' and device.x == 0 and device.y == 130:
+    elif environment == 'asymmetric_obstacle' and device.x == 0 and device.y == 130:
         num = random.randint(1, 2)
         if num == 1:
-            device.x += 1
+            device.direction = (1, 0)
         else:
-            device.y -= 1
+            device.direction = (0, -1)
     # region 1
-    elif device.x == 0 and device.y == 0:
+    elif device.x == x_min and device.y == y_min:
         num = random.randint(1, 2)
         if num == 1:
-            device.x += 1
+            device.direction = (1, 0)
         else:
-            device.y += 1
+            device.direction = (0, 1)
     # region 2
-    elif device.x == 0 and device.y != 0 and device.y != 200:
+    elif device.x == x_min and device.y != y_min and device.y != y_max:
         num = random.randint(1, 4)
         if num == 1 or num == 2:
-            device.x += 1
+            device.direction = (1, 0)
         elif num == 3:
-            device.y += 1
+            device.direction = (0, 1)
         else:
-            device.y -= 1
+            device.direction = (0, -1)
     # region 3
-    elif device.x == 0 and device.y == 200:
+    elif device.x == x_min and device.y == y_max:
         num = random.randint(1, 2)
         if num == 1:
-            device.x += 1
+            device.direction = (1, 0)
         else:
-            device.y -= 1
+            device.direction = (0, -1)
     # region 4
-    elif device.y == 0 and device.x != 0 and device.x != 180:
+    elif device.y == y_min and device.x != x_min and device.x != x_max:
         num = random.randint(1, 4)
         if num == 1 or num == 2:
-            device.y += 1
+            device.direction = (0, 1)
         elif num == 3:
-            device.x += 1
+            device.direction = (1, 0)
         else:
-            device.x -= 1
+            device.direction = (-1, 0)
     # region 6
-    elif device.y == 200 and device.x != 0 and device.x != 180:
+    elif device.y == y_max and device.x != x_min and device.x != x_max:
         num = random.randint(1, 4)
         if num == 1 or num == 2:
-            device.y -= 1
+            device.direction = (0, -1)
         elif num == 3:
-            device.x += 1
+            device.direction = (1, 0)
         else:
-            device.x -= 1
+            device.direction = (-1, 0)
     # region 7
-    elif device.x == 180 and device.y == 0:
+    elif device.x == x_max and device.y == y_min:
         num = random.randint(1, 2)
         if num == 1:
-            device.x -= 1
+            device.direction = (-1, 0)
         else:
-            device.y += 1
+            device.direction = (0, 1)
     # region 8
-    elif device.x == 180 and device.y != 0 and device.y != 200:
+    elif device.x == x_max and device.y != y_min and device.y != y_max:
         num = random.randint(1, 4)
         if num == 1 or num == 2:
-            device.x -= 1
+            device.direction = (-1, 0)
         elif num == 3:
-            device.y += 1
+            device.direction = (0, 1)
         else:
-            device.y -= 1
+            device.direction = (0, -1)
     # region 9
-    elif device.x == 180 and device.y == 200:
+    elif device.x == x_max and device.y == y_max:
         num = random.randint(1, 2)
         if num == 1:
-            device.x -= 1
+            device.direction = (-1, 0)
         else:
-            device.y -= 1
+            device.direction = (0, -1)
