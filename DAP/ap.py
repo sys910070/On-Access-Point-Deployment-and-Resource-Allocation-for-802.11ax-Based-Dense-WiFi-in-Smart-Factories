@@ -92,21 +92,6 @@ class AP:
             elif len(self.user) < self.lowerbound and len(self.user) != 0:
                 next_state = A_State.underpopulated
                 flag = True
-            # if self.type == Type.throughput:
-            #     for device in device_list:
-            #         if device.type == Type.delay and device.state == D_State.search and distance((device.x, device.y), (self.x, self.y)) < range_decode(self.power) and len(self.user) < transition_upperbound:
-            #             next_state = A_State.transition
-            #             flag = True
-        
-        # if self.state == A_State.transition:
-        #     transition_flag = False
-        #     for user in self.user:
-        #         if user.type == Type.delay:
-        #             transition_flag = True
-        #             break
-        #     if not transition_flag:
-        #         next_state = A_State.active
-        #         flag = True
         
         if self.state == A_State.underpopulated and self.timer != 0:
             user_count = 0
@@ -178,16 +163,12 @@ class AP:
             A_State.active : {
                 A_State.underpopulated : active_underpopulated, 
                 A_State.idle : active_idle,
-                A_State.transition : active_transition
             }, 
             A_State.underpopulated : {
                 A_State.active : underpopulated_active, 
                 A_State.idle : underpopulated_idle, 
                 A_State.underpopulated : underpopulated_underpopulated
             }, 
-            A_State.transition : {
-                A_State.active : transition_active 
-            },
             A_State.idle : {
                 A_State.active : idle_active, 
                 A_State.underpopulated : idle_underpopulated, 

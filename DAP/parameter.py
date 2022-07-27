@@ -35,16 +35,18 @@ agv_num = 60
 pgv_num = 20
 oht_num = 40
 type1_num = 20
+agv_mid = 40
 
 # all timer (second)
+global_timer = 2
 operation_time = 600
 interval = 10
 update_timer = 30
-d_state_timer_handover = 1
-d_state_timer_detached = 1
+d_state_timer_handover = global_timer
+d_state_timer_detached = global_timer
 d_state_timer_search = 5
-a_state_timer_underpopulate = 1
-a_state_timer_idle = 1
+a_state_timer_underpopulate = global_timer
+a_state_timer_idle = global_timer
 
 # qos reqirement
 total_throughput_qos = 7000

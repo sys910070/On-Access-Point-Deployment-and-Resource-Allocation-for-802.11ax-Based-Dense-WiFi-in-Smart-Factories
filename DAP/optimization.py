@@ -133,13 +133,3 @@ def fairness_adjust_version2(ap_list, device_list):
     throughput_cal(ap_list, device_list)
     fairness_index = fairness_cal(ap_list)
     return fairness_index
-
-# def fairness_choose(ap_list, device_list):
-#     if fairness_adjust_version1(ap_list, device_list) > fairness_adjust_version2(ap_list, device_list):
-#         print('version1 = ', fairness_adjust_version1(ap_list, device_list))
-#         print('version2 = ', fairness_adjust_version2(ap_list, device_list))
-#         return True
-#     else:
-#         print('version1 = ', fairness_adjust_version1(ap_list, device_list))
-#         print('version2 = ', fairness_adjust_version2(ap_list, device_list))
-#         return False

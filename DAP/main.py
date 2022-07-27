@@ -86,7 +86,8 @@ class AP_animate():
                 self.lowerbound = ap.lowerbound
                 self.upperbound = ap.upperbound
 
-random.seed(1450)
+random.seed(1356)
+
 # set global timer to 0
 t = 0
 # first simulation setup
@@ -110,6 +111,9 @@ throughput_cal(ap_list, device_list)
 fairness_cal(ap_list)
 
 print('t = ', t)
+
+
+loss_device_list = []
 
 # save all kinds of data in a list and store initial(t=0) data first
 fairness_record = []
@@ -145,16 +149,16 @@ run = True
 while run :
     clock.tick(60)
     keys = pygame.key.get_pressed()
-    win.fill(WHITE)
+    # win.fill(WHITE)
 
-    if factory_environment == 'symmetric_obstacle':
-        symmetric_obstacle_draw(win)
-    elif factory_environment == 'asymmetric_obstacle':
-        asymmetric_obstacle_draw(win)  
-    elif factory_environment == 'real_factory_layout':
-        real_factory_layout_draw(win)
+    # if factory_environment == 'symmetric_obstacle':
+    #     symmetric_obstacle_draw(win)
+    # elif factory_environment == 'asymmetric_obstacle':
+    #     asymmetric_obstacle_draw(win)  
+    # elif factory_environment == 'real_factory_layout':
+    #     real_factory_layout_draw(win)
 
-    animation(ap_list, device_list, ap_animate, device_animate, win)
+    # animation(ap_list, device_list, ap_animate, device_animate, win)
     
     if t == operation_time:
         if not os.path.exists('fig'):
@@ -202,7 +206,7 @@ while run :
                 user.selected = None
 
     if t % update_timer == 0:
-        if fairness_cal(ap_list) > 0.5:
+        if fairness_cal(ap_list) > 0.6:
             print('resource improvement')
             for ap in ap_list:
                 power_adjustment(ap, ap_list)
@@ -211,13 +215,11 @@ while run :
             print('fairness improvement')
         fairness_adjust_version2(ap_list, device_list)
     cci_cal(ap_list)
-    # throughput_lower = 0
-    # for device in device_list:
-    #     if device.throughput<device_throughput_qos:
-    #         throughput_lower += 1
-
     all_timer_minus_one(device_list, ap_list)
     log_info(ap_list, device_list)
+
+    
+    loss_device_list.append(loss_device_count(device_list))
 
     fairness_record_interval.append(fairness_cal(ap_list))
     total_throughput_record__interval.append(throughput_cal(ap_list, device_list))
@@ -236,6 +238,13 @@ while run :
         lost_device_record_interval.clear()
         active_ap_record_interval.clear()
 
+    if t == operation_time:
+        total_loss_device = 0
+        for i in range(99, 600):
+            total_loss_device += loss_device_list[i]
+        average_loss_device = total_loss_device/500
+        print('experiment: other timer =', global_timer , 'search timer = ', 5)
+        print('average loss device = ', average_loss_device)
     pygame.display.update()
 pygame.quit()
 
