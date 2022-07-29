@@ -85,7 +85,7 @@ class AP_animate():
                 self.lowerbound = ap.lowerbound
                 self.upperbound = ap.upperbound
 
-random.seed(1450)
+random.seed(1468)
 # set global timer to 0
 t = 0
 # first simulation setup
@@ -115,12 +115,15 @@ fairness_record = []
 total_throughput_record = []
 lost_device_record = []
 active_ap_record = []
-
 # record an interval of data
 fairness_record_interval = []
 total_throughput_record__interval = []
 lost_device_record_interval = []
 active_ap_record_interval = []
+
+# all qos record
+throughput_qos_record = []
+detached_qos_record = []
 
 # creare device and ap animation list
 device_animate = []
@@ -135,26 +138,26 @@ for device in device_animate:
         device.add_ap(ap_animate)
 
 # animation setup
-pygame.init()
-win = pygame.display.set_mode((factory_width*scale, factory_length*scale))
-pygame.display.set_caption("Simulation")
-clock = pygame.time.Clock()
+# pygame.init()
+# win = pygame.display.set_mode((factory_width*scale, factory_length*scale))
+# pygame.display.set_caption("Simulation")
+# clock = pygame.time.Clock()
 
 #main loop
 run = True
 while run :
-    clock.tick(60)
-    keys = pygame.key.get_pressed()
-    win.fill(WHITE)
+    # clock.tick(60)
+    # keys = pygame.key.get_pressed()
+    # win.fill(WHITE)
 
-    if factory_environment == 'symmetric_obstacle':
-        symmetric_obstacle_draw(win)
-    elif factory_environment == 'asymmetric_obstacle':
-        asymmetric_obstacle_draw(win)  
-    elif factory_environment == 'real_factory_layout':
-        real_factory_layout_draw(win)
+    # if factory_environment == 'symmetric_obstacle':
+    #     symmetric_obstacle_draw(win)
+    # elif factory_environment == 'asymmetric_obstacle':
+    #     asymmetric_obstacle_draw(win)  
+    # elif factory_environment == 'real_factory_layout':
+    #     real_factory_layout_draw(win)
 
-    animation(ap_list, device_list, ap_animate, device_animate, win)
+    # animation(ap_list, device_list, ap_animate, device_animate, win)
     
     if t == operation_time:
         if not os.path.exists('fig'):
@@ -172,13 +175,13 @@ while run :
         np.save(f'data/active_ap_{factory_environment}', active_ap_record)
         pygame.quit()
 
-    events = pygame.event.get()
-    for event in events:
-        if event.type == pygame.QUIT:
-            run = False
-        if event.type == KEYDOWN:
-            if event.key == K_ESCAPE:
-                pygame.quit()
+    # events = pygame.event.get()
+    # for event in events:
+    #     if event.type == pygame.QUIT:
+    #         run = False
+    #     if event.type == KEYDOWN:
+    #         if event.key == K_ESCAPE:
+    #             pygame.quit()
         # if keys[pygame.K_DOWN]:
     t += 1
     print('t = ', t)
@@ -187,12 +190,20 @@ while run :
     for device in device_list:
         device.action(ap_list)
         device.dis_cal()
+        if device.ap == None:
+            device.detached_time += 1
     for ap in ap_list:
         if len(ap.user)==0:
             ap.power_change(0, ap_list)
             ap.channel = 0
     cci_cal(ap_list)
     log_info(ap_list, device_list)
+
+    num_throughput_under_qos = 0
+    for device in device_list:
+        if device.type == 1 and device.throughput < throughput_qos:
+            num_throughput_under_qos += 1
+    throughput_qos_record.append(num_throughput_under_qos)
 
     fairness_record_interval.append(fairness_cal(ap_list))
     total_throughput_record__interval.append(throughput_cal(ap_list, device_list))
@@ -211,8 +222,19 @@ while run :
         lost_device_record_interval.clear()
         active_ap_record_interval.clear()
 
-    pygame.display.update()
-pygame.quit()
+    if t == operation_time:
+        print(factory_environment)
+        for device in device_list:
+            if device.type == 2:
+                detached_qos_record.append(device.detached_time)
+        num_delay_under_qos = 0
+        num_delay_under_qos = len(detached_qos_record)
+        print('throughput_qos_record = ', 100-average_of_list(throughput_qos_record))
+        print('detached_qos_record = ', average_of_list(detached_qos_record)/operation_time)
+        run = False
+
+#     pygame.display.update()
+# pygame.quit()
 
 # all kinds of info to print in console
             # cci_total = 0

@@ -17,7 +17,7 @@ def channel_amplification(ap_list):
             for channel in ch_dic[ap.channel]:
                 ap.channel = channel
                 ap.cci_calculation()
-                if ap.cci - pre_cci < 3:
+                if ap.cci - pre_cci <= 2:
                     break
             ch_dic[ap.channel].reverse()
 

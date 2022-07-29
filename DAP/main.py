@@ -86,7 +86,7 @@ class AP_animate():
                 self.lowerbound = ap.lowerbound
                 self.upperbound = ap.upperbound
 
-random.seed(1356)
+random.seed(1729)
 
 # set global timer to 0
 t = 0
@@ -112,8 +112,13 @@ fairness_cal(ap_list)
 
 print('t = ', t)
 
-
+# loss device vs timer
 loss_device_list = []
+
+# all qos record
+throughput_record = []
+throughput_qos_record = []
+detached_qos_record = []
 
 # save all kinds of data in a list and store initial(t=0) data first
 fairness_record = []
@@ -139,16 +144,16 @@ for device in device_animate:
         device.add_ap(ap_animate)
 
 # animation setup
-pygame.init()
-win = pygame.display.set_mode((factory_width*scale, factory_length*scale))
-pygame.display.set_caption("Simulation")
-clock = pygame.time.Clock()
+# pygame.init()
+# win = pygame.display.set_mode((factory_width*scale, factory_length*scale))
+# pygame.display.set_caption("Simulation")
+# clock = pygame.time.Clock()
 
 #main loop
 run = True
 while run :
-    clock.tick(60)
-    keys = pygame.key.get_pressed()
+    # clock.tick(60)
+    # keys = pygame.key.get_pressed()
     # win.fill(WHITE)
 
     # if factory_environment == 'symmetric_obstacle':
@@ -176,13 +181,13 @@ while run :
         np.save(f'data/active_ap_{factory_environment}', active_ap_record)
         pygame.quit()
 
-    events = pygame.event.get()
-    for event in events:
-        if event.type == pygame.QUIT :
-            run = False
-        if event.type == KEYDOWN:
-            if event.key == K_ESCAPE:
-                pygame.quit()
+    # events = pygame.event.get()
+    # for event in events:
+    #     if event.type == pygame.QUIT :
+    #         run = False
+    #     if event.type == KEYDOWN:
+    #         if event.key == K_ESCAPE:
+    #             pygame.quit()
         # if keys[pygame.K_DOWN]:
     t += 1
     print('t = ', t)
@@ -193,6 +198,8 @@ while run :
         if flag_device:
             device.action(device_next_state, ap_list)
         device.dis_cal()
+        if device.ap == None:
+            device.detached_time += 1
     for ap in ap_list:
         flag_ap, ap_next_state = ap.state_change(ap_list, device_list)
         if flag_ap:
@@ -218,8 +225,12 @@ while run :
     all_timer_minus_one(device_list, ap_list)
     log_info(ap_list, device_list)
 
-    
     loss_device_list.append(loss_device_count(device_list))
+    num_throughput_under_qos = 0
+    for device in device_list:
+        if device.type == 1 and device.throughput < throughput_qos:
+            num_throughput_under_qos += 1
+    throughput_qos_record.append(num_throughput_under_qos)
 
     fairness_record_interval.append(fairness_cal(ap_list))
     total_throughput_record__interval.append(throughput_cal(ap_list, device_list))
@@ -240,13 +251,22 @@ while run :
 
     if t == operation_time:
         total_loss_device = 0
-        for i in range(99, 600):
+        for i in range(start_time-1, end_time):
             total_loss_device += loss_device_list[i]
-        average_loss_device = total_loss_device/500
-        print('experiment: other timer =', global_timer , 'search timer = ', 5)
-        print('average loss device = ', average_loss_device)
-    pygame.display.update()
-pygame.quit()
+        average_loss_device = total_loss_device/(end_time-start_time)
+        # print('experiment: other timer =', all_timer , 'search timer = ', d_state_timer_search)
+        # print('average loss device = ', average_loss_device)
+        for device in device_list:
+            if device.type == 2:
+                detached_qos_record.append(device.detached_time)
+        num_delay_under_qos = 0
+        num_delay_under_qos = len(detached_qos_record)
+        print(factory_environment)
+        print('throughput_qos_record = ', 100-average_of_list(throughput_qos_record))
+        print('detached_qos_record = ', average_of_list(detached_qos_record)/operation_time)
+        run = False
+#     pygame.display.update()
+# pygame.quit()
 
 # all kinds of info to print in console
             # cci_total = 0

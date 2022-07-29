@@ -6,6 +6,13 @@ import random
 def distance(a, b):
     return ((a[0]-b[0])**2+(a[1]-b[1])**2)**(1/2)
 
+# average of a list
+def average_of_list(some_list):
+    num = 0
+    for thing in some_list:
+        num += thing
+    return num/len(some_list)
+    
 # communication range or decode range
 def range_decode(power):
     if power != 0:
@@ -185,16 +192,6 @@ def everything_ok(ap_list, device_list):
         if not device.ok():
             return False
     return True
-
-def qos_requirment_throughput(device_list):
-    throughput_count = 0
-    for device in device_list:
-        if device.throughput < device_throughput_qos:
-            throughput_count += 1
-    if throughput_count/device_num > device_throughput_ratio_reqirment:
-        return False
-    else:
-        return True
 
 # performance matric
 # number of active_ap

@@ -40,6 +40,8 @@ type1_num = 20
 operation_time = 600
 interval = 10
 update_timer = 30
+start_time = 100
+end_time = 600
 d_state_timer_handover = 2
 d_state_timer_detached = 2
 d_state_timer_search = 5
@@ -47,9 +49,8 @@ a_state_timer_underpopulate = 2
 a_state_timer_idle = 2
 
 # qos reqirement
-total_throughput_qos = 7000
-device_throughput_qos = 20
-device_throughput_ratio_reqirment = 0.45
+throughput_qos = 4 #Mbps
+detached_percentage = 10 # percent
 
 # channel overlap dictionary
 ch_dic = {}
@@ -83,7 +84,8 @@ for idx, channel_group in enumerate((frequency_channel_20, frequency_channel_40,
 #factory setup
 factory_width = 200
 factory_length = 180
-factory_environment = 'no_obstacle'
+factory_environment = 'real_factory_layout'
+factory_environment_list = ['no_obstacle', 'symmetric_obstacle', 'asymmetric_obstacle', 'real_factory_layout']
 
 # animation factor
 scale = 5

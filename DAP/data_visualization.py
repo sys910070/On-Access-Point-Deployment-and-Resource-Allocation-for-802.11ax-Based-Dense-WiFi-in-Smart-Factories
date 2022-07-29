@@ -34,9 +34,9 @@ def log_info(ap_list, device_list):
     device_logger.info('id, ap, x, y')
     for device in device_list:
         if device.ap != None:
-            device_logger.info(f'{device.id}, {device.ap.id}, {device.x}, {device.y}, {device.destination_dis}, {device.direction}')
+            device_logger.info(f'{device.id}, {device.ap.id}, {device.x}, {device.y}, {device.throughput}, {device.detached_time}')
         else:
-            device_logger.info(f'{device.id}, {None}, {device.x}, {device.y}, {device.destination_dis}, {device.direction}')
+            device_logger.info(f'{device.id}, {None}, {device.x}, {device.y}, {device.throughput}, {device.detached_time}')
 
 #graph
 def graph_device(ap_list, device_list):
@@ -134,6 +134,7 @@ def animation(ap_list, device_list, ap_animate, device_animate, win):
                     pygame.draw.line(win, BLACK, (device.y, device.x), (device.ap.y, device.ap.x), 1)            
         else:
             if device.ap != None:
+                # pygame.draw.circle(win, DIMGRAY, (device.y, device.x), 3)
                 pygame.draw.circle(win, BLACK, (device.y, device.x), 3)
                 pygame.draw.line(win, BLACK, (device.y, device.x), (device.ap.y, device.ap.x), 1) 
             else:   
@@ -147,14 +148,18 @@ def animation(ap_list, device_list, ap_animate, device_animate, win):
             # pygame.draw.circle(win, CADEBLUE1, (ap.y, ap.x), 3)
         elif ch_id_to_bw[ap.channel] == 20:
             pygame.draw.circle(win, GREEN, (ap.y, ap.x), 3)
+            text, textRect = txt(ap)
         elif ch_id_to_bw[ap.channel] == 40:
             pygame.draw.circle(win, RED, (ap.y, ap.x), 3)
+            text, textRect = txt(ap)
         elif ch_id_to_bw[ap.channel] == 80:
             pygame.draw.circle(win, BLUE, (ap.y, ap.x), 3)
+            text, textRect = txt(ap)
         elif ch_id_to_bw[ap.channel] == 160:
             pygame.draw.circle(win, PURPLE, (ap.y, ap.x), 3)
+            text, textRect = txt(ap)
         pygame.draw.circle(win, (255, 160, 122), (ap.y, ap.x), ap.communication_range, 1)
-        text, textRect = txt(ap)
+        # text, textRect = txt(ap)
         win.blit(text, textRect)
 
 # animation text

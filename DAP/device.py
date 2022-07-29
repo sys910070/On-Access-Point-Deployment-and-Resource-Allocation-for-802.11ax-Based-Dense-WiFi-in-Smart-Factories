@@ -22,10 +22,10 @@ class DEVICE:
         self.timer = float('inf')
         self.selected = None
         self.dis = 0
-        self.throughput = 0
         self.gv = 0 # 1 for RGV, 2 for OHT, 3 for AGV, 4 for human
         self.destination_dis = 0
         self.direction = 0
+        self.detached_time = 0
 
     def move(self):
         if self.type == Type.delay:
