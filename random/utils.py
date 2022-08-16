@@ -226,8 +226,8 @@ def throughput_cal(ap_list, device_list):
         total_throughput_device += device.throughput
     return total_throughput_device
     
-# fairness index
-def fairness_cal(ap_list):
+# AP fairness index
+def ap_fairness_cal(ap_list):
     x1 = 0
     x2 = 0
     active_num = 0
@@ -241,12 +241,25 @@ def fairness_cal(ap_list):
             x2 = x2+user_throughput**2
     return x1**2/(active_num*x2)
 
-def calculate_interval_average(fairness_record_interval, total_throughput_record__interval, lost_device_record_interval, active_ap_record_interval):
-    fairness = sum(fairness_record_interval)/len(fairness_record_interval)
+# device fairness index
+def device_fairness_cal(device_list):
+    x1 = 0
+    x2 = 0
+    active_num = 0
+    for device in device_list:
+        if device.power != 0:
+            active_num += 1
+            x1 = x1+device.throughput
+            x2 = x2+device.throughput**2
+    return x1**2/(active_num*x2)
+
+def calculate_interval_average(ap_fairness_record_interval, device_fairness_record_interval, total_throughput_record__interval, lost_device_record_interval, active_ap_record_interval):
+    ap_fairness = sum(ap_fairness_record_interval)/len(ap_fairness_record_interval)
+    device_fairness = sum(device_fairness_record_interval)/len(device_fairness_record_interval)
     throughput = sum(total_throughput_record__interval)/len(total_throughput_record__interval)
     lost_device = sum(lost_device_record_interval)/len(lost_device_record_interval)
     active_ap = sum(active_ap_record_interval)/len(active_ap_record_interval)
-    return fairness, throughput, lost_device, active_ap
+    return ap_fairness, device_fairness, throughput, lost_device, active_ap
 
 #mobility model
 def mobility_real_factory(device):

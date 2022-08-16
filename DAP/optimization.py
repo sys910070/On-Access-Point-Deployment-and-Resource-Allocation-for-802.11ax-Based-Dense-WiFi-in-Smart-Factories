@@ -78,7 +78,7 @@ def fairness_adjust_version1(ap_list, device_list):
 
     cci_cal(ap_list)  
     throughput_cal(ap_list, device_list)
-    fairness_index = fairness_cal(ap_list)
+    fairness_index = ap_fairness_cal(ap_list)
     return fairness_index
 
 # in this version, we attemp to pair up two ap in each interference rage and try do balance their user_throughput 
@@ -131,5 +131,5 @@ def fairness_adjust_version2(ap_list, device_list):
 
     cci_cal(ap_list)  
     throughput_cal(ap_list, device_list)
-    fairness_index = fairness_cal(ap_list)
+    fairness_index = ap_fairness_cal(ap_list)
     return fairness_index

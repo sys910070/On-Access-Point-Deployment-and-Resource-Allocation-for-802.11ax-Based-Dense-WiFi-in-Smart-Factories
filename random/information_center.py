@@ -25,7 +25,7 @@ def init(ap_list, device_list):
     cci_cal(ap_list)  
     throughput_cal(ap_list, device_list)
 
-# allocate lowest power level to cover all associated device
+# allocate the maximum power level to cover all associated device
 def power_allocation(ap_list):
     for ap in ap_list:
         if len(ap.user) != 0:

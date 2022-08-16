@@ -84,7 +84,7 @@ for idx, channel_group in enumerate((frequency_channel_20, frequency_channel_40,
 #factory setup
 factory_width = 200
 factory_length = 180
-factory_environment = 'real_factory_layout'
+factory_environment = 'no_obstacle'
 factory_environment_list = ['no_obstacle', 'symmetric_obstacle', 'asymmetric_obstacle', 'real_factory_layout']
 
 # animation factor

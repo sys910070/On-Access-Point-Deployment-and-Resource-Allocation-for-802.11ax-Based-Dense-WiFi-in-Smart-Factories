@@ -34,9 +34,9 @@ def log_info(ap_list, device_list):
     device_logger.info('id, ap, x, y')
     for device in device_list:
         if device.ap != None:
-            device_logger.info(f'{device.id}, {device.ap.id}, {device.x}, {device.y}, {device.throughput}')
+            device_logger.info(f'{device.id}, {device.ap.id}, {device.x}, {device.y}, {device.detached_time}')
         else:
-            device_logger.info(f'{device.id}, {None}, {device.x}, {device.y}, {device.throughput}')
+            device_logger.info(f'{device.id}, {None}, {device.x}, {device.y}, {device.detached_time}')
 
 #graph
 def graph_device(ap_list, device_list):
@@ -69,15 +69,26 @@ def graph_device(ap_list, device_list):
     plt.axis([0, factory_width, 0, factory_length])
     plt.show()
 
-def graph_fairness(t, fairness):
+def graph_ap_fairness(t, fairness):
     plt.figure(figsize=(16,12))
-    plt.title('fairness index')
+    plt.title('ap fairness index')
     plt.xlabel('time')
-    plt.ylabel('fairness')
+    plt.ylabel('ap fairness')
     plt.plot(t, fairness, '-o')
     # plt.xlim(0, operation_time+1)
     # plt.ylim(0, 1)
-    plt.savefig(f'fig/fairness with_{factory_environment}')
+    plt.savefig(f'fig/ap fairness with_{factory_environment}')
+    # plt.show()
+
+def graph_device_fairness(t, fairness):
+    plt.figure(figsize=(16,12))
+    plt.title('device fairness index')
+    plt.xlabel('time')
+    plt.ylabel('device fairness')
+    plt.plot(t, fairness, '-o')
+    # plt.xlim(0, operation_time+1)
+    # plt.ylim(0, 1)
+    plt.savefig(f'fig/device fairness with_{factory_environment}')
     # plt.show()
 
 def graph_throughput(t, total_throughput):

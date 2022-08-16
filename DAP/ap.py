@@ -39,10 +39,17 @@ class AP:
 
     def throughput_cal(self):
         if self.power != 0:
-            self.throughput = ch_id_to_bw[self.channel]*math.log2(1+(self.power-NOISE))
+            self.throughput = 0.9683738202073339*ch_id_to_bw[self.channel]*math.log2(1+(self.power-NOISE))/(self.cci+1)
         else:
             self.throughput = 0
             self.user_throughput = 0
+            
+    # def throughput_cal(self):
+    #     if self.power != 0:
+    #         self.throughput = ch_id_to_bw[self.channel]*math.log2(1+(self.power-NOISE))
+    #     else:
+    #         self.throughput = 0
+    #         self.user_throughput = 0
     
     # define neighbor_decode ap(power!=0) as if there exist ap in decode range
     # define neighbor ap(power!=0) as if there exist ap in interference range

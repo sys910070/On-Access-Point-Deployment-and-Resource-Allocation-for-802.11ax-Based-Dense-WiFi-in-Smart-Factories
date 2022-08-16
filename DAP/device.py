@@ -42,10 +42,16 @@ class DEVICE:
 
     def throughput_cal(self):
         if self.ap != None:
-            self.throughput = (self.ap.throughput*(T_ULPPDU+T_DLPPDU)/((self.ap.cci+1)*(T_UL+T_DL)))/len(self.ap.user)
+            self.throughput = self.ap.throughput/len(self.ap.user)
             self.ap.user_throughput = self.throughput
         else:
             self.throughput = 0
+    # def throughput_cal(self):
+    #     if self.ap != None:
+    #         self.throughput = (self.ap.throughput*(T_ULPPDU+T_DLPPDU)/((self.ap.cci+1)*(T_UL+T_DL)))/len(self.ap.user)
+    #         self.ap.user_throughput = self.throughput
+    #     else:
+    #         self.throughput = 0
 
     def state_change(self, ap_list):
         flag = False

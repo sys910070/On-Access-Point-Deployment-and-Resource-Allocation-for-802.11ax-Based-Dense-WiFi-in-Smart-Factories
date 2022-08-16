@@ -1,82 +1,82 @@
 INFO id, users, power, state, timer
-INFO 1, 0, None, None, 0, None, None, 18, 20
-INFO 2, 28, [10, 12, 20], [93, 132, 5, 110, 99, 105], 18, 40
-INFO 3, 0, None, None, 0, None, None, 18, 60
-INFO 4, 0, None, None, 0, None, None, 18, 80
-INFO 5, 0, None, None, 0, None, None, 18, 100
-INFO 6, 28, [16, 14, 23, 24, 8], [45, 50, 51, 66, 56, 70], 18, 120
-INFO 7, 0, None, None, 0, None, None, 18, 140
-INFO 8, 30, [6, 16], [159], 18, 160
-INFO 9, 0, None, None, 0, None, None, 18, 180
-INFO 10, 26, [2, 20, 28], [8, 26, 28, 24, 16], 36, 20
-INFO 11, 0, None, None, 0, None, None, 36, 40
-INFO 12, 22, [2, 13, 20], [135, 111, 104], 36, 60
-INFO 13, 26, [12, 23, 14], [161, 165, 169, 162, 166], 36, 80
-INFO 14, 22, [6, 13, 23, 24, 32], [71, 47, 80], 36, 100
-INFO 15, 0, None, None, 0, None, None, 36, 120
-INFO 16, 28, [6, 24, 34, 8], [158, 144, 141, 145, 154, 150, 152, 160, 149, 143, 151], 36, 140
-INFO 17, 0, None, None, 0, None, None, 36, 160
-INFO 18, 0, None, None, 0, None, None, 36, 180
-INFO 19, 0, None, None, 0, None, None, 54, 20
-INFO 20, 22, [10, 12, 28, 30, 2], [133, 101, 118, 38, 109, 128], 54, 40
-INFO 21, 0, None, None, 0, None, None, 54, 60
-INFO 22, 0, None, None, 0, None, None, 54, 80
-INFO 23, 28, [13, 24, 31, 14, 32, 6], [170, 174, 178], 54, 100
-INFO 24, 30, [16, 23, 14, 34, 32, 6], [60, 53, 46, 64, 142, 156], 54, 120
-INFO 25, 0, None, None, 0, None, None, 54, 140
-INFO 26, 0, None, None, 0, None, None, 54, 160
-INFO 27, 0, None, None, 0, None, None, 54, 180
-INFO 28, 30, [20, 10, 46], [1, 6, 30, 13, 7, 11, 35], 72, 20
-INFO 29, 0, None, None, 0, None, None, 72, 40
-INFO 30, 22, [20, 31], [123, 126, 94, 112, 90, 89, 139], 72, 60
-INFO 31, 22, [23, 30, 32], [173, 177], 72, 80
-INFO 32, 28, [14, 23, 24, 31, 51, 50], [67, 49, 58, 76, 74], 72, 100
-INFO 33, 0, None, None, 0, None, None, 72, 120
-INFO 34, 24, [24, 16], [146, 157, 148, 153, 155, 147], 72, 140
-INFO 35, 0, None, None, 0, None, None, 72, 160
-INFO 36, 0, None, None, 0, None, None, 72, 180
-INFO 37, 0, None, None, 0, None, None, 90, 20
-INFO 38, 0, None, None, 0, None, None, 90, 40
-INFO 39, 0, None, None, 0, None, None, 90, 60
-INFO 40, 0, None, None, 0, None, None, 90, 80
-INFO 41, 0, None, None, 0, None, None, 90, 100
-INFO 42, 0, None, None, 0, None, None, 90, 120
-INFO 43, 0, None, None, 0, None, None, 90, 140
-INFO 44, 0, None, None, 0, None, None, 90, 160
-INFO 45, 0, None, None, 0, None, None, 90, 180
-INFO 46, 26, [56, 28, 64], [27, 37, 14, 9, 3, 4, 2, 20], 108, 20
-INFO 47, 0, None, None, 0, None, None, 108, 40
-INFO 48, 22, [56, 58, 66], [108, 97, 119, 121], 108, 60
-INFO 49, 0, None, None, 0, None, None, 108, 80
-INFO 50, 30, [32, 51, 58, 59, 68, 69], [140, 127, 84, 87, 137], 108, 100
-INFO 51, 30, [52, 59, 32, 68, 69, 50, 62], [164, 168], 108, 120
-INFO 52, 22, [51, 62], [54, 61, 55, 52, 43, 44], 108, 140
-INFO 53, 0, None, None, 0, None, None, 108, 160
-INFO 54, 0, None, None, 0, None, None, 108, 180
-INFO 55, 0, None, None, 0, None, None, 126, 20
-INFO 56, 28, [46, 48, 64, 66, 74], [129, 134, 23, 82, 95, 114], 126, 40
-INFO 57, 0, None, None, 0, None, None, 126, 60
-INFO 58, 22, [48, 59, 66, 68, 50], [131, 96, 138, 116, 88], 126, 80
-INFO 59, 22, [51, 58, 69, 68, 50], [163, 167], 126, 100
-INFO 60, 0, None, None, 0, None, None, 126, 120
-INFO 61, 0, None, None, 0, None, None, 126, 140
-INFO 62, 30, [51, 52, 70, 80], [59, 57], 126, 160
-INFO 63, 0, None, None, 0, None, None, 126, 180
-INFO 64, 26, [56, 74, 66, 46], [15, 31, 40, 29, 34, 39, 17, 22, 36, 10], 144, 20
-INFO 65, 0, None, None, 0, None, None, 144, 40
-INFO 66, 30, [56, 58, 74, 76, 48, 64, 68], [115, 81, 120, 125, 102, 83, 91, 130, 100, 107], 144, 60
-INFO 67, 0, None, None, 0, None, None, 144, 80
-INFO 68, 30, [58, 59, 66, 69, 76, 77, 51, 78, 50], [98, 86, 92], 144, 100
-INFO 69, 26, [59, 70, 77, 68, 51, 78, 50], [172, 176, 180, 171], 144, 120
-INFO 70, 22, [69, 80, 78, 62], [69, 79, 75], 144, 140
-INFO 71, 0, None, None, 0, None, None, 144, 160
-INFO 72, 0, None, None, 0, None, None, 144, 180
-INFO 73, 0, None, None, 0, None, None, 162, 20
-INFO 74, 28, [56, 64, 66], [33, 85, 21, 122, 32, 19, 25, 117, 113], 162, 40
-INFO 75, 0, None, None, 0, None, None, 162, 60
-INFO 76, 22, [66, 77, 68], [106, 136, 124, 103], 162, 80
-INFO 77, 22, [69, 76, 68, 78], [179, 175], 162, 100
-INFO 78, 30, [68, 69, 70, 77, 80], [62, 78, 63, 77, 41], 162, 120
-INFO 79, 0, None, None, 0, None, None, 162, 140
-INFO 80, 24, [70, 62, 78], [68, 72, 48, 65], 162, 160
-INFO 81, 0, None, None, 0, None, None, 162, 180
+INFO 1, 0, idle, 0
+INFO 2, 30, [120, 74, 30], active, inf
+INFO 3, 22, [69, 103, 183], active, inf
+INFO 4, 30, [98, 108, 10, 176], active, inf
+INFO 5, 26, [17, 87, 113, 179], active, inf
+INFO 6, 30, [18, 162], active, inf
+INFO 7, 0, idle, 0
+INFO 8, 0, idle, 1
+INFO 9, 26, [39, 41, 63, 81, 129, 149, 167, 169], active, inf
+INFO 10, 30, [188, 66, 76, 190, 6], active, inf
+INFO 11, 28, [55, 155, 175, 181, 43, 173], active, inf
+INFO 12, 0, idle, 0
+INFO 13, 0, idle, 0
+INFO 14, 0, idle, 1
+INFO 15, 30, [85, 89, 157], active, inf
+INFO 16, 30, [38, 94, 4, 100], active, -20
+INFO 17, 0, idle, 0
+INFO 18, 30, [26, 124, 70, 96], active, inf
+INFO 19, 0, idle, 0
+INFO 20, 30, [192, 62, 46], active, inf
+INFO 21, 22, [91, 97, 119], active, inf
+INFO 22, 30, [56, 146, 68], active, -36
+INFO 23, 28, [135, 25], active, inf
+INFO 24, 30, [122, 90], active, -1
+INFO 25, 22, [57, 159], active, inf
+INFO 26, 0, idle, 1
+INFO 27, 26, [13, 19, 53, 75, 141], active, inf
+INFO 28, 30, [178, 44], active, inf
+INFO 29, 22, [101, 187], active, inf
+INFO 30, 0, idle, 0
+INFO 31, 0, idle, 0
+INFO 32, 0, idle, 1
+INFO 33, 24, [121, 123, 125, 197, 37], active, inf
+INFO 34, 0, idle, 0
+INFO 35, 0, idle, 0
+INFO 36, 30, [64, 138, 166], active, inf
+INFO 37, 22, [1, 107], active, inf
+INFO 38, 30, [168, 200, 184], active, inf
+INFO 39, 24, [51, 131, 133, 3], active, inf
+INFO 40, 30, [36, 170, 102, 198, 116], active, inf
+INFO 41, 24, [145, 153], active, inf
+INFO 42, 30, [72, 136, 112], active, inf
+INFO 43, 0, idle, 0
+INFO 44, 30, [8, 182, 160], active, inf
+INFO 45, 28, [7, 23, 29, 105, 143, 151, 185, 93], active, inf
+INFO 46, 30, [118, 186, 22], active, inf
+INFO 47, 0, idle, 0
+INFO 48, 0, idle, 1
+INFO 49, 0, idle, 0
+INFO 50, 0, idle, 0
+INFO 51, 0, idle, 0
+INFO 52, 30, [174, 86, 42], active, inf
+INFO 53, 0, idle, 0
+INFO 54, 30, [156, 48], active, inf
+INFO 55, 26, [67], underpopulated, 0
+INFO 56, 30, [16, 106, 154], active, inf
+INFO 57, 0, idle, 0
+INFO 58, 30, [180, 54, 2, 140, 82, 40, 152, 32], active, inf
+INFO 59, 28, [45, 117, 139, 147, 191, 195, 9], active, inf
+INFO 60, 30, [158], underpopulated, 1
+INFO 61, 22, [83], underpopulated, 0
+INFO 62, 30, [104, 114], active, inf
+INFO 63, 26, [31, 61, 115, 127, 33, 79], active, inf
+INFO 64, 30, [88, 12, 58, 196, 78, 126], active, inf
+INFO 65, 24, [21, 99, 161, 199], active, inf
+INFO 66, 0, idle, 1
+INFO 67, 24, [35, 111, 137], active, inf
+INFO 68, 30, [34, 128, 50, 132], active, inf
+INFO 69, 0, idle, 0
+INFO 70, 0, idle, 0
+INFO 71, 0, idle, 0
+INFO 72, 30, [28, 134, 110, 20, 144, 84, 148], active, inf
+INFO 73, 30, [15, 77, 95], active, inf
+INFO 74, 30, [14], underpopulated, 0
+INFO 75, 26, [11, 71, 73, 109, 163, 171], active, inf
+INFO 76, 28, [130], underpopulated, 1
+INFO 77, 30, [5, 27, 49, 165, 59], active, inf
+INFO 78, 30, [24, 172, 150, 60, 92, 142, 194], active, inf
+INFO 79, 0, idle, 0
+INFO 80, 30, [52, 80], active, inf
+INFO 81, 24, [47, 177], active, inf

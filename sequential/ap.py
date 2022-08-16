@@ -39,7 +39,7 @@ class AP:
 
     def throughput_cal(self):
         if self.power != 0:
-            self.throughput = ch_id_to_bw[self.channel]*math.log2(1+(self.power-NOISE))
+            self.throughput = 0.9683738202073339*ch_id_to_bw[self.channel]*math.log2(1+(self.power-NOISE))/(self.cci+1)
         else:
             self.throughput = 0
             self.user_throughput = 0
